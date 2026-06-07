@@ -12,10 +12,10 @@ import type { WorkspaceStateDetail } from '@renderer/utils/workspace/workspaceEv
 import { useLayoutContext } from '@/renderer/hooks/context/LayoutContext';
 import { useNavigationHistory } from '@/renderer/hooks/context/NavigationHistoryContext';
 import { isElectronDesktop, isMacOS } from '@/renderer/utils/platform';
-// Full brand lockups (orbit mark + wordmark + ™). Dark wordmark shows on light
-// theme, white wordmark on dark theme - toggled purely via CSS on [data-theme].
-import lockupDark from '@renderer/assets/logos/brand/wayland-lockup-dark.png';
-import lockupWhite from '@renderer/assets/logos/brand/wayland-lockup-white.png';
+// BaddAssApp brand mark (fork rebrand - upstream's wayland lockups/orbit mark are
+// Ferrox Labs trademarks and must not ship in this fork's UI). Wordmark is text,
+// theme-aware via currentColor + var(--brand) accent.
+import brandIcon from '@renderer/assets/logos/brand/baddassapp.png';
 import './titlebar.css';
 
 interface TitlebarProps {
@@ -23,23 +23,13 @@ interface TitlebarProps {
 }
 
 const WaylandLogoMark: React.FC = () => (
-  <svg
-    className='app-titlebar__brand-logo'
-    viewBox='0 0 24 24'
-    fill='none'
-    style={{ stroke: 'var(--brand)' }}
-    strokeWidth='2'
-    strokeLinecap='round'
-    strokeLinejoin='round'
+  <img
+    src={brandIcon}
+    alt=''
+    className='app-titlebar__brand-logo app-titlebar__brand-logo--img'
     aria-hidden='true'
-    focusable='false'
-  >
-    <path d='M20.341 6.484A10 10 0 0 1 10.266 21.85' />
-    <path d='M3.659 17.516A10 10 0 0 1 13.74 2.152' />
-    <circle cx='12' cy='12' r='3' />
-    <circle cx='19' cy='5' r='2' />
-    <circle cx='5' cy='19' r='2' />
-  </svg>
+    draggable={false}
+  />
 );
 
 // Claude-desktop-style sidebar toggle icon: a rounded rectangle with a vertical divider
@@ -74,7 +64,7 @@ const SidebarIcon: React.FC<{ size?: number; strokeWidth?: number }> = ({ size =
 
 const Titlebar: React.FC<TitlebarProps> = ({ workspaceAvailable }) => {
   const { t } = useTranslation();
-  const appTitle = useMemo(() => 'Wayland', []);
+  const appTitle = useMemo(() => 'BaddAssApp', []);
   const [workspaceCollapsed, setWorkspaceCollapsed] = useState(true);
   const [mobileCenterTitle, setMobileCenterTitle] = useState(appTitle);
   const [mobileCenterOffset, setMobileCenterOffset] = useState(0);
@@ -352,8 +342,10 @@ const Titlebar: React.FC<TitlebarProps> = ({ workspaceAvailable }) => {
           </span>
         ) : (
           <span className='app-titlebar__brand-desktop'>
-            <img src={lockupDark} alt={appTitle} className='app-titlebar__brand-lockup app-titlebar__brand-lockup--on-light' aria-hidden='true' draggable={false} />
-            <img src={lockupWhite} alt={appTitle} className='app-titlebar__brand-lockup app-titlebar__brand-lockup--on-dark' aria-hidden='true' draggable={false} />
+            <WaylandLogoMark />
+            <span className='app-titlebar__brand-wordmark' aria-hidden='true'>
+              BaddAss<span className='app-titlebar__brand-wordmark-accent'>App</span>
+            </span>
             <span className='app-titlebar__brand-tagline'>Perceives · Reasons · Acts · Evolves</span>
           </span>
         )}

@@ -11,7 +11,13 @@ export function useTeamList() {
 
   const { data: teams = [], mutate } = useSWR<TTeam[]>(
     `teams/${userId}`,
-    () => ipcBridge.team.list.invoke({ userId }),
+    async () => {
+      // Defensive: a failed main-process read can resolve to an error envelope
+      // instead of an array; coercing here keeps teams.reduce/map consumers
+      // from crashing the whole view ("teams.reduce is not a function").
+      const result = await ipcBridge.team.list.invoke({ userId });
+      return Array.isArray(result) ? result : [];
+    },
     { revalidateOnFocus: false }
   );
 

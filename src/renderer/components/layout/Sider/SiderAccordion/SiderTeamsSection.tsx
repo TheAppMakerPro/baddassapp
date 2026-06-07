@@ -49,7 +49,7 @@ export interface SiderTeamsSectionProps {
 
 /** Count of agents in `active` status across every team - drives the live badge. */
 const countRunningAgents = (teams: TTeam[]): number =>
-  teams.reduce((acc, team) => acc + team.agents.filter((a) => a.status === 'active').length, 0);
+  teams.reduce((acc, team) => acc + (team.agents ?? []).filter((a) => a.status === 'active').length, 0);
 
 export const SiderTeamsSection: React.FC<SiderTeamsSectionProps> = ({
   collapsed,

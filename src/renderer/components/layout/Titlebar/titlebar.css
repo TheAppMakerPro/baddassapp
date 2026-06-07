@@ -144,6 +144,28 @@
   display: block;
 }
 
+/* BaddAssApp rebrand: raster brand icon variant of the logo slot */
+.app-titlebar__brand-logo--img {
+  border-radius: 6px;
+  object-fit: contain;
+}
+
+/* BaddAssApp rebrand: text wordmark replaces the upstream trademark lockup images.
+   Inherits titlebar text color; "App" suffix picks up the brand accent. */
+.app-titlebar__brand-wordmark {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  color: inherit;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.app-titlebar__brand-wordmark-accent {
+  color: var(--brand);
+}
+
 .app-titlebar__brand-tagline {
   font-size: 11px;
   font-weight: 500;
