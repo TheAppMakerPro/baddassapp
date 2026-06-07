@@ -1,6 +1,6 @@
 {
-  "brand": "Wayland",
-  "welcome": "Willkommen bei Wayland",
+  "brand": "BaddAssApp",
+  "welcome": "Willkommen bei BaddAssApp",
   "footer": {
     "manage": "Die Erkennung lief einmal. Alles änderst du in Einstellungen → Anbieter.",
     "noLockIn": "Keine dieser Optionen bindet dich.",
@@ -22,7 +22,7 @@
     "errorUnrecognized": "Dieser Key wurde nicht als Flux-Router-Key akzeptiert. Prüfe ihn und versuche es erneut.",
     "errorNoModels": "Verbunden, aber es kamen keine Modelle zurück. Versuche es gleich noch einmal.",
     "errorUnknown": "Beim Verbinden ist etwas schiefgelaufen. Versuche es erneut.",
-    "trust": "Von Ferrox Labs, dem Team hinter Wayland."
+    "trust": "Von Ferrox Labs, dem Team hinter BaddAssApp."
   },
   "scenarioA": {
     "greeting": "{{name}}, du bist schon startklar",
@@ -34,7 +34,7 @@
     "ghost": "Auf den nächsten 10 Zügen testen"
   },
   "scenarioB": {
-    "greeting": "Willkommen bei Wayland",
+    "greeting": "Willkommen bei BaddAssApp",
     "sub": "Wähle einen Einstieg. Den Rest fügst du jederzeit hinzu.",
     "heroTag": "Empfohlen",
     "heroTitle": "Flux Router",
@@ -89,7 +89,7 @@
       "almost": "Almost there…"
     },
     "logoAlt": {
-      "wordmark": "Wayland"
+      "wordmark": "BaddAssApp"
     },
     "flux": {
       "title": "Get the best answer. Pay the right price. And get it done faster.",
@@ -111,7 +111,7 @@
     },
     "quickstart": {
       "headline": "First - what should I call you",
-      "sub": "So Wayland knows what to call you. Next we'll see what's already on your machine.",
+      "sub": "So BaddAssApp knows what to call you. Next we'll see what's already on your machine.",
       "googleButton": "Continue with Google",
       "freeNote": "Free with your Google account · basic Gemini limits · nothing to pay",
       "changeLater": "You can change everything later.",

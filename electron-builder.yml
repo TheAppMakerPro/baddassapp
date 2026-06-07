@@ -1,10 +1,10 @@
-appId: com.ferroxlabs.wayland
-productName: Wayland
-executableName: Wayland
-copyright: Copyright © 2026 Trade Canyon
+appId: com.theappmakerpro.baddassapp
+productName: BaddAssApp
+executableName: BaddAssApp
+copyright: Copyright © 2026 BaddAssApp (based on Wayland, © 2026 Trade Canyon)
 
 protocols:
-  - name: Wayland Protocol
+  - name: BaddAssApp Protocol
     schemes:
       - wayland
 

@@ -5,7 +5,7 @@
   },
   "pitch": {
     "headline": "Una memoria que te acompaña",
-    "lede": "Wayland recuerda en qué has trabajado, qué has decidido y qué has publicado. Cada asistente recibe el contexto, sin tener que explicarlo todo de nuevo. Funciona con IJFW, un motor de memoria de código abierto de Ferrox Labs.",
+    "lede": "BaddAssApp recuerda en qué has trabajado, qué has decidido y qué has publicado. Cada asistente recibe el contexto, sin tener que explicarlo todo de nuevo. Funciona con IJFW, un motor de memoria de código abierto de Ferrox Labs.",
     "bullet1": "Persistente entre chats, proyectos y CLIs",
     "bullet2": "Buscable, exportable, tuya",
     "bullet3": "Sin configuración tras la instalación",
@@ -37,7 +37,7 @@
   "upgrading": {
     "title": "Actualizando Memoria",
     "subtitle": "Preparando {{version}} para el próximo arranque",
-    "pending_message": "Actualización lista. Se activará cuando Wayland se reinicie.",
+    "pending_message": "Actualización lista. Se activará cuando BaddAssApp se reinicie.",
     "restart_now": "Reiniciar ahora"
   },
   "failed": {
@@ -53,11 +53,11 @@
     "invalid_target_version": "Número de versión no válido en el registro. Inténtalo de nuevo más tarde.",
     "unsafe_ownership": "La carpeta de instalación pendiente tiene una propiedad insegura y fue rechazada. Reinstala para recuperarla.",
     "stage_pending_failed": "No se pudo preparar la nueva instalación. Comprueba el espacio en disco e inténtalo de nuevo.",
-    "stage_swap_failed": "No se pudo aplicar la nueva instalación. Reinicia Wayland para reintentar.",
+    "stage_swap_failed": "No se pudo aplicar la nueva instalación. Reinicia BaddAssApp para reintentar.",
     "upgrade_failed_no_rollback": "La actualización falló y no se pudo restaurar la versión anterior. Reinstala para recuperarla.",
     "upgrade_failed_rolled_back": "La actualización falló, pero tu versión anterior sigue funcionando. Inténtalo de nuevo más tarde o revisa los detalles.",
     "rollback_also_failed": "Tanto la nueva versión como la restauración fallaron. Reinstala para recuperarla.",
-    "mcp_crashed": "Memoria se bloqueó. Reinicia Wayland para recuperarla.",
+    "mcp_crashed": "Memoria se bloqueó. Reinicia BaddAssApp para recuperarla.",
     "mcp_error": "Memoria devolvió un error. Inténtalo de nuevo.",
     "timeout": "Memoria no respondió a tiempo. Inténtalo de nuevo.",
     "validation_failed": "Esa solicitud no coincide con lo que Memoria espera.",
@@ -97,15 +97,15 @@
   "settings": {
     "panel_title": "IJFW Memory (Ferrox Labs)",
     "skip_label": "Omitir la configuración automática de IJFW",
-    "skip_description": "Cuando está activado, Wayland no instalará ni actualizará IJFW. Puedes instalarlo manualmente más tarde desde la página de Memoria.",
+    "skip_description": "Cuando está activado, BaddAssApp no instalará ni actualizará IJFW. Puedes instalarlo manualmente más tarde desde la página de Memoria.",
     "manual_install_hint": "Para instalar manualmente: ejecuta `npx -y @ijfw/install@latest` en un terminal",
     "about_title": "IJFW Memory",
     "about_body": "Un motor de memoria persistente de código abierto de Ferrox Labs."
   },
   "prelude": {
     "installing_notice": "IJFW se está instalando. Las CLIs externas (Claude Code, Codex, Gemini CLI) lo detectarán cuando finalice la instalación.",
-    "disabled_notice": "IJFW está desactivado en los Ajustes de Wayland. Vuelve a activarlo para compartir la memoria con las CLIs externas.",
-    "failed_notice": "La instalación de IJFW falló. Ve a la página de Memoria en Wayland para reintentar."
+    "disabled_notice": "IJFW está desactivado en los Ajustes de BaddAssApp. Vuelve a activarlo para compartir la memoria con las CLIs externas.",
+    "failed_notice": "La instalación de IJFW falló. Ve a la página de Memoria en BaddAssApp para reintentar."
   },
   "home": {
     "wiki_title": "Wiki",
@@ -432,7 +432,7 @@
       },
       "dropFolder": {
         "title": "Carpeta de arrastre",
-        "hint": "Suelta archivos .md / .txt / .json en ~/Documents/Wayland-Memory/",
+        "hint": "Suelta archivos .md / .txt / .json en ~/Documents/BaddAssApp-Memory/",
         "count": "{{count}} archivos procesados",
         "openBtn": "Abrir carpeta",
         "processBtn": "Procesar ahora",

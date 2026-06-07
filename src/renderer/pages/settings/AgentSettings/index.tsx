@@ -45,7 +45,7 @@ const FEATURED_BACKENDS = ['wcore', 'claude', 'codex'];
  */
 const WCORE_STATIC: DetectedAgent = {
   backend: 'wcore',
-  name: 'Wayland Core',
+  name: 'BaddAssApp Core',
   isExtension: false,
   isPreset: false,
 };

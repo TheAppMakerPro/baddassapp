@@ -58,6 +58,8 @@ function resolveTeamBundleRoot(): string | null {
   const home = homedir();
   const candidates = [
     path.join(home, 'dev', 'waylandteams'),
+    path.join(home, 'Library', 'Application Support', 'BaddAssApp', 'wayland', 'extensions', 'waylandteams'),
+    path.join(home, 'Library', 'Application Support', 'BaddAssApp-Dev', 'wayland', 'extensions', 'waylandteams'),
     path.join(home, 'Library', 'Application Support', 'Wayland', 'wayland', 'extensions', 'waylandteams'),
     path.join(home, 'Library', 'Application Support', 'Wayland-Dev', 'wayland', 'extensions', 'waylandteams'),
     path.join(home, 'Library', 'Application Support', 'Wayland-Beta', 'wayland', 'extensions', 'waylandteams'),

@@ -220,7 +220,7 @@ const IrcConfigForm: React.FC<IrcConfigFormProps> = ({ pluginStatus, onStatusCha
         <Input
           value={realname}
           onChange={setRealname}
-          placeholder={username || nick || 'Wayland IRC bot'}
+          placeholder={username || nick || 'BaddAssApp IRC bot'}
           style={{ width: 280 }}
         />
       </PreferenceRow>

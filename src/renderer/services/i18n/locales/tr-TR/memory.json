@@ -5,7 +5,7 @@
   },
   "pitch": {
     "headline": "Sizi takip eden bellek",
-    "lede": "Wayland; üzerinde çalıştığınız, karar verdiğiniz ve yayınladığınız şeyleri hatırlar. Her asistan bağlamı alır -- yeniden açıklamanıza gerek kalmaz. Ferrox Labs tarafından geliştirilen açık kaynaklı bellek motoru IJFW ile çalışır.",
+    "lede": "BaddAssApp; üzerinde çalıştığınız, karar verdiğiniz ve yayınladığınız şeyleri hatırlar. Her asistan bağlamı alır -- yeniden açıklamanıza gerek kalmaz. Ferrox Labs tarafından geliştirilen açık kaynaklı bellek motoru IJFW ile çalışır.",
     "bullet1": "Sohbetler, projeler ve CLI'lar arasında kalıcı",
     "bullet2": "Aranabilir, dışa aktarılabilir, size ait",
     "bullet3": "Kurulumdan sonra sıfır ayar",
@@ -37,7 +37,7 @@
   "upgrading": {
     "title": "Bellek yükseltiliyor",
     "subtitle": "{{version}} sonraki başlatma için hazırlanıyor",
-    "pending_message": "Yükseltme hazır. Wayland yeniden başlatıldığında etkinleşecek.",
+    "pending_message": "Yükseltme hazır. BaddAssApp yeniden başlatıldığında etkinleşecek.",
     "restart_now": "Şimdi yeniden başlat"
   },
   "failed": {
@@ -53,11 +53,11 @@
     "invalid_target_version": "Kayıt defterinden geçersiz bir sürüm numarası geldi. Daha sonra yeniden deneyin.",
     "unsafe_ownership": "Bekleyen kurulum klasörünün sahipliği güvenli olmadığı için reddedildi. Kurtarmak için yeniden yükleyin.",
     "stage_pending_failed": "Yeni kurulum hazırlanamadı. Disk alanını kontrol edip yeniden deneyin.",
-    "stage_swap_failed": "Yeni kuruluma geçilemedi. Yeniden denemek için Wayland'i yeniden başlatın.",
+    "stage_swap_failed": "Yeni kuruluma geçilemedi. Yeniden denemek için BaddAssApp'i yeniden başlatın.",
     "upgrade_failed_no_rollback": "Yükseltme başarısız oldu ve önceki sürüm geri yüklenemedi. Kurtarmak için yeniden yükleyin.",
     "upgrade_failed_rolled_back": "Yükseltme başarısız oldu ancak önceki sürümünüz çalışmaya devam ediyor. Daha sonra yeniden deneyin veya ayrıntılara bakın.",
     "rollback_also_failed": "Hem yeni sürüm hem de geri alma başarısız oldu. Kurtarmak için yeniden yükleyin.",
-    "mcp_crashed": "Bellek çöktü. Kurtarmak için Wayland'i yeniden başlatın.",
+    "mcp_crashed": "Bellek çöktü. Kurtarmak için BaddAssApp'i yeniden başlatın.",
     "mcp_error": "Bellek bir hata döndürdü. Yeniden deneyin.",
     "timeout": "Bellek zamanında yanıt vermedi. Yeniden deneyin.",
     "validation_failed": "Bu istek, Belleğin beklediği biçime uymadı.",
@@ -97,15 +97,15 @@
   "settings": {
     "panel_title": "IJFW Memory (Ferrox Labs)",
     "skip_label": "IJFW otomatik kurulumu atla",
-    "skip_description": "Etkin olduğunda Wayland, IJFW'yi yüklemez veya yükseltmez. Daha sonra Bellek sayfası üzerinden elle yükleyebilirsiniz.",
+    "skip_description": "Etkin olduğunda BaddAssApp, IJFW'yi yüklemez veya yükseltmez. Daha sonra Bellek sayfası üzerinden elle yükleyebilirsiniz.",
     "manual_install_hint": "Elle yüklemek için bir terminalde `npx -y @ijfw/install@latest` komutunu çalıştırın",
     "about_title": "IJFW Memory",
     "about_body": "Ferrox Labs tarafından geliştirilen açık kaynaklı kalıcı bellek motoru."
   },
   "prelude": {
     "installing_notice": "IJFW yükleniyor. Harici CLI'lar (Claude Code, Codex, Gemini CLI) kurulum tamamlandıktan sonra bunu algılayacak.",
-    "disabled_notice": "IJFW, Wayland Ayarları'nda devre dışı. Harici CLI'larla bellek paylaşmak için yeniden etkinleştirin.",
-    "failed_notice": "IJFW kurulumu başarısız oldu. Yeniden denemek için Wayland'deki Bellek sayfasını ziyaret edin."
+    "disabled_notice": "IJFW, BaddAssApp Ayarları'nda devre dışı. Harici CLI'larla bellek paylaşmak için yeniden etkinleştirin.",
+    "failed_notice": "IJFW kurulumu başarısız oldu. Yeniden denemek için BaddAssApp'deki Bellek sayfasını ziyaret edin."
   },
   "home": {
     "wiki_title": "Wiki",
@@ -432,7 +432,7 @@
       },
       "dropFolder": {
         "title": "Klasöre bırak",
-        "hint": ".md / .txt / .json dosyalarını ~/Documents/Wayland-Memory/ içine bırakın",
+        "hint": ".md / .txt / .json dosyalarını ~/Documents/BaddAssApp-Memory/ içine bırakın",
         "count": "{{count}} dosya işlendi",
         "openBtn": "Klasörü aç",
         "processBtn": "Şimdi işle",

@@ -5,7 +5,7 @@
   },
   "pitch": {
     "headline": "跟着你走的记忆",
-    "lede": "Wayland 记得你做过什么、决定过什么、发布过什么。每个助手都能拿到这些上下文 -- 不用再解释一遍。由 Ferrox Labs 出品的开源记忆引擎 IJFW 提供支持。",
+    "lede": "BaddAssApp 记得你做过什么、决定过什么、发布过什么。每个助手都能拿到这些上下文 -- 不用再解释一遍。由 Ferrox Labs 出品的开源记忆引擎 IJFW 提供支持。",
     "bullet1": "在聊天、项目和命令行之间持续保留",
     "bullet2": "可搜索、可导出，完全属于你",
     "bullet3": "安装后无需任何设置",
@@ -37,7 +37,7 @@
   "upgrading": {
     "title": "正在升级记忆",
     "subtitle": "已为下次启动准备 {{version}}",
-    "pending_message": "升级已就绪。Wayland 重启后将生效。",
+    "pending_message": "升级已就绪。BaddAssApp 重启后将生效。",
     "restart_now": "立即重启"
   },
   "failed": {
@@ -53,11 +53,11 @@
     "invalid_target_version": "注册表返回了无效的版本号。请稍后再试。",
     "unsafe_ownership": "待安装文件夹的所有权不安全已被拒绝。请重新安装以恢复。",
     "stage_pending_failed": "无法暂存新安装。请检查磁盘空间后重试。",
-    "stage_swap_failed": "无法切换到新安装。请重启 Wayland 后重试。",
+    "stage_swap_failed": "无法切换到新安装。请重启 BaddAssApp 后重试。",
     "upgrade_failed_no_rollback": "升级失败且无法恢复到上一版本。请重新安装以恢复。",
     "upgrade_failed_rolled_back": "升级失败，但上一版本仍可正常使用。请稍后重试或查看详情。",
     "rollback_also_failed": "新版本和回滚均失败。请重新安装以恢复。",
-    "mcp_crashed": "记忆崩溃了。请重启 Wayland 以恢复。",
+    "mcp_crashed": "记忆崩溃了。请重启 BaddAssApp 以恢复。",
     "mcp_error": "记忆返回了错误。请重试。",
     "timeout": "记忆未能及时响应。请重试。",
     "validation_failed": "该请求不符合记忆期望的格式。",
@@ -97,15 +97,15 @@
   "settings": {
     "panel_title": "IJFW Memory（Ferrox Labs）",
     "skip_label": "跳过 IJFW 自动设置",
-    "skip_description": "启用后，Wayland 将不会安装或升级 IJFW。你之后可以通过记忆页面手动安装。",
+    "skip_description": "启用后，BaddAssApp 将不会安装或升级 IJFW。你之后可以通过记忆页面手动安装。",
     "manual_install_hint": "手动安装：在终端中运行 `npx -y @ijfw/install@latest`",
     "about_title": "IJFW Memory",
     "about_body": "由 Ferrox Labs 出品的开源持久化记忆引擎。"
   },
   "prelude": {
     "installing_notice": "IJFW 正在安装。外部命令行工具（Claude Code、Codex、Gemini CLI）会在安装完成后识别它。",
-    "disabled_notice": "IJFW 已在 Wayland 设置中关闭。重新启用以与外部命令行共享记忆。",
-    "failed_notice": "IJFW 安装失败。请在 Wayland 的记忆页面重试。"
+    "disabled_notice": "IJFW 已在 BaddAssApp 设置中关闭。重新启用以与外部命令行共享记忆。",
+    "failed_notice": "IJFW 安装失败。请在 BaddAssApp 的记忆页面重试。"
   },
   "home": {
     "wiki_title": "Wiki",
@@ -432,7 +432,7 @@
       },
       "dropFolder": {
         "title": "拖放文件夹",
-        "hint": "将 .md / .txt / .json 文件拖放到 ~/Documents/Wayland-Memory/",
+        "hint": "将 .md / .txt / .json 文件拖放到 ~/Documents/BaddAssApp-Memory/",
         "count": "已处理 {{count}} 个文件",
         "openBtn": "打开文件夹",
         "processBtn": "立即处理",

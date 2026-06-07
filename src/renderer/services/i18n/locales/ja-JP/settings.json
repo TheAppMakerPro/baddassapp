@@ -5,7 +5,7 @@
     "description": "AIエージェントスキルを一元管理。一度インストールすれば、すべてのアシスタントで利用可能。",
     "mySkillsTitle": "マイスキル",
     "discoveredTitle": "外部スキルを検出",
-    "discoveryAlert": "CLIツールからスキルが検出されました。インポートしてWaylandで使用できます。",
+    "discoveryAlert": "CLIツールからスキルが検出されました。インポートしてBaddAssAppで使用できます。",
     "importAll": "すべてインポート",
     "importAllSuccess": "{{count}} 件のスキルをインポートしました",
     "noSkills": "スキルが見つかりません。インポートして始めましょう。",
@@ -159,7 +159,7 @@
   "autoPreviewOfficeFiles": "新しい Office ファイルを自動プレビュー",
   "autoPreviewOfficeFilesDesc": "現在のワークスペースで新規作成された Word、Excel、PowerPoint ファイルを自動で開きます。Office の一時ロックファイルは無視します。",
   "startOnBoot": "起動時に自動起動",
-  "startOnBootDesc": "macOS または Windows にサインインしたときに Wayland を自動起動します。",
+  "startOnBootDesc": "macOS または Windows にサインインしたときに BaddAssApp を自動起動します。",
   "startOnBootUnsupported": "パッケージ版の macOS / Windows アプリでのみ利用できます。",
   "startOnBootUpdateFailed": "起動時自動起動の設定更新に失敗しました",
   "closeToTray": "トレイに最小化",
@@ -201,7 +201,7 @@
   "deleteInvalidKeys": "無効なキーを削除",
   "testAllKeys": "すべてのキーをテスト",
   "addModelPlaceholder": "モデルIDを選択または入力してください",
-  "customModelSupportNote": "注: 現在 Wayland Core と Gemini CLI Agent がカスタムモデルをサポートしています。",
+  "customModelSupportNote": "注: 現在 BaddAssApp Core と Gemini CLI Agent がカスタムモデルをサポートしています。",
   "addModelHint": "モデル ID を選択または入力すると、このプロバイダーの設定に追加されます。",
   "addModelSelectedHint": "追加予定のモデル: {{model}}",
   "currentModelsLabel": "現在のモデル",
@@ -252,7 +252,7 @@
   "channels": {
     "label": "チャンネル",
     "telegram": {
-      "help": "Telegram で Wayland AI アシスタントとチャットできます。まず @BotFather でボットを作成してください。"
+      "help": "Telegram で BaddAssApp AI アシスタントとチャットできます。まず @BotFather でボットを作成してください。"
     },
     "slack": {
       "comingSoonTitle": "Slack サポートは {{phase}} で対応予定",
@@ -520,7 +520,7 @@
       "pluginEnabled": "MS Teams プラグインを有効にしました",
       "enableFailed": "プラグインの有効化に失敗しました",
       "testAndEnable": "テストして有効化",
-      "setupHint": "Azure ポータルでボットを登録します: Azure Bot Service → リソースの作成 → Microsoft Teams チャネルを構成 → メッセージングエンドポイントを Wayland の webhook URL に設定 → App ID とクライアントシークレットをここにコピーします。",
+      "setupHint": "Azure ポータルでボットを登録します: Azure Bot Service → リソースの作成 → Microsoft Teams チャネルを構成 → メッセージングエンドポイントを BaddAssApp の webhook URL に設定 → App ID とクライアントシークレットをここにコピーします。",
       "credentials": {
         "appId": {
           "label": "App ID（MicrosoftAppId）",
@@ -858,7 +858,7 @@
       }
     }
   },
-  "webui.description": "Wayland を「24時間365日のリモートアシスタント」として使用 - いつでもどこでもリモートデバイスからタスクを手配できます。",
+  "webui.description": "BaddAssApp を「24時間365日のリモートアシスタント」として使用 - いつでもどこでもリモートデバイスからタスクを手配できます。",
   "webui.steps": "ステップ 1. WebUI をオンにする；ステップ 2. アクセス URL をコピー；ステップ 3. リモートブラウザで開く",
   "webui.configuration": "WebUI 設定",
   "webui.enable": "WebUI を有効にする",
@@ -936,13 +936,13 @@
   "webui.passwordHint": "Password is shown in console on first startup. Use \"Change Password\" to reset",
   "webui.checkConsoleForPassword": "Check application console for initial password",
   "webui.browserNotSupported": "ブラウザではWebUI設定にアクセスできません",
-  "webui.browserNotSupportedDesc": "セキュリティ上の理由から、WebUI設定はデスクトップアプリでのみ管理できます。Waylandデスクトップアプリで設定パネルを開いて設定してください。",
+  "webui.browserNotSupportedDesc": "セキュリティ上の理由から、WebUI設定はデスクトップアプリでのみ管理できます。BaddAssAppデスクトップアプリで設定パネルを開いて設定してください。",
   "webui.passwordHidden": "******",
   "webui.passwordOnlyFirstTime": "パスワードは初回起動時のみ表示され、その後は非表示になります",
   "webui.resetPasswordWarning": "リセット後のパスワードを大切に保管してください！",
-  "webui.featureRemoteDesc": "WebUI を有効にすると、スマホやリモートブラウザから Wayland にアクセスできます。",
+  "webui.featureRemoteDesc": "WebUI を有効にすると、スマホやリモートブラウザから BaddAssApp にアクセスできます。",
   "webui.featureChannelsTitle": "Messaging Control",
-  "webui.featureChannelsDesc": "Telegram、Lark、DingTalk、WeChat を接続して、IM アプリから Wayland とやり取りできます。",
+  "webui.featureChannelsDesc": "Telegram、Lark、DingTalk、WeChat を接続して、IM アプリから BaddAssApp とやり取りできます。",
   "webui.goToChannels": "Channels へ",
   "webui.pairedDevices.title": "Paired Devices",
   "webui.pairedDevices.empty": "No devices paired yet",
@@ -1006,24 +1006,24 @@
   "assistant.step4": "Once approved, you can start chatting with Gemini through Telegram!",
   "channels.title": "Channels",
   "channels.telegramTitle": "Telegram",
-  "channels.telegramDesc": "Chat with Wayland assistant via Telegram",
+  "channels.telegramDesc": "Chat with BaddAssApp assistant via Telegram",
   "channels.slackTitle": "Slack",
-  "channels.slackDesc": "Chat with Wayland assistant via Slack",
+  "channels.slackDesc": "Chat with BaddAssApp assistant via Slack",
   "channels.discordTitle": "Discord",
-  "channels.discordDesc": "Chat with Wayland assistant via Discord",
+  "channels.discordDesc": "Chat with BaddAssApp assistant via Discord",
   "channels.larkTitle": "Lark",
-  "channels.larkDesc": "Chat with Wayland assistant via Lark",
+  "channels.larkDesc": "Chat with BaddAssApp assistant via Lark",
   "channels.dingtalkTitle": "DingTalk",
-  "channels.dingtalkDesc": "Chat with Wayland assistant via DingTalk",
+  "channels.dingtalkDesc": "Chat with BaddAssApp assistant via DingTalk",
   "channels.weixinTitle": "WeChat",
-  "channels.weixinDesc": "WeChat を使って Wayland アシスタントとチャット",
+  "channels.weixinDesc": "WeChat を使って BaddAssApp アシスタントとチャット",
   "channels.wecomTitle": "WeCom",
-  "channels.wecomDesc": "WeCom（企業微信）の AI ボットで Wayland アシスタントとチャット",
+  "channels.wecomDesc": "WeCom（企業微信）の AI ボットで BaddAssApp アシスタントとチャット",
   "channels.comingSoon": "Coming Soon",
   "channels.comingSoonDesc": "Support for {{channel}} is coming soon",
   "channels.notConfigured": "Not configured",
   "channels.configured": "Configured",
-  "channels.guide": "メッセージアプリを接続して、いつでも Wayland と会話できます。",
+  "channels.guide": "メッセージアプリを接続して、いつでも BaddAssApp と会話できます。",
   "channels.selectFirst": "チャンネルを選択して認証情報を設定します。",
   "channels.enableAfterConfig": "設定後にチャンネルを有効化すると、AI Agent とのチャットを開始できます。",
   "channels.extension.requiredField": "必須項目を入力してください: {{field}}",
@@ -1106,7 +1106,7 @@
   "mcpImportSuccess": "インポート成功",
   "mcpImportFailed": "インポート失敗",
   "mcpJsonInvalid": "無効な JSON 形式",
-  "mcpImportDescription": "WaylandはCLI Agentにインストールされている MCP を自動的に取得し、ワンクリックでインポートします",
+  "mcpImportDescription": "BaddAssAppはCLI Agentにインストールされている MCP を自動的に取得し、ワンクリックでインポートします",
   "mcpStepSelectAgent": "エージェントを選択",
   "mcpStepFetchTools": "mcpを取得",
   "mcpStepImportSuccess": "インポート成功",
@@ -1491,8 +1491,8 @@
     "marketUpdate": "更新",
     "marketEmpty": "インストール可能な Agent が見つかりませんでした。ネットワーク接続を確認し、GitHub に正常にアクセスできることを確認してください。",
     "marketContributionHint": "新しい Agent をマーケットに追加したいですか？",
-    "marketContributionAction": "WaylandHub に PR を送る",
-    "marketComingSoon": "WaylandHub market is coming soon.",
+    "marketContributionAction": "BaddAssApp Hub に PR を送る",
+    "marketComingSoon": "BaddAssApp Hub market is coming soon.",
     "detectCustomAgent": "カスタムエージェントを検出",
     "editCustomAgent": "カスタムエージェントを編集",
     "localAgentsEmpty": "ローカルエージェントが検出されていません",
@@ -1550,7 +1550,7 @@
     "notFound": "見つかりません",
     "version": "バージョン",
     "path": "パス",
-    "providerNote": "プロバイダーとAPIキーの設定はモデルページで管理します。Wayland Coreは以下をサポート：Anthropic、OpenAI、AWS Bedrock。"
+    "providerNote": "プロバイダーとAPIキーの設定はモデルページで管理します。BaddAssApp Coreは以下をサポート：Anthropic、OpenAI、AWS Bedrock。"
   },
   "shared": {
     "saving": "保存中…",
@@ -1605,7 +1605,7 @@
     "footerText": "拡張機能でさらに多くのチャンネルを追加できます。",
     "browseExtensions": "拡張機能を見る →",
     "channelsMovedHint": "チャンネルは連携に移動しました →",
-    "subtitle": "Wayland をメッセージングプラットフォームに接続します。各接続には独自のセットアップ、認証情報、ステータスがあります。",
+    "subtitle": "BaddAssApp をメッセージングプラットフォームに接続します。各接続には独自のセットアップ、認証情報、ステータスがあります。",
     "tier1Tab": "ティア 1",
     "tier2Tab": "ティア 2",
     "tier3Tab": "ティア 3",
@@ -1645,7 +1645,7 @@
       "keyLabel": "API キーを貼り付け",
       "keyPlaceholder": "任意のプロバイダーのキーを貼り付け…",
       "connect": "接続",
-      "hintDefault": "Wayland がプロバイダーを自動的に認識します、選択は不要です。",
+      "hintDefault": "BaddAssApp がプロバイダーを自動的に認識します、選択は不要です。",
       "hintAmbiguous": "OpenAI 形式のキーのようです、接続してプロバイダーを確認します。",
       "recognized": "認識:",
       "cloudHint": "このプロバイダーには「参照」からの認証フォームが必要です。",
@@ -1688,7 +1688,7 @@
       "errorUnrecognized": "そのキーは {{provider}} 用として認識されませんでした。",
       "errorNoModels": "{{provider}} に接続しましたが、モデルが返されませんでした。しばらくして再試行してください。",
       "errorUnknown": "{{provider}} に接続できませんでした。再試行してください。",
-      "trust": "Wayland を手がける Ferrox Labs より。"
+      "trust": "BaddAssApp を手がける Ferrox Labs より。"
     },
     "detected": {
       "found": "このマシンで {{provider}} API キーが見つかりました。使用しますか？",
@@ -1890,7 +1890,7 @@
   },
   "mcpPage": {
     "title": "MCPサーバー",
-    "subtitle": "Model Context Protocol を介して Wayland を外部ツールサーバーに接続します。エージェント全体で MCP サーバーを追加、設定、同期できます。"
+    "subtitle": "Model Context Protocol を介して BaddAssApp を外部ツールサーバーに接続します。エージェント全体で MCP サーバーを追加、設定、同期できます。"
   },
   "imageGenPage": {
     "title": "画像生成",
@@ -1907,11 +1907,11 @@
   },
   "notificationsPage": {
     "title": "通知",
-    "subtitle": "Wayland が通知を行うタイミングと方法。",
+    "subtitle": "BaddAssApp が通知を行うタイミングと方法。",
     "comingSoon": "カテゴリーごとの切り替え、おやすみ時間、サウンドコントロールは、次回リリースで導入されます。",
     "systemTitle": "システム通知",
     "master": "マスタースイッチ",
-    "masterHelp": "オフにすると、Wayland はシステム通知を一切送信しません。以下の他のルールは無視されます。",
+    "masterHelp": "オフにすると、BaddAssApp はシステム通知を一切送信しません。以下の他のルールは無視されます。",
     "agentFinished": "エージェント完了時に通知",
     "agentFinishedHelp": "長時間実行タスクまたはチームランチャーが完了したときに発火します。",
     "scheduledTask": "スケジュールタスク実行時に通知",
@@ -1943,7 +1943,7 @@
     "open": "開く",
     "clear": "クリア",
     "clearConfirmTitle": "ディレクトリをクリアしますか？",
-    "clearConfirmBody": "内部のファイルが完全に削除されます。Wayland は必要に応じてそれらを再構築します。",
+    "clearConfirmBody": "内部のファイルが完全に削除されます。BaddAssApp は必要に応じてそれらを再構築します。",
     "backupTitle": "バックアップと復元",
     "exportIncludeKeys": "エクスポートにAPIキーを含める",
     "exportPassphraseLabel": "暗号化パスフレーズ",
@@ -1952,7 +1952,7 @@
     "restore": "バックアップから復元",
     "syncTitle": "同期（E2EE）",
     "syncComingSoon": "フォルダーまたはリレーへのエンドツーエンド暗号化同期。",
-    "resetTitle": "Waylandをリセット",
+    "resetTitle": "BaddAssAppをリセット",
     "resetDescription": "すべての会話、設定、キャッシュデータを完全に削除します。",
     "resetAction": "すべてをリセット",
     "resetConfirmTitle": "すべてをリセットしますか？",
@@ -2009,7 +2009,7 @@
     "title": "スキルとツール"
   },
   "constitutionPage": {
-    "subtitle": "Wayland のルール。毎ターンごとに新しく読み込まれ、編集は再起動なしで即座に反映されます。オーバーライドの仕組みは §11 を参照してください。",
+    "subtitle": "BaddAssApp のルール。毎ターンごとに新しく読み込まれ、編集は再起動なしで即座に反映されます。オーバーライドの仕組みは §11 を参照してください。",
     "tocTitle": "セクション",
     "tocEmpty": "セクションはまだありません",
     "reset": "リセット",
@@ -2046,7 +2046,7 @@
     "yourAgents": "あなたのエージェント",
     "moreDetected": "その他の検出 · {{count}}",
     "remoteAgents": "リモートエージェント",
-    "empty": "エージェントはまだ検出されていません。モデルを接続すれば Wayland Core は常に利用できます。",
+    "empty": "エージェントはまだ検出されていません。モデルを接続すれば BaddAssApp Core は常に利用できます。",
     "loadErrorsTitle": "一部のエージェントの読み込みに失敗しました",
     "badge": {
       "active": "アクティブ",
@@ -2062,7 +2062,7 @@
       "mistral": "Mistral モデルを実行"
     },
     "about": {
-      "wcore": "Wayland 独自のエンジン。「モデル」ページのすべてのプロバイダーを活用します。",
+      "wcore": "BaddAssApp 独自のエンジン。「モデル」ページのすべてのプロバイダーを活用します。",
       "claude": "Anthropic のコーディングエージェント。独自のアカウントでサインインします、GPT や Gemini は実行できません。",
       "codex": "OpenAI のコーディングエージェント。独自のアカウントでサインインします、Claude や Gemini は実行できません。"
     },
@@ -2084,9 +2084,9 @@
     "fluxSetup": {
       "title": "{{tool}} を Flux 経由でルーティング",
       "absentBody": "このマシンで {{tool}} が検出されません。先にインストールしてから、Flux 経由でルーティングするために戻ってきてください。",
-      "unconfiguredBody": "{{tool}} を Flux 経由でルーティングするようにセットアップします。Wayland は {{configPath}} の {{tool}} の設定に Flux プロバイダーを書き込み、既存のファイルを先にバックアップします。",
+      "unconfiguredBody": "{{tool}} を Flux 経由でルーティングするようにセットアップします。BaddAssApp は {{configPath}} の {{tool}} の設定に Flux プロバイダーを書き込み、既存のファイルを先にバックアップします。",
       "routedBody": "{{tool}} は Flux 経由でルーティングされています。",
-      "driftedBody": "{{tool}} の Flux 設定が Wayland の外で変更されました。Wayland の設定を復元するには再適用するか、{{tool}} から Flux を削除してください。",
+      "driftedBody": "{{tool}} の Flux 設定が BaddAssApp の外で変更されました。BaddAssApp の設定を復元するには再適用するか、{{tool}} から Flux を削除してください。",
       "notConnected": "先に Flux Router を接続してから {{tool}} をセットアップしてください。",
       "genericError": "セットアップが完了しませんでした。",
       "setup": "{{tool}} を Flux 用にセットアップ",

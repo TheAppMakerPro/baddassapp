@@ -10,7 +10,7 @@ let _services: IPlatformServices | null = null;
  */
 export function getDevAppName(): string {
   const isMultiInstance = process.env.WAYLAND_MULTI_INSTANCE === '1';
-  return isMultiInstance ? 'Wayland-Dev-2' : 'Wayland-Dev';
+  return isMultiInstance ? 'BaddAssApp-Dev-2' : 'BaddAssApp-Dev';
 }
 
 export function registerPlatformServices(services: IPlatformServices): void {

@@ -5,7 +5,7 @@
     "description": "集中管理 AI 智能体技能。一次安装，全助手通用。",
     "mySkillsTitle": "我的技能",
     "discoveredTitle": "发现外部技能",
-    "discoveryAlert": "检测到来自 CLI 工具的技能。导入后即可在 Wayland 中使用。",
+    "discoveryAlert": "检测到来自 CLI 工具的技能。导入后即可在 BaddAssApp 中使用。",
     "importAll": "全部导入",
     "importAllSuccess": "成功导入 {{count}} 项技能",
     "noSkills": "未发现技能。请导入技能以开始使用。",
@@ -159,7 +159,7 @@
   "autoPreviewOfficeFiles": "自动预览新建 Office 文件",
   "autoPreviewOfficeFilesDesc": "自动打开当前工作区中新创建的 Word、Excel 和 PowerPoint 文件，并忽略 Office 临时锁定文件。",
   "startOnBoot": "开机启动",
-  "startOnBootDesc": "登录 macOS 或 Windows 后自动启动 Wayland。",
+  "startOnBootDesc": "登录 macOS 或 Windows 后自动启动 BaddAssApp。",
   "startOnBootUnsupported": "仅在打包后的 macOS 和 Windows 客户端中可用。",
   "startOnBootUpdateFailed": "更新开机启动设置失败",
   "closeToTray": "关闭到托盘",
@@ -201,7 +201,7 @@
   "deleteInvalidKeys": "删除无效密钥",
   "testAllKeys": "测试所有密钥",
   "addModelPlaceholder": "请选择或输入模型ID",
-  "customModelSupportNote": "说明：目前 Wayland Core 和 Gemini CLI Agent 支持使用自定义模型。",
+  "customModelSupportNote": "说明：目前 BaddAssApp Core 和 Gemini CLI Agent 支持使用自定义模型。",
   "addModelHint": "选择或输入模型 ID，它会追加到当前平台配置。",
   "addModelSelectedHint": "即将添加模型：{{model}}",
   "currentModelsLabel": "当前模型",
@@ -252,7 +252,7 @@
   "channels": {
     "label": "渠道",
     "telegram": {
-      "help": "通过 Telegram 与你的 Wayland AI 助手聊天。使用 @BotFather 创建一个机器人即可开始。"
+      "help": "通过 Telegram 与你的 BaddAssApp AI 助手聊天。使用 @BotFather 创建一个机器人即可开始。"
     },
     "slack": {
       "comingSoonTitle": "Slack 支持将在 {{phase}} 推出",
@@ -520,7 +520,7 @@
       "pluginEnabled": "MS Teams 插件已启用",
       "enableFailed": "启用插件失败",
       "testAndEnable": "测试并启用",
-      "setupHint": "在 Azure 门户中注册您的机器人：Azure Bot Service → 创建资源 → 配置 Microsoft Teams 渠道 → 将消息传递端点设置为您的 Wayland webhook URL → 在此处复制 App ID 和客户端密钥。",
+      "setupHint": "在 Azure 门户中注册您的机器人：Azure Bot Service → 创建资源 → 配置 Microsoft Teams 渠道 → 将消息传递端点设置为您的 BaddAssApp webhook URL → 在此处复制 App ID 和客户端密钥。",
       "credentials": {
         "appId": {
           "label": "App ID（MicrosoftAppId）",
@@ -858,7 +858,7 @@
       }
     }
   },
-  "webui.description": "把 Wayland 当作\"7*24小时的远程助手\"，随时随地用远程设备安排任务。",
+  "webui.description": "把 BaddAssApp 当作\"7*24小时的远程助手\"，随时随地用远程设备安排任务。",
   "webui.steps": "步骤 1. 打开 WebUI 开关;  步骤 2. 复制访问地址;  步骤 3.远程浏览器打开",
   "webui.configuration": "WebUI 配置",
   "webui.enable": "启用 WebUI",
@@ -936,13 +936,13 @@
   "webui.passwordHint": "首次启动时密码会显示在控制台，如需重置请使用「修改密码」功能",
   "webui.checkConsoleForPassword": "请查看应用控制台获取初始密码",
   "webui.browserNotSupported": "浏览器端无法访问 WebUI 设置",
-  "webui.browserNotSupportedDesc": "出于安全考虑，WebUI 设置只能在桌面应用中管理。请在 Wayland 桌面应用中打开设置面板进行配置。",
+  "webui.browserNotSupportedDesc": "出于安全考虑，WebUI 设置只能在桌面应用中管理。请在 BaddAssApp 桌面应用中打开设置面板进行配置。",
   "webui.passwordHidden": "******",
   "webui.passwordOnlyFirstTime": "密码仅在首次启动时显示，之后将被隐藏",
   "webui.resetPasswordWarning": "请保管好重置之后的密码！",
-  "webui.featureRemoteDesc": "启用 WebUI 后，你可以通过手机或远程浏览器访问 Wayland。",
+  "webui.featureRemoteDesc": "启用 WebUI 后，你可以通过手机或远程浏览器访问 BaddAssApp。",
   "webui.featureChannelsTitle": "Messaging Control",
-  "webui.featureChannelsDesc": "连接 Telegram、Lark、钉钉、微信，在即时通讯软件中与 Wayland 交互。",
+  "webui.featureChannelsDesc": "连接 Telegram、Lark、钉钉、微信，在即时通讯软件中与 BaddAssApp 交互。",
   "webui.goToChannels": "前往 Channels",
   "webui.pairedDevices.title": "Paired Devices",
   "webui.pairedDevices.empty": "No devices paired yet",
@@ -1006,19 +1006,19 @@
   "assistant.step4": "授权成功后，你可以通过 Telegram 与 Gemini 聊天！",
   "channels.title": "渠道配置",
   "channels.telegramTitle": "Telegram",
-  "channels.telegramDesc": "通过 Telegram 与 Wayland 助手对话",
+  "channels.telegramDesc": "通过 Telegram 与 BaddAssApp 助手对话",
   "channels.slackTitle": "Slack",
-  "channels.slackDesc": "通过 Slack 与 Wayland 助手对话",
+  "channels.slackDesc": "通过 Slack 与 BaddAssApp 助手对话",
   "channels.discordTitle": "Discord",
-  "channels.discordDesc": "通过 Discord 与 Wayland 助手对话",
+  "channels.discordDesc": "通过 Discord 与 BaddAssApp 助手对话",
   "channels.larkTitle": "Lark",
-  "channels.larkDesc": "通过 Lark 与 Wayland 助手对话",
+  "channels.larkDesc": "通过 Lark 与 BaddAssApp 助手对话",
   "channels.dingtalkTitle": "钉钉",
-  "channels.dingtalkDesc": "通过钉钉与 Wayland 助手对话",
+  "channels.dingtalkDesc": "通过钉钉与 BaddAssApp 助手对话",
   "channels.weixinTitle": "微信",
-  "channels.weixinDesc": "通过微信与 Wayland 助手对话",
+  "channels.weixinDesc": "通过微信与 BaddAssApp 助手对话",
   "channels.wecomTitle": "企业微信",
-  "channels.wecomDesc": "通过企业微信智能机器人与 Wayland 助手对话",
+  "channels.wecomDesc": "通过企业微信智能机器人与 BaddAssApp 助手对话",
   "channels.comingSoon": "即将上线",
   "channels.comingSoonDesc": "即将支持通过 {{channel}} 与助手直接对话",
   "channels.notConfigured": "未配置",
@@ -1106,7 +1106,7 @@
   "mcpImportSuccess": "导入成功",
   "mcpImportFailed": "导入失败",
   "mcpJsonInvalid": "无效的 JSON 格式",
-  "mcpImportDescription": "Wayland会自动获取的您在CLI Agent中已安装的MCP，并一键导入",
+  "mcpImportDescription": "BaddAssApp会自动获取的您在CLI Agent中已安装的MCP，并一键导入",
   "mcpStepSelectAgent": "选择Agent",
   "mcpStepFetchTools": "获取mcp",
   "mcpStepImportSuccess": "导入成功",
@@ -1490,8 +1490,8 @@
     "marketUpdate": "更新",
     "marketEmpty": "暂未发现可安装的 Agent。请检查网络连接，并确认当前环境可以正常访问 GitHub。",
     "marketContributionHint": "想让新的 Agent 出现在市场中？",
-    "marketContributionAction": "前往 WaylandHub 提交 PR",
-    "marketComingSoon": "WaylandHub 市场即将上线。",
+    "marketContributionAction": "前往 BaddAssApp Hub 提交 PR",
+    "marketComingSoon": "BaddAssApp Hub 市场即将上线。",
     "detectCustomAgent": "识别自定义 Agent",
     "editCustomAgent": "编辑自定义 Agent",
     "localAgentsEmpty": "未检测到本地 Agent",
@@ -1549,7 +1549,7 @@
     "notFound": "未找到",
     "version": "版本",
     "path": "路径",
-    "providerNote": "服务商和 API 密钥设置在模型页面管理。Wayland Core 支持：Anthropic、OpenAI、AWS Bedrock。"
+    "providerNote": "服务商和 API 密钥设置在模型页面管理。BaddAssApp Core 支持：Anthropic、OpenAI、AWS Bedrock。"
   },
   "shared": {
     "saving": "保存中…",
@@ -1604,7 +1604,7 @@
     "footerText": "更多渠道可通过扩展添加。",
     "browseExtensions": "浏览扩展 →",
     "channelsMovedHint": "消息渠道已移至集成 →",
-    "subtitle": "将 Wayland 连接到消息平台。每个连接都有各自的设置、凭据和状态。",
+    "subtitle": "将 BaddAssApp 连接到消息平台。每个连接都有各自的设置、凭据和状态。",
     "tier1Tab": "第 1 级",
     "tier2Tab": "第 2 级",
     "tier3Tab": "第 3 级",
@@ -1644,7 +1644,7 @@
       "keyLabel": "粘贴 API 密钥",
       "keyPlaceholder": "粘贴任意提供商的密钥…",
       "connect": "连接",
-      "hintDefault": "Wayland 会自动识别提供商，无需手动选择。",
+      "hintDefault": "BaddAssApp 会自动识别提供商，无需手动选择。",
       "hintAmbiguous": "看起来是 OpenAI 风格的密钥，连接后确认提供商。",
       "recognized": "已识别：",
       "cloudHint": "该提供商需要在“浏览”中填写凭据表单。",
@@ -1687,7 +1687,7 @@
       "errorUnrecognized": "无法为 {{provider}} 识别该密钥。",
       "errorNoModels": "{{provider}} 已连接但未返回任何模型。请稍后重试。",
       "errorUnknown": "无法连接 {{provider}}。请重试。",
-      "trust": "来自 Ferrox Labs，Wayland 背后的团队。"
+      "trust": "来自 Ferrox Labs，BaddAssApp 背后的团队。"
     },
     "detected": {
       "found": "在本机上发现一个 {{provider}} API 密钥。使用它吗？",
@@ -1889,7 +1889,7 @@
   },
   "mcpPage": {
     "title": "MCP 服务器",
-    "subtitle": "通过 Model Context Protocol 将 Wayland 连接到外部工具服务器。在你的各个智能体之间添加、配置和同步 MCP 服务器。"
+    "subtitle": "通过 Model Context Protocol 将 BaddAssApp 连接到外部工具服务器。在你的各个智能体之间添加、配置和同步 MCP 服务器。"
   },
   "imageGenPage": {
     "title": "图像生成",
@@ -1906,11 +1906,11 @@
   },
   "notificationsPage": {
     "title": "通知",
-    "subtitle": "Wayland 何时以及如何向你发出提醒。",
+    "subtitle": "BaddAssApp 何时以及如何向你发出提醒。",
     "comingSoon": "分类开关、免打扰时段和声音控制将在下个版本推出。",
     "systemTitle": "系统通知",
     "master": "总开关",
-    "masterHelp": "关闭后，Wayland 将不发送任何系统通知。下方其他规则将被忽略。",
+    "masterHelp": "关闭后，BaddAssApp 将不发送任何系统通知。下方其他规则将被忽略。",
     "agentFinished": "智能体完成时通知",
     "agentFinishedHelp": "当长时间运行的任务或团队启动器完成时触发。",
     "scheduledTask": "定时任务触发时通知",
@@ -1942,7 +1942,7 @@
     "open": "打开",
     "clear": "清除",
     "clearConfirmTitle": "清除目录？",
-    "clearConfirmBody": "此操作将永久删除其中的文件。Wayland 会在需要时重新生成它们。",
+    "clearConfirmBody": "此操作将永久删除其中的文件。BaddAssApp 会在需要时重新生成它们。",
     "backupTitle": "备份与恢复",
     "exportIncludeKeys": "在导出中包含 API 密钥",
     "exportPassphraseLabel": "加密口令",
@@ -1951,7 +1951,7 @@
     "restore": "从备份恢复",
     "syncTitle": "同步（端到端加密）",
     "syncComingSoon": "端到端加密同步到文件夹或中继服务器。",
-    "resetTitle": "重置 Wayland",
+    "resetTitle": "重置 BaddAssApp",
     "resetDescription": "永久删除所有对话、设置和缓存数据。",
     "resetAction": "重置全部",
     "resetConfirmTitle": "重置全部？",
@@ -2008,7 +2008,7 @@
     "title": "技能与工具"
   },
   "constitutionPage": {
-    "subtitle": "Wayland 的规则。每轮对话都会重新加载，编辑即时生效，无需重启。覆盖机制的工作方式请参见 §11。",
+    "subtitle": "BaddAssApp 的规则。每轮对话都会重新加载，编辑即时生效，无需重启。覆盖机制的工作方式请参见 §11。",
     "tocTitle": "章节",
     "tocEmpty": "暂无章节",
     "reset": "重置",
@@ -2045,7 +2045,7 @@
     "yourAgents": "你的智能体",
     "moreDetected": "更多已检测 · {{count}}",
     "remoteAgents": "远程智能体",
-    "empty": "尚未检测到智能体。连接模型后，Wayland Core 始终可用。",
+    "empty": "尚未检测到智能体。连接模型后，BaddAssApp Core 始终可用。",
     "loadErrorsTitle": "部分智能体加载失败",
     "badge": {
       "active": "运行中",
@@ -2061,7 +2061,7 @@
       "mistral": "运行 Mistral 模型"
     },
     "about": {
-      "wcore": "Wayland 自研引擎。调用你「模型」页面上的每个提供商。",
+      "wcore": "BaddAssApp 自研引擎。调用你「模型」页面上的每个提供商。",
       "claude": "Anthropic 的编程智能体。使用自己的账号登录，无法运行 GPT 或 Gemini。",
       "codex": "OpenAI 的编程智能体。使用自己的账号登录，无法运行 Claude 或 Gemini。"
     },
@@ -2083,9 +2083,9 @@
     "fluxSetup": {
       "title": "通过 Flux 路由 {{tool}}",
       "absentBody": "本机未检测到 {{tool}}。请先安装它，然后再回来通过 Flux 进行路由。",
-      "unconfiguredBody": "设置 {{tool}} 以通过 Flux 路由。Wayland 会在 {{configPath}} 的 {{tool}} 配置中写入一个 Flux 服务商，并会先备份现有文件。",
+      "unconfiguredBody": "设置 {{tool}} 以通过 Flux 路由。BaddAssApp 会在 {{configPath}} 的 {{tool}} 配置中写入一个 Flux 服务商，并会先备份现有文件。",
       "routedBody": "{{tool}} 正在通过 Flux 路由。",
-      "driftedBody": "{{tool}} 的 Flux 配置在 Wayland 之外被更改。重新应用以恢复 Wayland 的设置，或从 {{tool}} 中移除 Flux。",
+      "driftedBody": "{{tool}} 的 Flux 配置在 BaddAssApp 之外被更改。重新应用以恢复 BaddAssApp 的设置，或从 {{tool}} 中移除 Flux。",
       "notConnected": "请先连接 Flux Router，然后再设置 {{tool}}。",
       "genericError": "设置未完成。",
       "setup": "为 Flux 设置 {{tool}}",

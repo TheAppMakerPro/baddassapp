@@ -45,7 +45,7 @@
     "title": "Conectar {{vendor}} - cole as credenciais OAuth",
     "submit": "Salvar e entrar",
     "cancel": "Cancelar",
-    "universalIntro": "{{vendor}} não permite que o Wayland registre automaticamente um cliente OAuth. Registre um app OAuth no console de desenvolvedor do fornecedor e cole as credenciais abaixo.",
+    "universalIntro": "{{vendor}} não permite que o BaddAssApp registre automaticamente um cliente OAuth. Registre um app OAuth no console de desenvolvedor do fornecedor e cole as credenciais abaixo.",
     "openConsole": "Abrir console de desenvolvedor do {{vendor}}",
     "redirectLabel": "URI de redirecionamento para colar no console do fornecedor:",
     "clientIdLabel": "Client ID",

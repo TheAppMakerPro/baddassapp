@@ -165,7 +165,7 @@ const WebhookConfigForm: React.FC<WebhookConfigFormProps> = ({
         label={t('settings.channels.webhook.credentials.outboundUrl.label', 'Outbound URL')}
         description={t(
           'settings.channels.webhook.credentials.outboundUrl.help',
-          'Wayland will POST outgoing messages to this URL. Must return 2xx.'
+          'BaddAssApp will POST outgoing messages to this URL. Must return 2xx.'
         )}
         required
       >

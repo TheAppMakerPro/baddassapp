@@ -21,7 +21,7 @@
     "confirmTitle": "Schritt {{n}} autonom ausführen?",
     "confirmOk": "Autonom ausführen",
     "confirmCancel": "Abbrechen",
-    "confirmBody": "Wayland startet einen autonomen Worker, um Schritt {{n}} im Hintergrund abzuschließen. Du kannst in der Hauptsitzung weiterchatten.",
+    "confirmBody": "BaddAssApp startet einen autonomen Worker, um Schritt {{n}} im Hintergrund abzuschließen. Du kannst in der Hauptsitzung weiterchatten.",
     "confirmEta": "Voraussichtliche Dauer: 4–8 Minuten."
   }
 }

@@ -5,7 +5,7 @@
   },
   "pitch": {
     "headline": "Une mémoire qui vous suit",
-    "lede": "Wayland se souvient de ce sur quoi vous avez travaillé, décidé et livré. Chaque assistant reçoit le contexte -- sans avoir à tout réexpliquer. Propulsé par IJFW, un moteur de mémoire open source de Ferrox Labs.",
+    "lede": "BaddAssApp se souvient de ce sur quoi vous avez travaillé, décidé et livré. Chaque assistant reçoit le contexte -- sans avoir à tout réexpliquer. Propulsé par IJFW, un moteur de mémoire open source de Ferrox Labs.",
     "bullet1": "Persistante entre les discussions, les projets et les CLI",
     "bullet2": "Cherchable, exportable, à vous",
     "bullet3": "Aucune configuration après l'installation",
@@ -37,7 +37,7 @@
   "upgrading": {
     "title": "Mise à jour de Memory",
     "subtitle": "Préparation de {{version}} pour le prochain démarrage",
-    "pending_message": "Mise à jour prête. Elle s'activera au redémarrage de Wayland.",
+    "pending_message": "Mise à jour prête. Elle s'activera au redémarrage de BaddAssApp.",
     "restart_now": "Redémarrer maintenant"
   },
   "failed": {
@@ -53,11 +53,11 @@
     "invalid_target_version": "Numéro de version invalide depuis le registre. Réessayez plus tard.",
     "unsafe_ownership": "Le dossier d'installation en attente a des droits de propriété non sûrs et a été rejeté. Réinstallez pour récupérer.",
     "stage_pending_failed": "Impossible de préparer la nouvelle installation. Vérifiez l'espace disque et réessayez.",
-    "stage_swap_failed": "Impossible de basculer vers la nouvelle installation. Redémarrez Wayland pour réessayer.",
+    "stage_swap_failed": "Impossible de basculer vers la nouvelle installation. Redémarrez BaddAssApp pour réessayer.",
     "upgrade_failed_no_rollback": "La mise à jour a échoué et la version précédente n'a pas pu être restaurée. Réinstallez pour récupérer.",
     "upgrade_failed_rolled_back": "La mise à jour a échoué mais votre version précédente fonctionne toujours. Réessayez plus tard ou consultez les détails.",
     "rollback_also_failed": "La nouvelle version et la restauration ont toutes deux échoué. Réinstallez pour récupérer.",
-    "mcp_crashed": "Memory a planté. Redémarrez Wayland pour récupérer.",
+    "mcp_crashed": "Memory a planté. Redémarrez BaddAssApp pour récupérer.",
     "mcp_error": "Memory a renvoyé une erreur. Réessayez.",
     "timeout": "Memory n'a pas répondu à temps. Réessayez.",
     "validation_failed": "Cette requête ne correspond pas à ce que Memory attend.",
@@ -97,15 +97,15 @@
   "settings": {
     "panel_title": "IJFW Memory (Ferrox Labs)",
     "skip_label": "Ignorer la configuration automatique d'IJFW",
-    "skip_description": "Lorsque cette option est activée, Wayland n'installera ni ne mettra à jour IJFW. Vous pourrez l'installer manuellement plus tard depuis la page Mémoire.",
+    "skip_description": "Lorsque cette option est activée, BaddAssApp n'installera ni ne mettra à jour IJFW. Vous pourrez l'installer manuellement plus tard depuis la page Mémoire.",
     "manual_install_hint": "Pour installer manuellement : exécutez `npx -y @ijfw/install@latest` dans un terminal",
     "about_title": "IJFW Memory",
     "about_body": "Un moteur de mémoire persistante open source de Ferrox Labs."
   },
   "prelude": {
     "installing_notice": "IJFW est en cours d'installation. Les CLI externes (Claude Code, Codex, Gemini CLI) le prendront en charge une fois l'installation terminée.",
-    "disabled_notice": "IJFW est désactivé dans les Paramètres de Wayland. Réactivez-le pour partager la mémoire avec les CLI externes.",
-    "failed_notice": "L'installation d'IJFW a échoué. Rendez-vous sur la page Mémoire dans Wayland pour réessayer."
+    "disabled_notice": "IJFW est désactivé dans les Paramètres de BaddAssApp. Réactivez-le pour partager la mémoire avec les CLI externes.",
+    "failed_notice": "L'installation d'IJFW a échoué. Rendez-vous sur la page Mémoire dans BaddAssApp pour réessayer."
   },
   "home": {
     "wiki_title": "Wiki",
@@ -432,7 +432,7 @@
       },
       "dropFolder": {
         "title": "Dossier de dépôt",
-        "hint": "Déposez des fichiers .md / .txt / .json dans ~/Documents/Wayland-Memory/",
+        "hint": "Déposez des fichiers .md / .txt / .json dans ~/Documents/BaddAssApp-Memory/",
         "count": "{{count}} fichiers traités",
         "openBtn": "Ouvrir le dossier",
         "processBtn": "Traiter maintenant",

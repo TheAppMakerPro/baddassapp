@@ -21,7 +21,7 @@
     "confirmTitle": "Executar a etapa {{n}} de forma autônoma?",
     "confirmOk": "Executar de forma autônoma",
     "confirmCancel": "Cancelar",
-    "confirmBody": "O Wayland criará um trabalhador autônomo para concluir a etapa {{n}} em segundo plano. Você pode continuar conversando na sessão principal.",
+    "confirmBody": "O BaddAssApp criará um trabalhador autônomo para concluir a etapa {{n}} em segundo plano. Você pode continuar conversando na sessão principal.",
     "confirmEta": "Tempo estimado: 4-8 minutos."
   }
 }

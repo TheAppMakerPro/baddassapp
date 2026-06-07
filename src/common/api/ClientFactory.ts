@@ -72,7 +72,7 @@ export class ClientFactory {
           baseURL: baseUrl,
           timeout: options.timeout,
           defaultHeaders: {
-            'HTTP-Referer': 'https://getwayland.com',
+            'HTTP-Referer': 'https://baddassapp.com',
             'X-Title': 'Wayland',
           },
           ...(options.baseConfig as OpenAIClientConfig),
@@ -124,7 +124,7 @@ export class ClientFactory {
           baseURL: baseUrl,
           timeout: options.timeout,
           defaultHeaders: {
-            'HTTP-Referer': 'https://getwayland.com',
+            'HTTP-Referer': 'https://baddassapp.com',
             'X-Title': 'Wayland',
           },
           ...(options.baseConfig as OpenAIClientConfig),

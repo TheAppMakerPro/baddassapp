@@ -26,7 +26,7 @@
     "description": "Verwalte KI-Agenten-Skills zentral. Einmal installieren, in allen Assistenten nutzen.",
     "mySkillsTitle": "Meine Skills",
     "discoveredTitle": "Entdeckte externe Skills",
-    "discoveryAlert": "Skills aus deinen CLI-Tools erkannt. Importiere sie zur Nutzung in Wayland.",
+    "discoveryAlert": "Skills aus deinen CLI-Tools erkannt. Importiere sie zur Nutzung in BaddAssApp.",
     "importAll": "Alle importieren",
     "importAllSuccess": "{{count}} Skills importiert",
     "noSkills": "Keine Skills gefunden. Importiere welche, um loszulegen.",
@@ -180,7 +180,7 @@
   "autoPreviewOfficeFiles": "Neue Office-Dateien automatisch vorschauen",
   "autoPreviewOfficeFilesDesc": "Neu erstellte Word-, Excel- und PowerPoint-Dateien im aktuellen Arbeitsbereich automatisch öffnen. Temporäre Office-Sperrdateien werden ignoriert.",
   "startOnBoot": "Beim Start ausführen",
-  "startOnBootDesc": "Wayland automatisch starten, wenn du dich bei macOS, Windows oder Linux anmeldest.",
+  "startOnBootDesc": "BaddAssApp automatisch starten, wenn du dich bei macOS, Windows oder Linux anmeldest.",
   "startOnBootUnsupported": "Nur in paketierten Apps für macOS, Windows und Linux verfügbar.",
   "startOnBootUpdateFailed": "Einstellung „Beim Start ausführen“ konnte nicht aktualisiert werden",
   "closeToTray": "In den Infobereich minimieren",
@@ -223,7 +223,7 @@
   "deleteInvalidKeys": "Ungültige Schlüssel löschen",
   "testAllKeys": "Alle Schlüssel testen",
   "addModelPlaceholder": "Modell-ID auswählen oder eingeben",
-  "customModelSupportNote": "Hinweis: Wayland Core und der Gemini CLI Agent unterstützen derzeit benutzerdefinierte Modelle.",
+  "customModelSupportNote": "Hinweis: BaddAssApp Core und der Gemini CLI Agent unterstützen derzeit benutzerdefinierte Modelle.",
   "addModelHint": "Wähle oder gib eine Modell-ID ein, und sie wird diesem Anbieter hinzugefügt.",
   "addModelSelectedHint": "Bereit zum Hinzufügen des Modells: {{model}}",
   "currentModelsLabel": "Aktuelle Modelle",
@@ -274,7 +274,7 @@
   "channels": {
     "label": "Kanäle",
     "telegram": {
-      "help": "Chatte über Telegram mit deinem Wayland-KI-Assistenten. Erstelle einen Bot mit @BotFather, um loszulegen."
+      "help": "Chatte über Telegram mit deinem BaddAssApp-KI-Assistenten. Erstelle einen Bot mit @BotFather, um loszulegen."
     },
     "slack": {
       "comingSoonTitle": "Slack-Unterstützung kommt in {{phase}}",
@@ -530,7 +530,7 @@
       "pluginEnabled": "MS-Teams-Plugin aktiviert",
       "enableFailed": "Plugin konnte nicht aktiviert werden",
       "testAndEnable": "Testen & aktivieren",
-      "setupHint": "Registriere deinen Bot im Azure-Portal: Azure Bot Service → Ressource erstellen → Microsoft-Teams-Kanal konfigurieren → Messaging-Endpunkt auf deine Wayland-Webhook-URL setzen → App ID und Client Secret hierher kopieren.",
+      "setupHint": "Registriere deinen Bot im Azure-Portal: Azure Bot Service → Ressource erstellen → Microsoft-Teams-Kanal konfigurieren → Messaging-Endpunkt auf deine BaddAssApp-Webhook-URL setzen → App ID und Client Secret hierher kopieren.",
       "credentials": {
         "appId": {
           "label": "App ID (MicrosoftAppId)",
@@ -868,7 +868,7 @@
       }
     }
   },
-  "webui.description": "Nutze Wayland als deinen „24/7-Remote-Assistenten“ – organisiere Aufgaben von jedem Remote-Gerät aus, jederzeit und überall.",
+  "webui.description": "Nutze BaddAssApp als deinen „24/7-Remote-Assistenten“ – organisiere Aufgaben von jedem Remote-Gerät aus, jederzeit und überall.",
   "webui.steps": "Schritt 1. WebUI aktivieren; Schritt 2. Zugriffs-URL kopieren; Schritt 3. Im Remote-Browser öffnen",
   "webui.configuration": "WebUI-Konfiguration",
   "webui.enable": "WebUI aktivieren",
@@ -946,13 +946,13 @@
   "webui.passwordHint": "Das Passwort wird beim ersten Start in der Konsole angezeigt. Nutze „Passwort ändern“ zum Zurücksetzen",
   "webui.checkConsoleForPassword": "Sieh in der Anwendungskonsole nach dem Anfangspasswort",
   "webui.browserNotSupported": "WebUI-Einstellungen im Browser nicht verfügbar",
-  "webui.browserNotSupportedDesc": "Aus Sicherheitsgründen können WebUI-Einstellungen nur in der Desktop-Anwendung verwaltet werden. Bitte öffne das Einstellungsfenster in der Wayland-Desktop-App zur Konfiguration.",
+  "webui.browserNotSupportedDesc": "Aus Sicherheitsgründen können WebUI-Einstellungen nur in der Desktop-Anwendung verwaltet werden. Bitte öffne das Einstellungsfenster in der BaddAssApp-Desktop-App zur Konfiguration.",
   "webui.passwordHidden": "******",
   "webui.passwordOnlyFirstTime": "Das Passwort wird nur beim ersten Start angezeigt und danach ausgeblendet",
   "webui.resetPasswordWarning": "Bitte bewahre das zurückgesetzte Passwort sicher auf!",
-  "webui.featureRemoteDesc": "Aktiviere WebUI, damit dein Telefon oder Remote-Browser auf Wayland zugreifen kann.",
+  "webui.featureRemoteDesc": "Aktiviere WebUI, damit dein Telefon oder Remote-Browser auf BaddAssApp zugreifen kann.",
   "webui.featureChannelsTitle": "Messaging-Steuerung",
-  "webui.featureChannelsDesc": "Verbinde Telegram, Lark, DingTalk und WeChat, um aus IM-Apps mit Wayland zu interagieren.",
+  "webui.featureChannelsDesc": "Verbinde Telegram, Lark, DingTalk und WeChat, um aus IM-Apps mit BaddAssApp zu interagieren.",
   "webui.goToChannels": "Zu den Kanälen",
   "webui.pairedDevices.title": "Gekoppelte Geräte",
   "webui.pairedDevices.empty": "Noch keine Geräte gekoppelt",
@@ -1014,24 +1014,24 @@
   "assistant.step4": "Nach der Genehmigung kannst du über Telegram mit Gemini chatten!",
   "channels.title": "Kanäle",
   "channels.telegramTitle": "Telegram",
-  "channels.telegramDesc": "Chatte über Telegram mit dem Wayland-Assistenten",
+  "channels.telegramDesc": "Chatte über Telegram mit dem BaddAssApp-Assistenten",
   "channels.slackTitle": "Slack",
-  "channels.slackDesc": "Chatte über Slack mit dem Wayland-Assistenten",
+  "channels.slackDesc": "Chatte über Slack mit dem BaddAssApp-Assistenten",
   "channels.discordTitle": "Discord",
-  "channels.discordDesc": "Chatte über Discord mit dem Wayland-Assistenten",
+  "channels.discordDesc": "Chatte über Discord mit dem BaddAssApp-Assistenten",
   "channels.larkTitle": "Lark",
-  "channels.larkDesc": "Chatte über Lark mit dem Wayland-Assistenten",
+  "channels.larkDesc": "Chatte über Lark mit dem BaddAssApp-Assistenten",
   "channels.dingtalkTitle": "DingTalk",
-  "channels.dingtalkDesc": "Chatte über DingTalk mit dem Wayland-Assistenten",
+  "channels.dingtalkDesc": "Chatte über DingTalk mit dem BaddAssApp-Assistenten",
   "channels.weixinTitle": "WeChat",
-  "channels.weixinDesc": "Chatte über WeChat mit dem Wayland-Assistenten",
+  "channels.weixinDesc": "Chatte über WeChat mit dem BaddAssApp-Assistenten",
   "channels.wecomTitle": "WeCom",
-  "channels.wecomDesc": "Chatte über WeCom mit dem Wayland-Assistenten (Enterprise-WeChat-KI-Bot)",
+  "channels.wecomDesc": "Chatte über WeCom mit dem BaddAssApp-Assistenten (Enterprise-WeChat-KI-Bot)",
   "channels.comingSoon": "Demnächst verfügbar",
   "channels.comingSoonDesc": "Unterstützung für {{channel}} kommt bald",
   "channels.notConfigured": "Nicht konfiguriert",
   "channels.configured": "Konfiguriert",
-  "channels.guide": "Verbinde Telegram, Lark, DingTalk und mehr, um deinen stets aktiven Wayland-KI-Agenten aus jeder Chat-App zu steuern.",
+  "channels.guide": "Verbinde Telegram, Lark, DingTalk und mehr, um deinen stets aktiven BaddAssApp-KI-Agenten aus jeder Chat-App zu steuern.",
   "channels.selectFirst": "Wähle einen Kanal und konfiguriere die Anmeldedaten.",
   "channels.enableAfterConfig": "Aktiviere den Kanal und beginne, mit deinem KI-Agenten zu chatten.",
   "channels.extension.requiredField": "Bitte fülle das erforderliche Feld aus: {{field}}",
@@ -1129,7 +1129,7 @@
   "mcpImportSuccess": "Import erfolgreich",
   "mcpImportFailed": "Import fehlgeschlagen",
   "mcpJsonInvalid": "Ungültiges JSON-Format",
-  "mcpImportDescription": "Wayland ruft die in deinem CLI-Agenten installierten MCP automatisch ab und importiert sie mit einem Klick",
+  "mcpImportDescription": "BaddAssApp ruft die in deinem CLI-Agenten installierten MCP automatisch ab und importiert sie mit einem Klick",
   "mcpStepSelectAgent": "Agent auswählen",
   "mcpStepFetchTools": "MCP abrufen",
   "mcpStepImportSuccess": "Import erfolgreich",
@@ -1512,8 +1512,8 @@
     "marketUpdate": "Aktualisieren",
     "marketEmpty": "Keine installierbaren Agenten gefunden. Prüfe deine Netzwerkverbindung und stelle sicher, dass GitHub erreichbar ist.",
     "marketContributionHint": "Möchtest du, dass ein neuer Agent hier gelistet wird?",
-    "marketContributionAction": "Eröffne einen PR auf WaylandHub",
-    "marketComingSoon": "Der WaylandHub-Markt kommt bald.",
+    "marketContributionAction": "Eröffne einen PR auf BaddAssApp Hub",
+    "marketComingSoon": "Der BaddAssApp Hub-Markt kommt bald.",
     "detectCustomAgent": "Benutzerdefinierten Agenten erkennen",
     "editCustomAgent": "Benutzerdefinierten Agenten bearbeiten",
     "localAgentsEmpty": "Keine lokalen Agenten erkannt",
@@ -1571,7 +1571,7 @@
     "notFound": "Nicht gefunden",
     "version": "Version",
     "path": "Pfad",
-    "providerNote": "Anbieter- und API-Schlüssel-Einstellungen werden auf der Modelle-Seite verwaltet. Wayland Core unterstützt: Anthropic, OpenAI, AWS Bedrock."
+    "providerNote": "Anbieter- und API-Schlüssel-Einstellungen werden auf der Modelle-Seite verwaltet. BaddAssApp Core unterstützt: Anthropic, OpenAI, AWS Bedrock."
   },
   "shared": {
     "saving": "Wird gespeichert…",
@@ -1611,7 +1611,7 @@
   },
   "channelsIndex": {
     "title": "Kanäle",
-    "subtitle": "Verbinde Wayland mit Messaging-Plattformen. Jede Verbindung hat ihre eigene Einrichtung, Anmeldedaten und ihren eigenen Status.",
+    "subtitle": "Verbinde BaddAssApp mit Messaging-Plattformen. Jede Verbindung hat ihre eigene Einrichtung, Anmeldedaten und ihren eigenen Status.",
     "tier1Tab": "Stufe 1",
     "tier2Tab": "Stufe 2",
     "tier3Tab": "Stufe 3",
@@ -1678,7 +1678,7 @@
       "keyLabel": "API-Schlüssel einfügen",
       "keyPlaceholder": "Schlüssel eines beliebigen Anbieters einfügen…",
       "connect": "Verbinden",
-      "hintDefault": "Wayland erkennt den Anbieter selbst, du musst keinen auswählen.",
+      "hintDefault": "BaddAssApp erkennt den Anbieter selbst, du musst keinen auswählen.",
       "hintAmbiguous": "Sieht nach einem Schlüssel im OpenAI-Stil aus, verbinde dich, um den Anbieter zu bestätigen.",
       "recognized": "Erkannt:",
       "cloudHint": "dieser Anbieter benötigt ein Anmeldedatenformular aus Durchsuchen.",
@@ -1721,7 +1721,7 @@
       "errorUnrecognized": "Dieser Schlüssel wurde für {{provider}} nicht erkannt.",
       "errorNoModels": "{{provider}} verbunden, aber keine Modelle zurückgegeben. Versuche es gleich noch einmal.",
       "errorUnknown": "Verbindung zu {{provider}} fehlgeschlagen. Bitte versuche es erneut.",
-      "trust": "Von Ferrox Labs, dem Team hinter Wayland."
+      "trust": "Von Ferrox Labs, dem Team hinter BaddAssApp."
     },
     "detected": {
       "found": "Ein {{provider}}-API-Schlüssel auf diesem Gerät gefunden. Verwenden?",
@@ -1911,7 +1911,7 @@
   },
   "mcpPage": {
     "title": "MCP-Server",
-    "subtitle": "Verbinde Wayland über das Model Context Protocol mit externen Tool-Servern. Füge MCP-Server hinzu, konfiguriere sie und synchronisiere sie über deine Agenten hinweg."
+    "subtitle": "Verbinde BaddAssApp über das Model Context Protocol mit externen Tool-Servern. Füge MCP-Server hinzu, konfiguriere sie und synchronisiere sie über deine Agenten hinweg."
   },
   "imageGenPage": {
     "title": "Bildgenerierung",
@@ -1932,11 +1932,11 @@
   },
   "notificationsPage": {
     "title": "Benachrichtigungen",
-    "subtitle": "Wann und wie Wayland dich benachrichtigt.",
+    "subtitle": "Wann und wie BaddAssApp dich benachrichtigt.",
     "comingSoon": "Schalter pro Kategorie, Ruhezeiten und Tonsteuerung kommen im nächsten Release.",
     "systemTitle": "Systembenachrichtigungen",
     "master": "Hauptschalter",
-    "masterHelp": "Wenn deaktiviert, sendet Wayland keine Systembenachrichtigungen. Die anderen Regeln unten werden ignoriert.",
+    "masterHelp": "Wenn deaktiviert, sendet BaddAssApp keine Systembenachrichtigungen. Die anderen Regeln unten werden ignoriert.",
     "agentFinished": "Benachrichtigen, wenn der Agent fertig ist",
     "agentFinishedHelp": "Wird ausgelöst, wenn eine langlaufende Aufgabe oder ein Team-Launcher abgeschlossen ist.",
     "scheduledTask": "Bei Auslösung geplanter Aufgaben benachrichtigen",
@@ -1968,7 +1968,7 @@
     "open": "Öffnen",
     "clear": "Leeren",
     "clearConfirmTitle": "Verzeichnis leeren?",
-    "clearConfirmBody": "Dadurch werden die enthaltenen Dateien dauerhaft entfernt. Wayland baut sie bei Bedarf neu auf.",
+    "clearConfirmBody": "Dadurch werden die enthaltenen Dateien dauerhaft entfernt. BaddAssApp baut sie bei Bedarf neu auf.",
     "backupTitle": "Sicherung & Wiederherstellung",
     "exportIncludeKeys": "API-Schlüssel in den Export einbeziehen",
     "exportPassphraseLabel": "Verschlüsselungspassphrase",
@@ -1977,7 +1977,7 @@
     "restore": "Aus Sicherung wiederherstellen",
     "syncTitle": "Synchronisierung (E2EE)",
     "syncComingSoon": "Ende-zu-Ende-verschlüsselte Synchronisierung zu einem Ordner oder Relay.",
-    "resetTitle": "Wayland zurücksetzen",
+    "resetTitle": "BaddAssApp zurücksetzen",
     "resetDescription": "Alle Gespräche, Einstellungen und zwischengespeicherten Daten dauerhaft löschen.",
     "resetAction": "Alles zurücksetzen",
     "resetConfirmTitle": "Alles zurücksetzen?",
@@ -2034,7 +2034,7 @@
     "title": "Skills & Tools"
   },
   "constitutionPage": {
-    "subtitle": "Waylands Regeln. Werden bei jeder Runde frisch geladen, Änderungen werden sofort wirksam, ohne Neustart. Siehe §11, wie Überschreibungen funktionieren.",
+    "subtitle": "BaddAssApps Regeln. Werden bei jeder Runde frisch geladen, Änderungen werden sofort wirksam, ohne Neustart. Siehe §11, wie Überschreibungen funktionieren.",
     "tocTitle": "Abschnitte",
     "tocEmpty": "Noch keine Abschnitte",
     "reset": "Zurücksetzen",
@@ -2071,7 +2071,7 @@
     "yourAgents": "Deine Agenten",
     "moreDetected": "Weitere erkannt · {{count}}",
     "remoteAgents": "Remote-Agenten",
-    "empty": "Noch keine Agenten erkannt. Wayland Core ist immer verfügbar, sobald ein Modell verbunden ist.",
+    "empty": "Noch keine Agenten erkannt. BaddAssApp Core ist immer verfügbar, sobald ein Modell verbunden ist.",
     "loadErrorsTitle": "Einige Agenten konnten nicht geladen werden",
     "badge": {
       "active": "Aktiv",
@@ -2087,7 +2087,7 @@
       "mistral": "Führt Mistral-Modelle aus"
     },
     "about": {
-      "wcore": "Waylands eigene Engine. Greift auf jeden Anbieter auf deiner Modelle-Seite zu.",
+      "wcore": "BaddAssApps eigene Engine. Greift auf jeden Anbieter auf deiner Modelle-Seite zu.",
       "claude": "Anthropics Coding-Agent. Meldet sich mit eigenem Konto an, kann GPT oder Gemini nicht ausführen.",
       "codex": "OpenAIs Coding-Agent. Meldet sich mit eigenem Konto an, kann Claude oder Gemini nicht ausführen."
     },
@@ -2109,9 +2109,9 @@
     "fluxSetup": {
       "title": "{{tool}} über Flux routen",
       "absentBody": "{{tool}} wurde auf diesem Rechner nicht gefunden. Installiere es zuerst und komme dann zurück, um es über Flux zu routen.",
-      "unconfiguredBody": "Richte {{tool}} ein, um es über Flux zu routen. Wayland schreibt einen Flux-Provider in die {{tool}}-Konfiguration unter {{configPath}} und sichert die vorhandene Datei zuvor.",
+      "unconfiguredBody": "Richte {{tool}} ein, um es über Flux zu routen. BaddAssApp schreibt einen Flux-Provider in die {{tool}}-Konfiguration unter {{configPath}} und sichert die vorhandene Datei zuvor.",
       "routedBody": "{{tool}} wird über Flux geroutet.",
-      "driftedBody": "Die Flux-Konfiguration von {{tool}} wurde außerhalb von Wayland geändert. Wende sie erneut an, um Waylands Einstellungen wiederherzustellen, oder entferne Flux aus {{tool}}.",
+      "driftedBody": "Die Flux-Konfiguration von {{tool}} wurde außerhalb von BaddAssApp geändert. Wende sie erneut an, um BaddAssApps Einstellungen wiederherzustellen, oder entferne Flux aus {{tool}}.",
       "notConnected": "Verbinde zuerst den Flux Router und richte dann {{tool}} ein.",
       "genericError": "Die Einrichtung wurde nicht abgeschlossen.",
       "setup": "{{tool}} für Flux einrichten",

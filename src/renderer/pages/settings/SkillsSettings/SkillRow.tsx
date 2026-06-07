@@ -34,7 +34,7 @@ export const VERDICT_ICON: Record<SkillVerdict, React.ReactNode> = {
 
 // Friendly source labels - also consumed by the detail drawer.
 export const SOURCE_LABEL: Record<SkillSource, string> = {
-  'wayland-library': 'Wayland library',
+  'wayland-library': 'BaddAssApp library',
   team: 'Team',
   user: 'My skills',
   imported: 'Imported',

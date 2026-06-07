@@ -5,7 +5,7 @@
   },
   "pitch": {
     "headline": "Memory that follows you",
-    "lede": "Wayland remembers what you've worked on, decided, and shipped. Every assistant gets the context -- no re-explaining. Powered by IJFW, an open-source memory engine by Ferrox Labs.",
+    "lede": "BaddAssApp remembers what you've worked on, decided, and shipped. Every assistant gets the context -- no re-explaining. Powered by IJFW, an open-source memory engine by Ferrox Labs.",
     "bullet1": "Persistent across chats, projects, and CLIs",
     "bullet2": "Searchable, exportable, yours",
     "bullet3": "Zero setup after install",
@@ -37,7 +37,7 @@
   "upgrading": {
     "title": "Upgrading Memory",
     "subtitle": "Staging {{version}} for next boot",
-    "pending_message": "Upgrade ready. Will activate when Wayland restarts.",
+    "pending_message": "Upgrade ready. Will activate when BaddAssApp restarts.",
     "restart_now": "Restart now"
   },
   "failed": {
@@ -53,11 +53,11 @@
     "invalid_target_version": "Invalid version number from the registry. Try again later.",
     "unsafe_ownership": "The pending install folder has unsafe ownership and was rejected. Reinstall to recover.",
     "stage_pending_failed": "Couldn't stage the new install. Check disk space and try again.",
-    "stage_swap_failed": "Couldn't swap in the new install. Restart Wayland to retry.",
+    "stage_swap_failed": "Couldn't swap in the new install. Restart BaddAssApp to retry.",
     "upgrade_failed_no_rollback": "Upgrade failed and the previous version couldn't be restored. Reinstall to recover.",
     "upgrade_failed_rolled_back": "The upgrade failed but your previous version is still working. Try again later or check details.",
     "rollback_also_failed": "Both the new version and the rollback failed. Reinstall to recover.",
-    "mcp_crashed": "Memory crashed. Restart Wayland to recover.",
+    "mcp_crashed": "Memory crashed. Restart BaddAssApp to recover.",
     "mcp_error": "Memory returned an error. Try again.",
     "timeout": "Memory didn't respond in time. Try again.",
     "validation_failed": "That request didn't match what Memory expects.",
@@ -97,15 +97,15 @@
   "settings": {
     "panel_title": "IJFW Memory (Ferrox Labs)",
     "skip_label": "Skip IJFW automatic setup",
-    "skip_description": "When enabled, Wayland will not install or upgrade IJFW. You can install manually later via the Memory page.",
+    "skip_description": "When enabled, BaddAssApp will not install or upgrade IJFW. You can install manually later via the Memory page.",
     "manual_install_hint": "To install manually: run `npx -y @ijfw/install@latest` in a terminal",
     "about_title": "IJFW Memory",
     "about_body": "An open-source persistent memory engine by Ferrox Labs."
   },
   "prelude": {
     "installing_notice": "IJFW is being installed. External CLIs (Claude Code, Codex, Gemini CLI) will pick it up after install completes.",
-    "disabled_notice": "IJFW is disabled in Wayland Settings. Re-enable to share memory with external CLIs.",
-    "failed_notice": "IJFW install failed. Visit the Memory page in Wayland to retry."
+    "disabled_notice": "IJFW is disabled in BaddAssApp Settings. Re-enable to share memory with external CLIs.",
+    "failed_notice": "IJFW install failed. Visit the Memory page in BaddAssApp to retry."
   },
   "home": {
     "wiki_title": "Wiki",
@@ -432,7 +432,7 @@
       },
       "dropFolder": {
         "title": "Drop folder",
-        "hint": "Drop .md / .txt / .json files into ~/Documents/Wayland-Memory/",
+        "hint": "Drop .md / .txt / .json files into ~/Documents/BaddAssApp-Memory/",
         "count": "{{count}} files processed",
         "openBtn": "Open folder",
         "processBtn": "Process now",

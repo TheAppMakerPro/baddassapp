@@ -46,7 +46,7 @@
     "title": "连接 {{vendor}} - 粘贴 OAuth 凭据",
     "submit": "保存并登录",
     "cancel": "取消",
-    "universalIntro": "{{vendor}} 不允许 Wayland 自动注册 OAuth 客户端。请在该供应商的开发者控制台中注册一个 OAuth 应用，并将凭据粘贴到下方。",
+    "universalIntro": "{{vendor}} 不允许 BaddAssApp 自动注册 OAuth 客户端。请在该供应商的开发者控制台中注册一个 OAuth 应用，并将凭据粘贴到下方。",
     "openConsole": "打开 {{vendor}} 开发者控制台",
     "redirectLabel": "需要粘贴到供应商控制台的回调 URL：",
     "clientIdLabel": "客户端 ID",

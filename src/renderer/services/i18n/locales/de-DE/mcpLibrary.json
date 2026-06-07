@@ -45,7 +45,7 @@
     "title": "{{vendor}} verbinden - OAuth-Anmeldedaten einfügen",
     "submit": "Speichern & anmelden",
     "cancel": "Abbrechen",
-    "universalIntro": "{{vendor}} erlaubt Wayland nicht, automatisch einen OAuth-Client zu registrieren. Registrieren Sie eine OAuth-App in der Entwicklerkonsole des Anbieters und fügen Sie die Anmeldedaten unten ein.",
+    "universalIntro": "{{vendor}} erlaubt BaddAssApp nicht, automatisch einen OAuth-Client zu registrieren. Registrieren Sie eine OAuth-App in der Entwicklerkonsole des Anbieters und fügen Sie die Anmeldedaten unten ein.",
     "openConsole": "{{vendor}}-Entwicklerkonsole öffnen",
     "redirectLabel": "Redirect-URI zum Einfügen in die Anbieterkonsole:",
     "clientIdLabel": "Client ID",

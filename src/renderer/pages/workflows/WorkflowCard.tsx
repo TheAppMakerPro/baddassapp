@@ -30,9 +30,9 @@ function sourceLabel(entry: SkillIndexEntry): { label: string; bg: string } {
   // reads as on-brand rather than competing with Standing Companies.
   switch (entry.source) {
     case 'wayland-library':
-      return { label: 'Wayland Library', bg: 'rgb(var(--primary-6) / 0.16)' };
+      return { label: 'BaddAssApp Library', bg: 'rgb(var(--primary-6) / 0.16)' };
     case 'team':
-      return { label: entry.sourceLabel ?? 'Wayland Teams', bg: 'rgba(33,150,243,0.14)' };
+      return { label: entry.sourceLabel ?? 'BaddAssApp Teams', bg: 'rgba(33,150,243,0.14)' };
     case 'user':
       return { label: 'My workflows', bg: 'rgba(76,175,80,0.16)' };
     case 'imported':

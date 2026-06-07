@@ -21,7 +21,7 @@
     "confirmTitle": "¿Ejecutar el paso {{n}} de forma autónoma?",
     "confirmOk": "Ejecutar de forma autónoma",
     "confirmCancel": "Cancelar",
-    "confirmBody": "Wayland generará un trabajador autónomo para completar el paso {{n}} en segundo plano. Puedes seguir chateando en la sesión principal.",
+    "confirmBody": "BaddAssApp generará un trabajador autónomo para completar el paso {{n}} en segundo plano. Puedes seguir chateando en la sesión principal.",
     "confirmEta": "Tiempo estimado: 4-8 minutos."
   }
 }
