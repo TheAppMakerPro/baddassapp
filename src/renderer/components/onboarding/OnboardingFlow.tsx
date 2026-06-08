@@ -27,7 +27,9 @@ import { FLUX_AUTO_MODEL, FLUX_PROVIDER_ID } from '@/common/config/flux';
 import { ConfigStorage } from '@/common/config/storage';
 import type { DetectionResult } from '@/common/types/onboarding';
 import type { ProviderId } from '@process/providers/types';
-import wordmark from '@renderer/assets/logos/wayland-wordmark-white.png';
+// BaddAssApp rebrand: upstream's wayland orbit-mark wordmark is a Ferrox Labs
+// trademark; use the BAA mark + a text wordmark instead.
+import brandMark from '@renderer/assets/logos/baddassapp-mark.png';
 import anthropicLogo from '@renderer/assets/logos/anthropic.svg';
 import claudeLogo from '@renderer/assets/logos/claude.svg';
 import codexLogo from '@renderer/assets/logos/codex.svg';
@@ -372,7 +374,12 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ detection, onFinish }) 
 
   const Header: React.FC<{ step: 0 | 1 | 2 }> = ({ step }) => (
     <div className={styles.top}>
-      <img className={styles.wordmark} src={wordmark} alt={t('onboarding.flow.logoAlt.wordmark')} />
+      <span className={styles.brandLockup}>
+        <img className={styles.brandMark} src={brandMark} alt={t('onboarding.flow.logoAlt.wordmark')} />
+        <span className={styles.brandWordmark}>
+          BaddAss<span className={styles.brandWordmarkAccent}>App</span>
+        </span>
+      </span>
       <div className={styles.dots}>
         {[0, 1, 2].map((i) => (
           <span key={i} className={`${styles.dot} ${i === step ? styles.dotOn : i < step ? styles.dotDone : ''}`} />
