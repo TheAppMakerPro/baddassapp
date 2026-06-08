@@ -222,3 +222,7 @@ design-mockups/
 # IJFW / tooling scratch dirs (local memory, sessions, wiki; never tracked)
 .wayland-core/
 /ijfw/
+.gstack/
+.cursor/
+.windsurfrules
+.ijfw/
