@@ -275,11 +275,11 @@ const WhatsAppConfigForm: React.FC<WhatsAppConfigFormProps> = ({ pluginStatus, m
           mode === 'personal'
             ? t(
                 'settings.channels.whatsapp.mode.personalHelp',
-                'Wayland links your own WhatsApp. Only you, via your own self-chat, can talk to it. Messages from other contacts are ignored.',
+                'BaddAssApp links your own WhatsApp. Only you, via your own self-chat, can talk to it. Messages from other contacts are ignored.',
               )
             : t(
                 'settings.channels.whatsapp.mode.dedicatedHelp',
-                'Use a separate WhatsApp number created for your agent. Enter your personal number so Wayland knows you are the owner; other people can pair to talk to it.',
+                'Use a separate WhatsApp number created for your agent. Enter your personal number so BaddAssApp knows you are the owner; other people can pair to talk to it.',
               )
         }
         required
@@ -297,7 +297,7 @@ const WhatsAppConfigForm: React.FC<WhatsAppConfigFormProps> = ({ pluginStatus, m
             <>
               {t(
                 'settings.channels.whatsapp.mode.ownerNumbers.help',
-                'Your own WhatsApp number(s) in full international format. Wayland recognizes messages from these numbers as the owner. Separate multiple numbers with commas.',
+                'Your own WhatsApp number(s) in full international format. BaddAssApp recognizes messages from these numbers as the owner. Separate multiple numbers with commas.',
               )}{' '}
               {t(
                 'settings.channels.whatsapp.mode.ownerNumbers.savedHidden',
@@ -476,7 +476,7 @@ const WhatsAppConfigForm: React.FC<WhatsAppConfigFormProps> = ({ pluginStatus, m
                 <span className='text-12px text-t-tertiary text-center'>
                   {t(
                     'settings.channels.whatsapp.qrPairing.howToTalk',
-                    'Open WhatsApp and message yourself (the "Message yourself" chat). Wayland just said hi there; reply to chat.',
+                    'Open WhatsApp and message yourself (the "Message yourself" chat). BaddAssApp just said hi there; reply to chat.',
                   )}
                 </span>
               </>

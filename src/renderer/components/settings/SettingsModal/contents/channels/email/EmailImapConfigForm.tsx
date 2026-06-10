@@ -414,7 +414,7 @@ const EmailImapConfigForm: React.FC<EmailImapConfigFormProps> = ({
         <span className='text-12px text-t-tertiary'>
           {t(
             'settings.channels.emailImap.howToTalk',
-            'Check your own inbox. Wayland just emailed you; reply to that email any time.',
+            'Check your own inbox. BaddAssApp just emailed you; reply to that email any time.',
           )}
         </span>
       )}

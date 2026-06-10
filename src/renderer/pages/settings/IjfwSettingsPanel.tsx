@@ -113,7 +113,7 @@ const IjfwSettingsPanel: React.FC = () => {
           <Typography.Text type='secondary' className='text-12px'>
             {t('memory.settings.skip_description', {
               defaultValue:
-                'When enabled, Wayland will not install or upgrade IJFW. You can install manually later via the Memory page.',
+                'When enabled, BaddAssApp will not install or upgrade IJFW. You can install manually later via the Memory page.',
             })}
           </Typography.Text>
         </div>

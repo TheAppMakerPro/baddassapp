@@ -188,7 +188,7 @@ const SignalConfigForm: React.FC<SignalConfigFormProps> = ({ pluginStatus, model
         <span className='text-12px text-t-tertiary'>
           {t(
             'settings.channels.signal.howToTalk',
-            'Open Signal and check your Note to Self chat. Wayland just said hi there; reply to chat.',
+            'Open Signal and check your Note to Self chat. BaddAssApp just said hi there; reply to chat.',
           )}
         </span>
       )}

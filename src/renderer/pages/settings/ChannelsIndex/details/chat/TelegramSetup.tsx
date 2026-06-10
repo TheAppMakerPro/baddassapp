@@ -52,7 +52,7 @@ const TelegramSetup: React.FC = () => {
       displayName='Telegram'
       helpText={t(
         'settings.channels.telegram.help',
-        'Chat with your Wayland AI assistant via Telegram. Create a bot with @BotFather to get started.'
+        'Chat with your BaddAssApp AI assistant via Telegram. Create a bot with @BotFather to get started.'
       )}
     >
       <TelegramConfigForm

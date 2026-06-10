@@ -161,7 +161,7 @@ const WebhookConfigForm: React.FC<WebhookConfigFormProps> = ({
         type='info'
         content={t(
           'settings.channels.webhook.info',
-          'Generic webhook bridge. Wayland POSTs outbound messages to your URL; your platform POSTs inbound messages to the Wayland inbound URL below.'
+          'Generic webhook bridge. BaddAssApp POSTs outbound messages to your URL; your platform POSTs inbound messages to the BaddAssApp inbound URL below.'
         )}
       />
 
@@ -191,7 +191,7 @@ const WebhookConfigForm: React.FC<WebhookConfigFormProps> = ({
         )}
         description={t(
           'settings.channels.webhook.credentials.outboundSecret.help',
-          'Optional. When set, Wayland adds X-Webhook-Signature: sha256=<hmac> to every outbound POST.'
+          'Optional. When set, BaddAssApp adds X-Webhook-Signature: sha256=<hmac> to every outbound POST.'
         )}
       >
         <Input.Password
@@ -211,7 +211,7 @@ const WebhookConfigForm: React.FC<WebhookConfigFormProps> = ({
           label={t('settings.channels.webhook.webhookUrl.label', 'Inbound Webhook URL')}
           description={t(
             'settings.channels.webhook.webhookUrl.help',
-            'Paste this URL into your platform as the webhook destination. The inbound secret is managed by Wayland.'
+            'Paste this URL into your platform as the webhook destination. The inbound secret is managed by BaddAssApp.'
           )}
         >
           <div className='flex items-center gap-8px'>

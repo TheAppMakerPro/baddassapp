@@ -200,7 +200,7 @@ const MsTeamsConfigForm: React.FC<MsTeamsConfigFormProps> = ({ pluginStatus, mod
       <div className='text-12px text-t-tertiary'>
         {t(
           'settings.channels.msTeams.setupHint',
-          'Register your bot in the Azure Portal: Azure Bot Service → Create resource → configure Microsoft Teams channel → set messaging endpoint to your Wayland webhook URL → copy App ID and client secret here.',
+          'Register your bot in the Azure Portal: Azure Bot Service → Create resource → configure Microsoft Teams channel → set messaging endpoint to your BaddAssApp webhook URL → copy App ID and client secret here.',
         )}
       </div>
 

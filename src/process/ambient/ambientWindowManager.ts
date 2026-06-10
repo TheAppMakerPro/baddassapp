@@ -163,7 +163,7 @@ export async function createAmbientWindow(): Promise<void> {
     height: BUBBLE_SIZE,
     x,
     y,
-    title: 'Wayland Ambient Bubble',
+    title: 'BaddAssApp Ambient Bubble',
     frame: false,
     transparent: true,
     resizable: false,

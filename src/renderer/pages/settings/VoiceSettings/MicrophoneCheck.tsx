@@ -140,7 +140,7 @@ const MicrophoneCheck: React.FC = () => {
         setErrorMsg(
           t(
             'settings.voiceMicPermissionBlocked',
-            'Microphone access blocked. Open System Settings → Privacy → Microphone and enable Wayland.'
+            'Microphone access blocked. Open System Settings → Privacy → Microphone and enable BaddAssApp.'
           )
         );
       } else if (name === 'NotFoundError' || name === 'OverconstrainedError') {
