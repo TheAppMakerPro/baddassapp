@@ -225,7 +225,7 @@ export const CHANNEL_SETUP_GUIDES: Readonly<Record<string, ChannelSetupGuideCont
       {
         textKey: 'settings.channelGuide.signal.step2',
         textDefault:
-          'Connect a number. Easiest is to LINK as a secondary device to your existing Signal: run `signal-cli link -n "Wayland"`, it prints a sgnl:// URI / QR; on your phone go to Signal then Settings then Linked Devices then + and scan it. (Alternatively register a fresh number with `signal-cli -a +1XXXXXXXXXX register` then `verify`.)',
+          'Connect a number. Easiest is to LINK as a secondary device to your existing Signal: run `signal-cli link -n "BaddAssApp"`, it prints a sgnl:// URI / QR; on your phone go to Signal then Settings then Linked Devices then + and scan it. (Alternatively register a fresh number with `signal-cli -a +1XXXXXXXXXX register` then `verify`.)',
       },
       {
         textKey: 'settings.channelGuide.signal.step3',
@@ -382,7 +382,7 @@ export const CHANNEL_SETUP_GUIDES: Readonly<Record<string, ChannelSetupGuideCont
       {
         textKey: 'settings.channelGuide.msTeams.step4',
         textDefault:
-          'In the bot resource open Channels and add the "Microsoft Teams" channel. Copy the Inbound Webhook URL shown here and paste it as the bot Messaging endpoint in Azure (Configuration), so Teams delivers messages to Wayland.',
+          'In the bot resource open Channels and add the "Microsoft Teams" channel. Copy the Inbound Webhook URL shown here and paste it as the bot Messaging endpoint in Azure (Configuration), so Teams delivers messages to BaddAssApp.',
       },
       {
         textKey: 'settings.channelGuide.msTeams.step5',
@@ -435,7 +435,7 @@ export const CHANNEL_SETUP_GUIDES: Readonly<Record<string, ChannelSetupGuideCont
       {
         textKey: 'settings.channelGuide.imessage.step2',
         textDefault:
-          'Grant Full Disk Access: open System Settings then Privacy & Security then Full Disk Access, and enable Wayland (toggle it on, restart the app if prompted).',
+          'Grant Full Disk Access: open System Settings then Privacy & Security then Full Disk Access, and enable BaddAssApp (toggle it on, restart the app if prompted).',
         links: [
           {
             labelKey: 'settings.channelGuide.imessage.step2.link',
@@ -751,7 +751,7 @@ export const CHANNEL_SETUP_GUIDES: Readonly<Record<string, ChannelSetupGuideCont
       {
         textKey: 'settings.channelGuide.synologyChat.step2',
         textDefault:
-          'Create an Incoming Webhook, pick a channel, and copy its webhook URL into the Incoming Webhook URL field here (Wayland POSTs replies there).',
+          'Create an Incoming Webhook, pick a channel, and copy its webhook URL into the Incoming Webhook URL field here (BaddAssApp POSTs replies there).',
       },
       {
         textKey: 'settings.channelGuide.synologyChat.step3',
@@ -800,12 +800,12 @@ export const CHANNEL_SETUP_GUIDES: Readonly<Record<string, ChannelSetupGuideCont
       {
         textKey: 'settings.channelGuide.webhook.step1',
         textDefault:
-          'This is a generic HTTP channel. Enter the Outbound URL: the https endpoint of your own service that should receive the agent\'s replies (Wayland POSTs each reply there as JSON).',
+          'This is a generic HTTP channel. Enter the Outbound URL: the https endpoint of your own service that should receive the agent\'s replies (BaddAssApp POSTs each reply there as JSON).',
       },
       {
         textKey: 'settings.channelGuide.webhook.step2',
         textDefault:
-          'Optional: set an Outbound Secret. Wayland sends it so your service can verify the request is genuinely from Wayland.',
+          'Optional: set an Outbound Secret. BaddAssApp sends it so your service can verify the request is genuinely from BaddAssApp.',
       },
       {
         textKey: 'settings.channelGuide.webhook.step3',
@@ -838,7 +838,7 @@ export const CHANNEL_SETUP_GUIDES: Readonly<Record<string, ChannelSetupGuideCont
       {
         textKey: 'settings.channelGuide.emailAgentMail.step3',
         textDefault:
-          'Test & Enable. Then copy the Inbound Webhook URL shown here into the AgentMail dashboard\'s Webhook URL field so new mail reaches Wayland. Optionally paste AgentMail\'s signing secret (whsec_...) into Webhook Secret to verify deliveries.',
+          'Test & Enable. Then copy the Inbound Webhook URL shown here into the AgentMail dashboard\'s Webhook URL field so new mail reaches BaddAssApp. Optionally paste AgentMail\'s signing secret (whsec_...) into Webhook Secret to verify deliveries.',
       },
     ],
   },

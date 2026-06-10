@@ -335,7 +335,7 @@
     "title": "{{backend}} can't sign in here",
     "subscriptionExplainer": "The vendor blocks subscription logins inside third-party tools like this one. To keep using {{backend}} here, route it through Flux Router, add a provider API key, or sign in to the CLI directly.",
     "genericExplainer": "{{backend}} could not authenticate. Route it through Flux Router, add a provider API key, or sign in to the CLI to fix this.",
-    "wcoreExplainer": "Wayland Core could not authenticate. The inference provider rejected the API key (401). Unlike Claude Code, Wayland Core has no subscription sign-in to fall back on, so add a working provider key or route it through Flux Router.",
+    "wcoreExplainer": "BaddAssApp Core could not authenticate. The inference provider rejected the API key (401). Unlike Claude Code, BaddAssApp Core has no subscription sign-in to fall back on, so add a working provider key or route it through Flux Router.",
     "flux": {
       "label": "Route through Flux",
       "sublabel": "Free and card-free. Flux runs the model for you, no provider key needed.",
