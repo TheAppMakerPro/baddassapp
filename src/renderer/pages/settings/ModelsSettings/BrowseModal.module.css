@@ -247,6 +247,29 @@
   margin-top: 1px;
 }
 
+.keyGetLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--color-link-default, var(--color-text-3));
+  transition: color 0.15s ease;
+}
+
+.keyGetLink:hover {
+  color: var(--color-link-hover, rgb(var(--primary-6)));
+}
+
+.keyGetLink svg {
+  flex-shrink: 0;
+}
+
 .keySubmit {
   margin-top: 14px;
 }

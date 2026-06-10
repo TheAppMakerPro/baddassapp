@@ -190,6 +190,54 @@ export const PROVIDER_META: Record<NativeProviderId, ProviderMeta> = {
   },
 };
 
+/**
+ * Deep-link to where each provider's API key / console lives, surfaced as a
+ * "Get your {provider} API key" link next to the key field in the Browse
+ * connect form. Each URL is the provider's own official key/console page.
+ *
+ * Omitted on purpose: `openai-compatible` (no canonical host — the user supplies
+ * a base URL) and `ollama-local` (local, no key). Cloud providers keep a console
+ * link even though they connect through the multi-field cloud form.
+ */
+export const PROVIDER_KEYS_URL: Partial<Record<NativeProviderId, string>> = {
+  anthropic: 'https://console.anthropic.com/settings/keys',
+  openai: 'https://platform.openai.com/api-keys',
+  'google-gemini': 'https://aistudio.google.com/apikey',
+  'aws-bedrock': 'https://console.aws.amazon.com/bedrock',
+  vertex: 'https://console.cloud.google.com/vertex-ai',
+  azure: 'https://portal.azure.com',
+  openrouter: 'https://openrouter.ai/keys',
+  groq: 'https://console.groq.com/keys',
+  xai: 'https://console.x.ai',
+  mistral: 'https://console.mistral.ai/api-keys/',
+  cohere: 'https://dashboard.cohere.com/api-keys',
+  perplexity: 'https://www.perplexity.ai/settings/api',
+  together: 'https://api.together.xyz/settings/api-keys',
+  fireworks: 'https://app.fireworks.ai/settings/users/api-keys',
+  cerebras: 'https://cloud.cerebras.ai',
+  replicate: 'https://replicate.com/account/api-tokens',
+  huggingface: 'https://huggingface.co/settings/tokens',
+  nvidia: 'https://build.nvidia.com',
+  anyscale: 'https://console.anyscale.com',
+  deepseek: 'https://platform.deepseek.com/api_keys',
+  moonshot: 'https://platform.moonshot.ai/console/api-keys',
+  qwen: 'https://dashscope.console.aliyun.com/apiKey',
+  baichuan: 'https://platform.baichuan-ai.com',
+  lingyiwanwu: 'https://platform.lingyiwanwu.com/apikeys',
+  'zhipu-glm': 'https://open.bigmodel.cn/usercenter/apikeys',
+  minimax: 'https://platform.minimaxi.com',
+  stability: 'https://platform.stability.ai/account/keys',
+  deepgram: 'https://console.deepgram.com',
+  assemblyai: 'https://www.assemblyai.com/app/account',
+  elevenlabs: 'https://elevenlabs.io/app/settings/api-keys',
+  'flux-router': 'https://fluxrouter.ai/home/api-keys',
+};
+
+/** The official API-key / console URL for a provider, or `undefined` if none. */
+export function providerKeysUrl(id: ProviderId): string | undefined {
+  return PROVIDER_KEYS_URL[id as NativeProviderId];
+}
+
 /** Look up provider metadata, falling back to a generic tile for unknown ids. */
 export function providerMeta(id: ProviderId): ProviderMeta {
   return (

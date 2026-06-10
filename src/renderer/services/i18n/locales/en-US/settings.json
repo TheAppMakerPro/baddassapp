@@ -1868,6 +1868,7 @@
       "keySubtitle": "Paste an API key for {{provider}} to connect.",
       "keyLabel": "API key",
       "keyPlaceholder": "Paste your API key…",
+      "getKeyLink": "Get your {{provider}} API key",
       "baseUrlLabel": "Base URL (optional)",
       "baseUrlPlaceholder": "https://your-endpoint.example/v1",
       "connect": "Connect & test",

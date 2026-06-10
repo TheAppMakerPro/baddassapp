@@ -1,17 +1,19 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Input, List, Modal, Spin } from '@arco-design/web-react';
-import { AlertTriangle, Check, ChevronLeft, ChevronRight } from 'lucide-react';
+import { AlertTriangle, Check, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { IModelRegistryConnectResult } from '@/common/adapter/ipcBridge';
 import type { ConnectError, ProviderId } from '@process/providers/types';
 import type { CatalogProviderEntry } from '@process/providers/catalog/catalogProvider';
 import { useModelRegistry } from '@renderer/hooks/useModelRegistry';
+import { openExternalUrl } from '@renderer/utils/platform';
 import FluxRouterMark from '@renderer/components/icons/FluxRouterMark';
 import CloudCredentialForm, { isCloudFormProvider, type CloudProviderId } from './CloudCredentialForm';
 import {
   PROVIDER_GROUP_ORDER,
   type ProviderGroup,
   type ProviderMeta,
+  providerKeysUrl,
   providerMeta,
   providersInGroup,
 } from './providerCatalog';
@@ -476,6 +478,21 @@ const BrowseModal: React.FC<Props> = ({ visible, onClose, initialProvider }) => 
                 disabled={connecting}
               />
             </>
+          )}
+          {providerKeysUrl(view.provider.id) && (
+            <button
+              type='button'
+              className={styles.keyGetLink}
+              onClick={() => void openExternalUrl(providerKeysUrl(view.provider.id)!)}
+            >
+              <span>
+                {t('settings.modelsPage.browse.getKeyLink', {
+                  defaultValue: 'Get your {{provider}} API key',
+                  provider: view.provider.displayName,
+                })}
+              </span>
+              <ExternalLink size={12} aria-hidden='true' />
+            </button>
           )}
           {errorKey && (
             <div className={styles.keyError} role='alert'>
