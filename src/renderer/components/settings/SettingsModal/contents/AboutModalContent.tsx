@@ -81,6 +81,13 @@ const AboutModalContent: React.FC = () => {
       url: 'https://baddassapp.com',
       icon: <ChevronRight size={16} />,
     },
+    {
+      // AGPL-3.0: recipients are entitled to the complete corresponding source
+      // (our modifications included). Points at our public fork, not upstream.
+      title: t('settings.sourceCode', { defaultValue: 'Source code (AGPL-3.0)' }),
+      url: 'https://github.com/TheAppMakerPro/baddassapp',
+      icon: <ChevronRight size={16} />,
+    },
   ];
 
   return (
@@ -108,7 +115,7 @@ const AboutModalContent: React.FC = () => {
               <div
                 className='text-t-primary cursor-pointer hover:text-t-secondary transition-colors p-4px'
                 onClick={() =>
-                  openLink('https://github.com/FerroxLabs/wayland').catch((error) =>
+                  openLink('https://github.com/TheAppMakerPro/baddassapp').catch((error) =>
                     console.error('Failed to open link:', error)
                   )
                 }
