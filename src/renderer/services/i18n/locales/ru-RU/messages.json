@@ -3,6 +3,7 @@
   "fileChanges": "Изменения файлов",
   "fileChangesCount": "{{count}} изменений файлов",
   "conversationInProgress": "Диалог в процессе...",
+  "working": "Working...",
   "confirm": "Подтвердить",
   "canceledExecution": "Выполнение отменено",
   "openLinkFailed": "Не удалось открыть ссылку",
@@ -67,5 +68,6 @@
   },
   "atFile.hint": "Введите текст для поиска файлов",
   "atFile.menuLabel": "Упоминания файлов",
-  "atFile.loading": "Загрузка..."
+  "atFile.loading": "Загрузка...",
+  "slash.customBadge": "Custom"
 }

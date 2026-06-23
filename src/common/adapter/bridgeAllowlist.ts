@@ -268,6 +268,19 @@ const REMOTE_DENIED_KEYS: ReadonlySet<string> = new Set([
   //     stays allowed. ---
   'onboarding.connect-pasted-key',
   'onboarding.connect-flux',
+  // --- Native xAI "Sign in with X (Grok)" OAuth. Both mint/persist the `xai`
+  //     provider credential via the model-registry connect path - same class as
+  //     connect-flux above. A remote WS caller must never drive an OAuth mint or
+  //     trigger a refresh-token exchange. ---
+  'xai.auth.login',
+  'xai.auth.refresh',
+  'xai.auth.submit-code',
+  // --- Native "Sign in with ChatGPT" OAuth. Both mint/persist the
+  //     `chatgpt-subscription` provider bundle (refresh + access tokens) via the
+  //     OAuth flow - same credential-minting class as xai.auth.* above. A remote
+  //     WS caller must never drive an OAuth mint or a refresh-token exchange. ---
+  'chatgpt.auth.login',
+  'chatgpt.auth.refresh',
   // --- Cost observability (WS-D / WS-F). The whole cost.* namespace is already
   //     denied to remote callers via the `cost.` prefix above; these exact keys
   //     are enumerated for documentation + defence-in-depth. byConversation +
@@ -302,6 +315,12 @@ const REMOTE_DENIED_KEYS: ReadonlySet<string> = new Set([
   'open-file',
   'open-dev-tools',
   'show-item-in-folder',
+  // --- Doctor / health-check (issue #35). The report enumerates the host's
+  //     provider connectivity verdicts, MCP server reachability, detected
+  //     backends, workspace paths, and config posture. None of it is a raw
+  //     secret, but disclosing the full diagnostic posture to a paired WebUI is
+  //     a reconnaissance aid — deny it to remote callers (defence-in-depth). ---
+  'doctor.run',
 ]);
 
 /**

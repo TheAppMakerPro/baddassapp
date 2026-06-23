@@ -3,6 +3,7 @@
   "fileChanges": "Alterações de Arquivos",
   "fileChangesCount": "{{count}} Alterações de Arquivos",
   "conversationInProgress": "Uma conversa está em andamento...",
+  "working": "Working...",
   "confirm": "Confirmar",
   "canceledExecution": "Execução cancelada",
   "openLinkFailed": "Falha ao abrir o link",
@@ -67,5 +68,6 @@
     "yesAlwaysAllowTool": "Sim, sempre permitir a ferramenta \"{{toolName}}\" do servidor \"{{serverName}}\"",
     "yesAlwaysAllowServer": "Sim, sempre permitir todas as ferramentas do servidor \"{{serverName}}\"",
     "no": "Não (esc)"
-  }
+  },
+  "slash.customBadge": "Custom"
 }

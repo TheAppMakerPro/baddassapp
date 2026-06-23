@@ -3,6 +3,7 @@
   "fileChanges": "File Changes",
   "fileChangesCount": "{{count}} File Changes",
   "conversationInProgress": "A conversation is currently in progress...",
+  "working": "Working...",
   "confirm": "Confirm",
   "canceledExecution": "Execution canceled",
   "openLinkFailed": "Failed to open link",
@@ -67,5 +68,6 @@
     "yesAlwaysAllowTool": "Yes, always allow tool \"{{toolName}}\" from server \"{{serverName}}\"",
     "yesAlwaysAllowServer": "Yes, always allow all tools from server \"{{serverName}}\"",
     "no": "No (esc)"
-  }
+  },
+  "slash.customBadge": "Custom"
 }

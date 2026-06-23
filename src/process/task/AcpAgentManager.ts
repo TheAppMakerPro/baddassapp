@@ -5,6 +5,8 @@ import { teamEventBus } from '@process/team/teamEventBus';
 import { ipcBridge } from '@/common';
 import type { CronMessageMeta, TMessage } from '@/common/chat/chatLib';
 import { isCodexAutoApproveMode } from '@/common/types/codex/codexModes';
+import { isAutoGuardedMode, shouldAutoApproveAcpEdit } from '@/common/types/agentModes';
+import { classifyDestructiveToolCall } from '@/common/security/destructiveCommand';
 import type { SlashCommandItem } from '@/common/chat/slash/types';
 import { transformMessage } from '@/common/chat/chatLib';
 import type { IConfigStorageRefer } from '@/common/config/storage';
@@ -42,6 +44,7 @@ import {
   writeCodexSandboxMode,
 } from '@process/task/codexConfig';
 import { materializeFluxClaudeConfigDir } from '@process/task/claudeConfig';
+import { materializeFluxHermesHome } from '@process/task/hermesConfig';
 import { app } from 'electron';
 import BaseAgentManager from './BaseAgentManager';
 import { IpcAgentEventEmitter } from './IpcAgentEventEmitter';
@@ -95,6 +98,8 @@ interface AcpAgentManagerData {
   sandboxMode?: CodexSandboxMode;
   /** Pending config option selections from Guid page (applied after session creation) */
   pendingConfigOptions?: Record<string, string>;
+  /** Per-conversation reasoning effort (codex/claude). Absent => backend default. */
+  effort?: 'low' | 'medium' | 'high';
 }
 
 type BufferedStreamTextMessage = {
@@ -582,7 +587,13 @@ ${collectedResponses.join('\n')}`;
       if (data.backend === 'codex') {
         try {
           const sandboxMode = normalizeCodexSandboxMode(data.sandboxMode);
-          const codexHome = await materializeFluxCodexHome(app.getPath('userData'), sandboxMode);
+          const codexHome = await materializeFluxCodexHome(
+            app.getPath('userData'),
+            sandboxMode,
+            undefined,
+            undefined,
+            data.effort
+          );
           mergedEnv.CODEX_HOME = codexHome;
         } catch (err) {
           mainWarn('[AcpAgentManager]', 'materializeFluxCodexHome failed', err);
@@ -598,9 +609,31 @@ ${collectedResponses.join('\n')}`;
       // real ~/.claude is never modified.
       if (data.backend === 'claude') {
         try {
-          mergedEnv.CLAUDE_CONFIG_DIR = await materializeFluxClaudeConfigDir(app.getPath('userData'));
+          mergedEnv.CLAUDE_CONFIG_DIR = await materializeFluxClaudeConfigDir(
+            app.getPath('userData'),
+            undefined,
+            data.effort
+          );
         } catch (err) {
           mainWarn('[AcpAgentManager]', 'materializeFluxClaudeConfigDir failed', err);
+        }
+      }
+
+      // hermes selects its provider from <HERMES_HOME>/config.yaml, not from env.
+      // Point flux-routed hermes spawns at a Wayland-scoped HERMES_HOME whose
+      // config pins model.provider=custom at the Flux openai surface + flux-auto
+      // (reading FLUX_API_KEY at request time), so the user's real ~/.hermes
+      // config (and active profile) stays native for non-flux model picks.
+      if (data.backend === 'hermes') {
+        try {
+          // hermes ignores FLUX_API_KEY for a custom provider, so the connector
+          // writes the connected flux key inline into the scoped config.
+          mergedEnv.HERMES_HOME = await materializeFluxHermesHome(
+            app.getPath('userData'),
+            decision.env.FLUX_API_KEY ?? ''
+          );
+        } catch (err) {
+          mainWarn('[AcpAgentManager]', 'materializeFluxHermesHome failed', err);
         }
       }
     }
@@ -1094,6 +1127,40 @@ ${collectedResponses.join('\n')}`;
           void this.confirm(v.msg_id, toolCall.toolCallId || v.msg_id, autoOption);
         }, 50);
         return;
+      }
+
+      // Auto-approve file edits when in "Accept Edits" mode. The claude ACP bridge
+      // still forwards a permission request for edit tools after session/set_mode,
+      // so Wayland honors the mode here (mirroring Gemini autoEdit / WCore auto_edit).
+      // Commands and other tool kinds still surface a confirmation.
+      if (shouldAutoApproveAcpEdit(this.currentMode, toolCall.kind) && options.length > 0) {
+        const allowOption = options.find((option) => !option.kind.startsWith('reject')) ?? options[0];
+        setTimeout(() => {
+          void this.confirm(v.msg_id, toolCall.toolCallId || v.msg_id, allowOption);
+        }, 50);
+        return;
+      }
+
+      // Autopilot guardrail. In guarded-auto mode (workflows / Autopilot run the
+      // bridge in 'default' so it escalates risky tool calls) the run proceeds
+      // unattended, so auto-approve every escalated request EXCEPT a catastrophic
+      // command - that must never fire without a human. A flagged command is NOT
+      // auto-approved; it falls through to addConfirmation so it surfaces for an
+      // explicit decision (the run pauses rather than nuking the machine).
+      if (isAutoGuardedMode(this.currentMode) && options.length > 0) {
+        const verdict = classifyDestructiveToolCall(toolCall);
+        if (!verdict.destructive) {
+          const allowOption = options.find((option) => !option.kind.startsWith('reject')) ?? options[0];
+          setTimeout(() => {
+            void this.confirm(v.msg_id, toolCall.toolCallId || v.msg_id, allowOption);
+          }, 50);
+          return;
+        }
+        mainWarn(
+          '[AcpAgentManager]',
+          `Autopilot guardrail held a destructive command (${verdict.reason}); surfacing for confirmation: ${toolCall.title || ''}`
+        );
+        // fall through to addConfirmation below
       }
 
       this.addConfirmation({

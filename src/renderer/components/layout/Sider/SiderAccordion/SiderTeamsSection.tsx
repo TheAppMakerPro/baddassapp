@@ -76,7 +76,7 @@ export const SiderTeamsSection: React.FC<SiderTeamsSectionProps> = ({
     return (
       <button
         type='button'
-        className='w-full h-40px flex items-center justify-center rd-7px bg-transparent border-none cursor-pointer hover:bg-fill-2 text-text-2 hover:text-text-1 relative'
+        className='w-full h-26px flex items-center justify-center rd-7px bg-transparent border-none cursor-pointer hover:bg-fill-2 text-text-2 hover:text-text-1 relative'
         onClick={() => {
           if (typeof window !== 'undefined') window.location.hash = '#/teams';
           onSessionClick?.();
@@ -84,7 +84,7 @@ export const SiderTeamsSection: React.FC<SiderTeamsSectionProps> = ({
         aria-label={`${t('sider.accordion.teams')}${hasRunning ? ` (${liveCount} running)` : ''}`}
         title={`${t('sider.accordion.teams')}${hasRunning ? ` · ${liveCount} running` : ''}`}
       >
-        <Users size={18} />
+        <Users size={16} />
         {hasRunning && (
           <span
             className='absolute top-6px right-6px w-6px h-6px rounded-full bg-[rgb(var(--primary-6))] shadow-[0_0_0_2px_rgba(254,153,0,0.25)]'
@@ -108,7 +108,7 @@ export const SiderTeamsSection: React.FC<SiderTeamsSectionProps> = ({
     >
       {hasRunning && (
         <div data-testid='sider-teams-running-group'>
-          <div className='px-10px py-4px text-9px tracking-wide text-text-4 uppercase font-bold'>
+          <div className='px-8px py-4px text-9px tracking-wide text-text-4 uppercase font-bold'>
             {t('sider.accordion.running')}
           </div>
           <SiderActiveTeams pathname={pathname} collapsed={false} onSessionClick={onSessionClick} />

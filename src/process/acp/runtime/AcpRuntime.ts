@@ -21,7 +21,13 @@ import type {
 import { shouldInjectTeamGuideMcp } from '@process/team/prompts/teamGuideCapability';
 import { ProcessConfig } from '@process/utils/initStorage';
 
-const DEFAULT_IDLE_TIMEOUT_MS = 300_000; // 5 minutes
+// 30 minutes. 5 minutes was far too aggressive for interactive chat: normal
+// think-time between messages exceeds it, so the agent process was killed and
+// cold-respawned mid-conversation. That re-billed the full base context every
+// turn (prompt caching is lost when the process dies, cachedReadTokens drops to
+// 0) and stacked a new "Active session" banner per respawn. Reclaim still runs
+// for genuinely abandoned sessions; override via RuntimeOptions.idleTimeoutMs.
+const DEFAULT_IDLE_TIMEOUT_MS = 1_800_000; // 30 minutes
 const DEFAULT_CHECK_INTERVAL_MS = 30_000; // 30 seconds
 
 type StreamEventHandler = (convId: string, message: TMessage) => void;
@@ -208,9 +214,21 @@ export class AcpRuntime {
     this.sessions.clear();
   }
 
+  /**
+   * Refresh a session's idle clock on any agent activity. Without this the
+   * IdleReclaimer only ever sees lastActiveAt updated on send, so a session
+   * that is actively streaming (or that the user is reading) gets suspended
+   * after the idle timeout mid-conversation, killing the bridge. See #60.
+   */
+  private touchActivity(convId: string): void {
+    const entry = this.sessions.get(convId);
+    if (entry) entry.lastActiveAt = Date.now();
+  }
+
   private buildCallbacks(convId: string): SessionCallbacks {
     return {
       onMessage: (message) => {
+        this.touchActivity(convId);
         this.onStreamEvent(convId, message);
       },
       onSessionId: (_sessionId) => {
@@ -218,6 +236,7 @@ export class AcpRuntime {
         // this.acpSessionRepo.updateSessionId(convId, sessionId);
       },
       onStatusChange: (status) => {
+        this.touchActivity(convId);
         // TODO(ACP Discovery): Re-enable after fixing agent_id.
         // this.persistStatus(convId, status);
         this.onSignalEvent(convId, { type: 'status_change', status });

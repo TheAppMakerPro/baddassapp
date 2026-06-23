@@ -11,6 +11,7 @@ import { uuid } from '@/common/utils';
 import { cronService } from './cron/cronServiceSingleton';
 import { SqliteProjectRepository } from '@process/services/database/SqliteProjectRepository';
 import { loadProjectKnowledgeBlock } from '@process/services/projectKnowledge/knowledge';
+import { enforceProjectWorkspace } from '@process/services/projectWorkspace';
 import {
   createGeminiAgent,
   createAcpAgent,
@@ -151,8 +152,23 @@ export class ConversationServiceImpl implements IConversationService {
     }
   }
 
+  /**
+   * #30 NO-DRIFT: a chat created inside a project (extra.projectId) is pinned to
+   * its project workspace before the agent factory runs, so it never drifts to a
+   * throwaway `*-temp-*` dir. Delegates to the shared enforcer (also run at spawn
+   * time for resumed/migrated rows). A user-chosen custom workspace is never
+   * overwritten; if the project has no workspace the temp fallback still applies.
+   */
+  private async reconcileProjectWorkspace(params: CreateConversationParams): Promise<void> {
+    await enforceProjectWorkspace(params.extra as Record<string, unknown> | undefined);
+  }
+
   async createConversation(params: CreateConversationParams): Promise<TChatConversation> {
     let conversation: TChatConversation;
+
+    // Resolve the project workspace before the factory runs, so a project chat
+    // never drifts to a temporary workspace (#30).
+    await this.reconcileProjectWorkspace(params);
 
     // Project knowledge auto-injection. When a chat is created inside a project
     // (extra.projectId), append that project's substantive .wayland/ knowledge to

@@ -11,6 +11,7 @@ import type { OpenDialogOptions } from 'electron';
 // buildEmitter - only the side-effect of allowlist registration differs.
 import { buildProvider, buildEmitter } from './bridgeAllowlist';
 import type { McpSource } from '../../process/services/mcpServices/McpProtocol';
+import type { DoctorReport } from '../../process/doctor/types';
 import type { AgentBackend, AcpModelInfo } from '../types/acpTypes';
 import type { SlashCommandItem } from '../chat/slash/types';
 import type { IMcpServer, IProvider, TChatConversation, TProviderWithModel, ICssTheme } from '../config/storage';
@@ -31,7 +32,12 @@ import type {
   UpdateDownloadResult,
   AutoUpdateStatus,
 } from '../update/updateTypes';
-import type { ConnectFluxResult, ConnectPastedKeyResult } from '../types/onboarding';
+import type {
+  ChatGptOAuthResult,
+  ConnectFluxResult,
+  ConnectPastedKeyResult,
+  XaiOAuthResult,
+} from '../types/onboarding';
 import type { ProtocolDetectionRequest, ProtocolDetectionResponse } from '../utils/protocolDetector';
 import type { SpeechToTextRequest, SpeechToTextResult } from '../types/speech';
 import type { DownloadResult, VoiceAsset } from '../types/voiceAsset';
@@ -42,6 +48,9 @@ import type {
   AskRecord,
   ResolvedSkill,
   StepStatus,
+  StepTransitionSource,
+  WorkflowInteractivity,
+  WorkflowRunMode,
   WorkflowSession,
   WorkflowSessionStatus,
 } from '../types/workflowTypes';
@@ -118,6 +127,14 @@ export const conversation = {
     'conversation.response.search.workspace'
   ),
   reloadContext: buildProvider<IBridgeResponse, { conversation_id: string }>('conversation.reload-context'),
+  // Pop-out windows (#27 phase 2): open a conversation in its own OS window for
+  // multi-monitor work. Dedupes per conversation (focuses an existing pop-out);
+  // dockBack closes the pop-out and restores the main-window tab. popoutClosed
+  // is broadcast to ALL windows so the main window can un-dim the placeholder
+  // tab when a pop-out closes by any path (dock-back, OS close, app quit).
+  popout: buildProvider<{ ok: boolean; alreadyOpen: boolean }, { conversation_id: string }>('conversation.popout'),
+  dockBack: buildProvider<{ ok: boolean }, { conversation_id: string }>('conversation.dock-back'),
+  popoutClosed: buildEmitter<{ conversation_id: string }>('conversation.popout-closed'),
   setConfig: buildProvider<
     IBridgeResponse,
     {
@@ -292,7 +309,9 @@ export const fs = {
   copyFilesToWorkspace: buildProvider<
     // Return details for successful and failed copies for better UI feedback
     IBridgeResponse<{ copiedFiles: string[]; failedFiles?: Array<{ path: string; error: string }> }>,
-    { filePaths: string[]; workspace: string; sourceRoot?: string }
+    // allowExternalSource: an explicit user drag-drop/paste authorizes a source
+    // file outside the static roots (still guarded against secrets/traversal).
+    { filePaths: string[]; workspace: string; sourceRoot?: string; allowExternalSource?: boolean }
   >('copy-files-to-workspace'), // Copy files into workspace
   removeEntry: buildProvider<IBridgeResponse, { path: string }>('remove-entry'), // Delete file or folder
   renameEntry: buildProvider<IBridgeResponse<{ newPath: string }>, { path: string; newName: string }>('rename-entry'), // Rename file or folder
@@ -398,6 +417,12 @@ export const skills = {
    * caller ever needs them.
    */
   list: buildProvider<SkillIndexEntry[], { type?: SkillIndexEntry['type'] } | undefined>('skills.list'),
+  /**
+   * Rank library skills for a composer draft (BM25), mirroring the per-turn
+   * retrieval the agent uses. Powers the composer "+" "Suggested for '<draft>'"
+   * list. Returns [] for greetings or when nothing clearly matches.
+   */
+  suggest: buildProvider<SkillIndexEntry[], { query: string; limit?: number }>('skills.suggest'),
   /** Return aggregate library statistics. */
   stats: buildProvider<SkillStats, void>('skills.stats'),
   /**
@@ -419,6 +444,8 @@ export const skills = {
   >('skills.update-body'),
   /** Pin or unpin a skill by name. */
   setPinned: buildProvider<void, { name: string; pinned: boolean }>('skills.set-pinned'),
+  /** Names of the currently pinned skills, used to hydrate the pin stars on load. */
+  getPinned: buildProvider<string[], void>('skills.get-pinned'),
   /**
    * Add a skill to a single conversation from the chat composer. The skill's
    * body is injected once on that conversation's next turn (persisted in
@@ -522,6 +549,49 @@ export const googleAuth = {
   ),
   logout: buildProvider<void, {}>('google.auth.logout'),
   status: buildProvider<IBridgeResponse<{ account: string }>, { proxy?: string }>('google.auth.status'),
+};
+
+export const xaiAuth = {
+  /**
+   * Native xAI "Sign in with X (Grok)" via OAuth 2.0 Authorization Code + PKCE.
+   * Reuses an existing `~/.grok/auth.json` credential when present, otherwise
+   * opens the system browser to `accounts.x.ai`, runs a loopback listener,
+   * exchanges the code for a bearer token, and persists it through the
+   * model-registry connect path as the `xai` provider (inference targets
+   * `https://api.x.ai/v1`). Resolves `{ ok: true, reused }` or a stable error
+   * reason - it never rejects, so the renderer can branch on the result alone.
+   */
+  login: buildProvider<XaiOAuthResult, void>('xai.auth.login'),
+  /**
+   * Silent re-auth: exchange the persisted refresh token for a fresh access
+   * token and re-register it. Surfaced for the 401 re-auth path.
+   */
+  refresh: buildProvider<XaiOAuthResult, void>('xai.auth.refresh'),
+  /**
+   * Complete an in-flight sign-in with the code the user copied from the xAI
+   * consent page (xAI shows a code to paste rather than redirecting to the
+   * loopback). Returns `{ accepted }` - false when no flow is awaiting a code.
+   */
+  submitCode: buildProvider<{ accepted: boolean }, { code: string }>('xai.auth.submit-code'),
+};
+
+export const chatgptAuth = {
+  /**
+   * Native "Sign in with ChatGPT" via OAuth 2.0 Authorization Code + PKCE, using
+   * the same flow the Codex CLI uses (`auth.openai.com`, `originator=codex_cli_rs`)
+   * - no `codex` CLI required. Opens the system browser, runs a loopback listener
+   * on `127.0.0.1:1455` (fallback 1457), exchanges the code for the subscription
+   * bundle, persists it encrypted, and registers the `chatgpt-subscription`
+   * provider (inference routes to `https://chatgpt.com/backend-api/codex/responses`).
+   * Resolves `{ ok: true, planType }` or a stable error reason - it never rejects,
+   * so the renderer can branch on the result alone.
+   */
+  login: buildProvider<ChatGptOAuthResult, void>('chatgpt.auth.login'),
+  /**
+   * Silent re-auth: exchange the persisted refresh token for a fresh access
+   * token and re-register it. Surfaced for the proactive + 401 re-auth paths.
+   */
+  refresh: buildProvider<ChatGptOAuthResult, void>('chatgpt.auth.refresh'),
 };
 
 export const onboarding = {
@@ -933,6 +1003,15 @@ export const systemSettings = {
   setAutoPreviewOfficeFiles: buildProvider<void, { enabled: boolean }>('system-settings:set-auto-preview-office-files'),
 };
 
+// Doctor / health-check (issue #35). `runDoctor` runs the full diagnostic
+// battery across providers, models, the engine, MCP, backends, workspaces, and
+// config, returning a machine-readable + human-readable report. Remote-denied
+// (bridgeAllowlist): the report discloses the host's connectivity + config
+// posture, so a paired WebUI client must never enumerate it.
+export const doctor = {
+  runDoctor: buildProvider<DoctorReport, void>('doctor.run'),
+};
+
 // Flux compatibility-layer connectors (opencode, etc.)
 export const fluxConnector = {
   opencodeStatus: buildProvider<OpencodeStatusResult, void>('flux-connector:opencode-status'),
@@ -1236,6 +1315,18 @@ export interface ICreateConversationParams {
     extraSkillPaths?: string[];
     /** Builtin skill names to exclude from auto-injection (e.g. 'cron' for cron-spawned conversations) */
     excludeBuiltinSkills?: string[];
+    /**
+     * Skills staged in the composer "+" menu before the conversation existed.
+     * Persisted to the new conversation so consumePendingSessionSkills injects
+     * their bodies on the first turn (same field skills.add-to-conversation writes).
+     */
+    sessionSkills?: string[];
+    /**
+     * Per-conversation reasoning effort for effort-capable backends
+     * (Codex / WCore / Claude-ACP). Persisted on the conversation and read by
+     * each backend's config builder on the next turn. Absent => backend default.
+     */
+    effort?: 'low' | 'medium' | 'high';
     /** Team ownership - conversations with teamId are hidden from the sidebar */
     teamId?: string;
     /** Project ownership - stamps extra.projectId so the conversation lives under a project umbrella. */
@@ -2172,6 +2263,12 @@ export const workflow = {
     { sessions: Array<{ session: WorkflowSession; conversation_preview: string }> },
     { limit?: number }
   >('workflow.findAllActive'),
+  // 6.3.2 - Fetch a single session by id REGARDLESS of status. Unlike
+  // findAllActive (which filters to in-flight sessions), this returns
+  // completed/ended sessions too, so the renderer can re-sync a workflow
+  // surface when the main-side driver advances or completes a run. Backs the
+  // `sessionChanged` live-refresh in useWorkflowSession.
+  findById: buildProvider<{ session: WorkflowSession | null }, { sessionId: string }>('workflow.findById'),
   // 6.4 - Single mutation endpoint for renderer-driven state changes. Avoids
   // five separate IPC channels for step-status / ask / status transitions.
   updateSessionState: buildProvider<
@@ -2184,6 +2281,11 @@ export const workflow = {
   dispatchAutonomousStep: buildProvider<{ dispatchId: string }, { sessionId: string; stepN: number }>(
     'workflow.dispatchAutonomousStep'
   ),
+  // 6.5.1 - Step-mode "Accept & continue": the user approved the active step at
+  // the StepReviewBeat. The service marks it done, advances to the next step,
+  // and the handler sends the next-step directive into the conversation. Returns
+  // the resulting session so the renderer rail re-renders immediately.
+  acceptStep: buildProvider<{ session: WorkflowSession }, { sessionId: string }>('workflow.acceptStep'),
   // 6.6 - Fire-and-forget notification that a workflow session was created,
   // mutated, or completed. Sidebar listeners use this to update the in-flight
   // strip and badge counts without re-fetching the full session payload.
@@ -2214,15 +2316,38 @@ export const workflow = {
 // as a sentinel so the renderer can guarantee exactly-once begin semantics
 // across Strict Mode double-mount, refresh, and back-navigation.
 export type WorkflowUpdateSessionStatePatch = {
-  setStepStatus?: { n: number; status: StepStatus; completed_at?: number };
+  /**
+   * `source` is the provenance of the transition. The renderer threads
+   * `'parent'` for in-chat `<step>` markers narrated by the agent (so the
+   * stepCursor no-forward-leapfrog guard activates) and `'user'` for explicit
+   * rail jumps. Absent → the bridge defaults to `'user'` (the historical
+   * behaviour) so existing callers are unchanged.
+   */
+  setStepStatus?: { n: number; status: StepStatus; completed_at?: number; source?: StepTransitionSource };
   setCurrentStep?: number;
   appendAsk?: AskRecord;
   answerAsk?: { askId: string; answer: string; answered_at: number };
   setSessionStatus?: WorkflowSessionStatus;
+  /**
+   * Drive the run-state machine (Phase 2c). `paused` routes to `pause()`,
+   * `running` to `resume()` (the Continue affordance on an `awaiting_input`
+   * step-mode run), and `done` to `setRunMode()` directly. Idempotent.
+   */
+  setRunMode?: WorkflowRunMode;
   recordAutonomousDispatch?: { stepN: number; dispatchId: string };
   recordAutonomousResult?: { stepN: number; success: boolean };
   /** Epoch ms when the hidden begin auto-send fired. Idempotent - service no-ops if already set. */
   setBeginSent?: number;
+  /**
+   * Flip the interactivity mode (Phase 3 collaborative surface toggle).
+   * Routes to `service.setInteractivity`. Idempotent.
+   */
+  setInteractivity?: WorkflowInteractivity;
+  /**
+   * Regress the run to step N (Phase 3 backtrack affordance).
+   * Routes to `service.backtrackToStep`. Emits `workflow.backtrack` telemetry.
+   */
+  backtrackToStep?: number;
 };
 
 // Telemetry-driven Launchpad predictive widget. The renderer fires

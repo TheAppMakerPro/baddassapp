@@ -8,19 +8,34 @@ import type { WCoreModelSelection } from './useWCoreModelSelection';
 import { usePreviewContext } from '@/renderer/pages/conversation/Preview';
 import { useLayoutContext } from '@/renderer/hooks/context/LayoutContext';
 import { getModelDisplayLabel } from '@/renderer/utils/model/agentLogo';
-import { Button, Dropdown, Menu, Tooltip } from '@arco-design/web-react';
+import { Button, Dropdown, Tooltip } from '@arco-design/web-react';
 import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
 import useSWR from 'swr';
 import { ipcBridge } from '@/common';
 import type { IProvider } from '@/common/config/storage';
+import { FLUX_MODEL_DISPLAY, FLUX_PROVIDER_ID, isFluxModelId, type FluxModelId } from '@/common/config/flux';
+import ModelSelectorFlyout from '@renderer/components/model/modelSelector/ModelSelectorFlyout';
+import { modelKey } from '@renderer/components/model/modelSelector/modelRowHelpers';
+import { resolveSelectedProvider } from '@renderer/components/model/modelSelector/resolveSelectedProvider';
+import { useModelSelectorViewModel } from '@renderer/components/model/modelSelector/useModelSelectorViewModel';
+import { useModelEffort } from '@renderer/components/model/modelSelector/useModelEffort';
+import { usePinnedModels } from '@renderer/hooks/usage/usePinnedModels';
+
+/** Render a Flux routing alias (flux-auto, ...) as its brand name ("Flux Auto"). */
+const toDisplayName = (modelName: string): string =>
+  isFluxModelId(modelName) ? FLUX_MODEL_DISPLAY[modelName as FluxModelId] : modelName;
 
 const WCoreModelSelector: React.FC<{
   selection?: WCoreModelSelection;
   disabled?: boolean;
-}> = ({ selection, disabled = false }) => {
+  /** Drives per-conversation effort persistence (Wayland Core supports effort). */
+  conversationId?: string;
+}> = ({ selection, disabled = false, conversationId }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { isOpen: isPreviewOpen } = usePreviewContext();
   const layout = useLayoutContext();
   const compact = isPreviewOpen || layout?.isMobile;
@@ -30,6 +45,19 @@ const WCoreModelSelector: React.FC<{
   const { data: modelConfig, mutate: mutateModelConfig } = useSWR<IProvider[]>('model.config', () =>
     ipcBridge.mode.getModelConfig.invoke()
   );
+
+  // Unified flyout: the active row key + pins. A Flux selection keys off the
+  // canonical `flux-router:<id>` so the Flux Auto hero shows its active check
+  // even though the live Flux provider in model.config carries an opaque id.
+  const currentSelection = selection?.currentModel;
+  const activeModelKey = useMemo(() => {
+    if (!currentSelection?.useModel) return null;
+    if (isFluxModelId(currentSelection.useModel)) return `${FLUX_PROVIDER_ID}:${currentSelection.useModel}`;
+    return modelKey({ providerId: currentSelection.id, id: currentSelection.useModel });
+  }, [currentSelection?.id, currentSelection?.useModel]);
+  const vm = useModelSelectorViewModel('wcore', activeModelKey);
+  const { toggle } = usePinnedModels(true);
+  const { effort, setEffort } = useModelEffort(conversationId ?? '');
 
   // Re-read the model list when the registry catalog changes (connect / rekey /
   // refresh emit `modelRegistry.listChanged`). Without this the Wayland Core
@@ -76,51 +104,35 @@ const WCoreModelSelector: React.FC<{
 
   const label = getModelDisplayLabel({
     selectedValue: currentModel?.useModel,
-    selectedLabel: currentModel?.useModel || '',
+    selectedLabel: currentModel?.useModel ? toDisplayName(currentModel.useModel) : '',
     defaultModelLabel,
     fallbackLabel: t('conversation.welcome.selectModel'),
   });
+
+  // The flyout emits `(modelId, providerId)`; route it through the existing
+  // `handleSelectModel(provider, modelName)` path. The flyout's providerId is
+  // the registry ProviderId, not the legacy storage provider.id, so resolve the
+  // owning provider robustly (see resolveSelectedProvider) - matching on
+  // provider.id alone silently dropped every non-Flux selection (#99/102/103/104).
+  const onSelect = (modelId: string, providerId: string) => {
+    const provider = resolveSelectedProvider(providers, getAvailableModels, modelId, providerId);
+    if (!provider) return;
+    void handleSelectModel(provider, modelId);
+  };
 
   return (
     <Dropdown
       trigger='click'
       droplist={
-        <Menu>
-          {providers.map((provider) => {
-            const models = getAvailableModels(provider);
-            if (!models.length) return null;
-
-            return (
-              <Menu.ItemGroup title={provider.name} key={provider.id}>
-                {models.map((modelName) => {
-                  const matchedProvider = modelConfig?.find((p) => p.id === provider.id);
-                  const healthStatus = matchedProvider?.modelHealth?.[modelName]?.status || 'unknown';
-                  const healthColor =
-                    healthStatus === 'healthy'
-                      ? 'bg-green-500'
-                      : healthStatus === 'unhealthy'
-                        ? 'bg-red-500'
-                        : 'bg-gray-400';
-
-                  return (
-                    <Menu.Item
-                      key={`${provider.id}-${modelName}`}
-                      className={currentModel?.id + currentModel?.useModel === provider.id + modelName ? '!bg-2' : ''}
-                      onClick={() => void handleSelectModel(provider, modelName)}
-                    >
-                      <div className='flex items-center gap-8px w-full'>
-                        {healthStatus !== 'unknown' && (
-                          <div className={`w-6px h-6px rounded-full shrink-0 ${healthColor}`} />
-                        )}
-                        <span>{modelName}</span>
-                      </div>
-                    </Menu.Item>
-                  );
-                })}
-              </Menu.ItemGroup>
-            );
-          })}
-        </Menu>
+        <ModelSelectorFlyout
+          vm={vm}
+          onSelect={onSelect}
+          onTogglePin={toggle}
+          onManage={() => navigate('/settings/models')}
+          effort={effort}
+          onSetEffort={setEffort}
+          draftSearch
+        />
       }
     >
       <Button

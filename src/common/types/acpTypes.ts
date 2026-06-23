@@ -4,10 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+// These versions are FALLBACK floors only. At spawn time the connectors resolve
+// the LATEST published version of each bridge via bridgeVersionResolver (so new
+// models/features land automatically); these pins are used only when the npm
+// registry is unreachable. Keep them at a recent known-good version.
 export const CODEX_ACP_BRIDGE_VERSION = '0.9.5';
 export const CODEX_ACP_NPX_PACKAGE = `@zed-industries/codex-acp@${CODEX_ACP_BRIDGE_VERSION}`;
 
-export const CLAUDE_ACP_BRIDGE_VERSION = '0.33.1';
+export const CLAUDE_ACP_BRIDGE_VERSION = '0.44.0';
 export const CLAUDE_ACP_NPX_PACKAGE = `@agentclientprotocol/claude-agent-acp@${CLAUDE_ACP_BRIDGE_VERSION}`;
 
 export const CODEBUDDY_ACP_BRIDGE_VERSION = '2.73.0';
@@ -42,6 +46,7 @@ export type AcpBackendAll =
   // | 'gemini' // Google Gemini - not an ACP agent, handled by AgentRegistry directly
   | 'qwen' // Qwen Code ACP
   | 'codex' // OpenAI Codex ACP (via codex-acp bridge)
+  | 'grok' // xAI Grok Build CLI (native ACP via `grok agent stdio`)
   | 'codebuddy' // Tencent CodeBuddy Code CLI
   | 'droid' // Factory Droid CLI (ACP via `droid exec --output-format acp`)
   | 'goose' // Block's Goose CLI
@@ -318,6 +323,20 @@ export const ACP_BACKENDS_ALL: Record<AcpBackendAll, AcpBackendConfig> = {
     // Responses surface via a [model_providers.flux] table in its TOML config.
     fluxCompat: 'setup',
   },
+  grok: {
+    id: 'grok',
+    name: 'Grok Build',
+    cliCommand: 'grok',
+    // Auth is CLI-owned: `grok login` (grok.com OAuth, SuperGrok subscription).
+    // Wayland spawns the binary and it uses its cached credentials.
+    authRequired: true,
+    enabled: true, // ✅ xAI Grok Build CLI, native ACP v1 via `grok agent stdio` (proven: initialize/session/new/session/prompt)
+    supportsStreaming: true, // streams agent_thought_chunk / agent_message_chunk over session/update
+    acpArgs: ['agent', 'stdio'],
+    skillsDirs: ['.grok/skills'],
+    // Talks to xAI's own gateway (grok.com); not Flux-routable.
+    fluxCompat: 'vendor',
+  },
   qwen: {
     id: 'qwen',
     name: 'Qwen Code',
@@ -458,6 +477,7 @@ export const ACP_BACKENDS_ALL: Record<AcpBackendAll, AcpBackendConfig> = {
     enabled: true, // ✅ Nous Research Hermes Agent, launched via `hermes acp`
     supportsStreaming: false,
     acpArgs: ['acp'], // hermes uses the acp subcommand
+    fluxCompat: 'setup',
   },
   snow: {
     id: 'snow',

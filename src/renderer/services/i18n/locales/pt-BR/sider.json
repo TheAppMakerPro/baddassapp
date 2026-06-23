@@ -9,7 +9,7 @@
     "install": {
       "body": "Codex, Cursor e Claude Code ainda não estão roteados. O Flux Desktop conecta os três com um clique.",
       "action": "Instalar Flux Desktop",
-      "sub": "fluxrouter.ai/downloads"
+      "sub": "fluxrouter.ai/download"
     },
     "ollama": {
       "body": "O Ollama local processou {{pct}}% da semana passada. O Flux Router assume o restante quando seu hardware chega ao limite.",
@@ -18,6 +18,10 @@
     "wired": {
       "body": "Últimas 100: H{{h}} · S{{s}} · O{{o}}",
       "action": "Ver para onde foi cada interação"
+    },
+    "dismiss": {
+      "label": "Ocultar status do Flux",
+      "hint": "Status do Flux ocultado."
     }
   },
   "accordion": {

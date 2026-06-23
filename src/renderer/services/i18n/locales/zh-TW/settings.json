@@ -5,8 +5,7 @@
     "description": "集中管理 AI 智慧體技能。一次安裝，全助手通用。",
     "mySkillsTitle": "我的技能",
     "discoveredTitle": "發現外部技能",
-    "discoveryAlert": "偵測到來自 CLI 工具的技能。匯入後即可在 BaddAssApp 中使用。",
-    "importAll": "全部匯入",
+    "discoveryAlert": "偵測到來自 CLI 工具的技能。匯入後即可在 BaddAssApp 中使用。",    "importAll": "全部匯入",
     "importAllSuccess": "成功匯入 {{count}} 項技能",
     "noSkills": "未發現技能。請匯入技能以開始使用。",
     "custom": "自訂",
@@ -159,8 +158,7 @@
   "autoPreviewOfficeFiles": "自動預覽新建 Office 文件",
   "autoPreviewOfficeFilesDesc": "自動打開目前工作區中新建立的 Word、Excel 與 PowerPoint 文件，並忽略 Office 臨時鎖定文件。",
   "startOnBoot": "開機啟動",
-  "startOnBootDesc": "登入 macOS 或 Windows 後自動啟動 BaddAssApp。",
-  "startOnBootUnsupported": "僅在打包後的 macOS 與 Windows 用戶端中可用。",
+  "startOnBootDesc": "登入 macOS 或 Windows 後自動啟動 BaddAssApp。",  "startOnBootUnsupported": "僅在打包後的 macOS 與 Windows 用戶端中可用。",
   "startOnBootUpdateFailed": "更新開機啟動設定失敗",
   "closeToTray": "關閉到托盤",
   "notification": "通知",
@@ -201,8 +199,7 @@
   "deleteInvalidKeys": "刪除無效金鑰",
   "testAllKeys": "測試所有金鑰",
   "addModelPlaceholder": "請選擇或輸入模型ID",
-  "customModelSupportNote": "說明：目前 BaddAssApp Core 和 Gemini CLI Agent 支援使用自訂模型。",
-  "addModelHint": "選擇或輸入模型 ID，會追加到當前平台配置。",
+  "customModelSupportNote": "說明：目前 BaddAssApp Core 和 Gemini CLI Agent 支援使用自訂模型。",  "addModelHint": "選擇或輸入模型 ID，會追加到當前平台配置。",
   "addModelSelectedHint": "即將新增模型：{{model}}",
   "currentModelsLabel": "目前模型",
   "addModelNoExisting": "尚未為此服務商新增模型，新增後會顯示在此。",
@@ -252,9 +249,7 @@
   "channels": {
     "label": "頻道",
     "telegram": {
-      "help": "透過 Telegram 與你的 BaddAssApp AI 助理對話。使用 @BotFather 建立一個機器人即可開始。",
-      "howToTalk": "開啟 Telegram，找到你的機器人並傳送任意訊息。BaddAssApp 會在那裡直接回覆。"
-    },
+      "help": "透過 Telegram 與你的 BaddAssApp AI 助理對話。使用 @BotFather 建立一個機器人即可開始。",      "howToTalk": "開啟 Telegram，找到你的機器人並傳送任意訊息。BaddAssApp 會在那裡直接回覆。"    },
     "slack": {
       "comingSoonTitle": "Slack 支援將於 {{phase}} 推出",
       "comingSoonBody": "透過 Socket Mode 進行機器人整合。可在你工作區的任何頻道發送及接收訊息。",
@@ -292,8 +287,7 @@
           "required": "Events API 傳輸方式需要簽署密鑰"
         }
       },
-      "howToTalk": "開啟 Slack，傳訊息給機器人或在頻道中提及它。BaddAssApp 會在那裡直接回覆。"
-    },
+      "howToTalk": "開啟 Slack，傳訊息給機器人或在頻道中提及它。BaddAssApp 會在那裡直接回覆。"    },
     "discord": {
       "comingSoonTitle": "Discord 支援即將推出",
       "comingSoonBody": "原生 Discord 機器人整合正在開發中。可在功能推出後設定你的機器人 Token、Application ID 及允許的伺服器。",
@@ -323,8 +317,7 @@
           "help": "選填。僅在你日後改用 HTTP 互動端點而非 Gateway 時才需要。"
         }
       },
-      "howToTalk": "開啟 Discord，私訊機器人或在伺服器頻道中提及它。BaddAssApp 會在那裡直接回覆。"
-    },
+      "howToTalk": "開啟 Discord，私訊機器人或在伺服器頻道中提及它。BaddAssApp 會在那裡直接回覆。"    },
     "webhook": {
       "comingSoonTitle": "Webhook 頻道將於 {{phase}} 推出",
       "comingSoonBody": "具備 HMAC 簽章驗證的通用對內 HTTP 端點。適用於自訂整合。",
@@ -404,12 +397,9 @@
         "label": "帳戶模式",
         "personal": "個人（僅限你）",
         "dedicated": "專用（其他人可對話）",
-        "personalHelp": "BaddAssApp 連結你自己的 WhatsApp。只有你能透過自己的「傳訊給自己」對話與它交流。來自其他聯絡人的訊息將被忽略。",
-        "dedicatedHelp": "使用為你的智慧代理建立的獨立 WhatsApp 號碼。輸入你的個人號碼，讓 BaddAssApp 知道你是擁有者；其他人可以配對與它對話。",
-        "ownerNumbers": {
+        "personalHelp": "BaddAssApp 連結你自己的 WhatsApp。只有你能透過自己的「傳訊給自己」對話與它交流。來自其他聯絡人的訊息將被忽略。",        "dedicatedHelp": "使用為你的智慧代理建立的獨立 WhatsApp 號碼。輸入你的個人號碼，讓 BaddAssApp 知道你是擁有者；其他人可以配對與它對話。",        "ownerNumbers": {
           "label": "你的個人號碼",
-          "help": "以完整國際格式填寫你自己的 WhatsApp 號碼。BaddAssApp 會將來自這些號碼的訊息辨識為擁有者。多個號碼以逗號分隔。",
-          "savedHidden": "已儲存的號碼已隱藏。重新輸入以變更。",
+          "help": "以完整國際格式填寫你自己的 WhatsApp 號碼。BaddAssApp 會將來自這些號碼的訊息辨識為擁有者。多個號碼以逗號分隔。",          "savedHidden": "已儲存的號碼已隱藏。重新輸入以變更。",
           "placeholder": "+15551234567"
         }
       },
@@ -493,8 +483,7 @@
           "help": "留空則使用內建執行環境或您 PATH 中的 signal-cli。"
         }
       },
-      "howToTalk": "開啟 Signal 並查看你的「給自己的訊息」聊天。BaddAssApp 剛在那裡打了招呼；回覆該聊天即可。"
-    },
+      "howToTalk": "開啟 Signal 並查看你的「給自己的訊息」聊天。BaddAssApp 剛在那裡打了招呼；回覆該聊天即可。"    },
     "matrix": {
       "comingSoonTitle": "Matrix 將於 {{phase}} 推出",
       "comingSoonBody": "透過 matrix-js-sdk 支援聯邦架構。選用的端對端加密並支援裝置驗證。相容於任何 homeserver。",
@@ -537,8 +526,7 @@
       "pluginEnabled": "MS Teams 外掛已啟用",
       "enableFailed": "無法啟用外掛",
       "testAndEnable": "測試並啟用",
-      "setupHint": "請在 Azure 入口網站註冊您的機器人：Azure Bot Service → 建立資源 → 設定 Microsoft Teams 頻道 → 將傳訊端點設為您的 BaddAssApp webhook URL → 在此處複製 App ID 與用戶端密鑰。",
-      "credentials": {
+      "setupHint": "請在 Azure 入口網站註冊您的機器人：Azure Bot Service → 建立資源 → 設定 Microsoft Teams 頻道 → 將傳訊端點設為您的 BaddAssApp webhook URL → 在此處複製 App ID 與用戶端密鑰。",      "credentials": {
         "appId": {
           "label": "App ID（MicrosoftAppId）",
           "help": "Azure AD 應用程式註冊的用戶端 ID，位於 Azure 入口網站 → App Registrations → Overview。",
@@ -589,8 +577,7 @@
     "imessage": {
       "comingSoonTitle": "iMessage 將於 {{phase}} 推出",
       "comingSoonBody": "僅限 macOS，實驗性功能。透過 AppleScript 橋接 Messages.app。Apple 會悄悄限制指令稿發送速率，因此傳訊會受到節流。",
-      "howToTalk": "向你 Mac 上允許的識別碼傳送一則 iMessage。BaddAssApp 會在那裡直接回覆。"
-    },
+      "howToTalk": "向你 Mac 上允許的識別碼傳送一則 iMessage。BaddAssApp 會在那裡直接回覆。"    },
     "viber": {
       "comingSoonTitle": "Viber 將於 {{phase}} 推出",
       "comingSoonBody": "透過 Viber Bot API 進行機器人整合。入站使用 webhook，出站使用 REST。需要公開 URL。"
@@ -874,14 +861,11 @@
           "help": "連接埠為 587 時使用 STARTTLS，為 465 時使用隱式 TLS。"
         }
       },
-      "howToTalk": "查看你自己的收件匣。BaddAssApp 剛寄了一封郵件給你；隨時回覆那封郵件即可。"
-    },
+      "howToTalk": "查看你自己的收件匣。BaddAssApp 剛寄了一封郵件給你；隨時回覆那封郵件即可。"    },
     "welcome": {
-      "message": "你好，我是 BaddAssApp。我已連線。隨時回覆這則訊息，我會幫你。"
-    }
+      "message": "你好，我是 BaddAssApp。我已連線。隨時回覆這則訊息，我會幫你。"    }
   },
-  "webui.description": "把 BaddAssApp 當作「7*24小時的遠程助手」，隨時隨地用遠程設備安排任務。",
-  "webui.steps": "步驟 1. 開啟 WebUI 開關；步驟 2. 複製存取網址；步驟 3. 遠程瀏覽器開啟",
+  "webui.description": "把 BaddAssApp 當作「7*24小時的遠程助手」，隨時隨地用遠程設備安排任務。",  "webui.steps": "步驟 1. 開啟 WebUI 開關；步驟 2. 複製存取網址；步驟 3. 遠程瀏覽器開啟",
   "webui.configuration": "WebUI 配置",
   "webui.enable": "啟用 WebUI",
   "webui.enableDesc": "啟動 Web 服務，允許透過瀏覽器存取",
@@ -895,7 +879,7 @@
   "webui.networkUrl": "網路網址",
   "webui.qrLogin": "QR 碼登入",
   "webui.qrLoginTitle": "掃描登入",
-  "webui.qrLoginHint": "使用手機掃描 QR 碼，即可在手機瀏覽器中自動登入",
+  "webui.qrLoginHint": "使用手機掃描 QR 碼，即可在手機瀏覽器中自動登入。手機需與此電腦連接同一 Wi-Fi/網路。",
   "webui.qrExpires": "有效期至 {{time}}",
   "webui.refreshQr": "重新整理 QR 碼",
   "webui.copyQrLink": "複製連結",
@@ -905,6 +889,7 @@
   "webui.initialPassword": "初始密碼",
   "webui.initialPasswordDesc": "首次啟動時產生的密碼，建議修改",
   "webui.changePassword": "修改密碼",
+  "webui.changePasswordDesc": "更新此伺服器的管理員密碼。",
   "webui.currentPassword": "目前密碼",
   "webui.currentPasswordPlaceholder": "請輸入目前密碼",
   "webui.currentPasswordRequired": "請輸入目前密碼",
@@ -958,14 +943,11 @@
   "webui.passwordHint": "Password is shown in console on first startup. Use \"Change Password\" to reset",
   "webui.checkConsoleForPassword": "Check application console for initial password",
   "webui.browserNotSupported": "瀏覽器端無法存取 WebUI 設定",
-  "webui.browserNotSupportedDesc": "出於安全考量，WebUI 設定只能在桌面應用中管理。請在 BaddAssApp 桌面應用中開啟設定面板進行配置。",
-  "webui.passwordHidden": "******",
+  "webui.browserNotSupportedDesc": "出於安全考量，WebUI 設定只能在桌面應用中管理。請在 BaddAssApp 桌面應用中開啟設定面板進行配置。",  "webui.passwordHidden": "******",
   "webui.passwordOnlyFirstTime": "密碼僅在首次啟動時顯示，之後將被隱藏",
   "webui.resetPasswordWarning": "請妥善保管重設後的密碼！",
-  "webui.featureRemoteDesc": "啟用 WebUI 後，你可以透過手機或遠端瀏覽器存取 BaddAssApp。",
-  "webui.featureChannelsTitle": "Messaging Control",
-  "webui.featureChannelsDesc": "連接 Telegram、Lark、釘釘、微信，在即時通訊軟體中與 BaddAssApp 互動。",
-  "webui.goToChannels": "前往 Channels",
+  "webui.featureRemoteDesc": "啟用 WebUI 後，你可以透過手機或遠端瀏覽器存取 BaddAssApp。",  "webui.featureChannelsTitle": "Messaging Control",
+  "webui.featureChannelsDesc": "連接 Telegram、Lark、釘釘、微信，在即時通訊軟體中與 BaddAssApp 互動。",  "webui.goToChannels": "前往 Channels",
   "webui.pairedDevices.title": "Paired Devices",
   "webui.pairedDevices.empty": "No devices paired yet",
   "webui.pairedDevices.lastSeen": "Last seen {{time}}",
@@ -1028,20 +1010,13 @@
   "assistant.step4": "Once approved, you can start chatting with Gemini through Telegram!",
   "channels.title": "Channels",
   "channels.telegramTitle": "Telegram",
-  "channels.telegramDesc": "Chat with BaddAssApp assistant via Telegram",
-  "channels.slackTitle": "Slack",
-  "channels.slackDesc": "Chat with BaddAssApp assistant via Slack",
-  "channels.discordTitle": "Discord",
-  "channels.discordDesc": "Chat with BaddAssApp assistant via Discord",
-  "channels.larkTitle": "Lark",
-  "channels.larkDesc": "Chat with BaddAssApp assistant via Lark",
-  "channels.dingtalkTitle": "DingTalk",
-  "channels.dingtalkDesc": "Chat with BaddAssApp assistant via DingTalk",
-  "channels.weixinTitle": "微信",
-  "channels.weixinDesc": "透過微信與 BaddAssApp 助手對話",
-  "channels.wecomTitle": "企業微信",
-  "channels.wecomDesc": "透過企業微信智慧機器人與 BaddAssApp 助手對話",
-  "channels.comingSoon": "Coming Soon",
+  "channels.telegramDesc": "Chat with BaddAssApp assistant via Telegram",  "channels.slackTitle": "Slack",
+  "channels.slackDesc": "Chat with BaddAssApp assistant via Slack",  "channels.discordTitle": "Discord",
+  "channels.discordDesc": "Chat with BaddAssApp assistant via Discord",  "channels.larkTitle": "Lark",
+  "channels.larkDesc": "Chat with BaddAssApp assistant via Lark",  "channels.dingtalkTitle": "DingTalk",
+  "channels.dingtalkDesc": "Chat with BaddAssApp assistant via DingTalk",  "channels.weixinTitle": "微信",
+  "channels.weixinDesc": "透過微信與 BaddAssApp 助手對話",  "channels.wecomTitle": "企業微信",
+  "channels.wecomDesc": "透過企業微信智慧機器人與 BaddAssApp 助手對話",  "channels.comingSoon": "Coming Soon",
   "channels.comingSoonDesc": "Support for {{channel}} is coming soon",
   "channels.notConfigured": "Not configured",
   "channels.configured": "Configured",
@@ -1128,8 +1103,7 @@
   "mcpImportSuccess": "匯入成功",
   "mcpImportFailed": "匯入失敗",
   "mcpJsonInvalid": "無效的 JSON 格式",
-  "mcpImportDescription": "BaddAssApp會自動獲取的您在CLI Agent中已安裝的MCP，並一鍵匯入",
-  "mcpStepSelectAgent": "選擇Agent",
+  "mcpImportDescription": "BaddAssApp會自動獲取的您在CLI Agent中已安裝的MCP，並一鍵匯入",  "mcpStepSelectAgent": "選擇Agent",
   "mcpStepFetchTools": "獲取mcp",
   "mcpStepImportSuccess": "匯入成功",
   "mcpLoadingTools": "讀取CLI工具列表中...",
@@ -1185,7 +1159,7 @@
   "needHelpTooltip": "如需幫助，請查看",
   "googleCloudProjectPlaceholder": "請輸入 Google Cloud Project ID",
   "noAvailableModels": "暫無可用模型",
-  "appDescription": "Free, local, open-source GUI app for Gemini CLI",
+  "appDescription": "面向 AI 程式設計代理的免費、本機、開源圖形介面",
   "helpDocumentation": "幫助文檔",
   "updateLog": "更新日誌",
   "feedback": "意見反饋",
@@ -1513,9 +1487,7 @@
     "marketUpdate": "更新",
     "marketEmpty": "暫未發現可安裝的 Agent。請檢查網路連線，並確認目前環境可以正常存取 GitHub。",
     "marketContributionHint": "想讓新的 Agent 出現在市場中？",
-    "marketContributionAction": "前往 BaddAssAppHub 提交 PR",
-    "marketComingSoon": "BaddAssAppHub 市場即將上線。",
-    "detectCustomAgent": "識別自訂 Agent",
+    "marketContributionAction": "前往 BaddAssAppHub 提交 PR",    "marketComingSoon": "BaddAssAppHub 市場即將上線。",    "detectCustomAgent": "識別自訂 Agent",
     "editCustomAgent": "編輯自訂 Agent",
     "localAgentsEmpty": "未檢測到本機 Agent",
     "detected": "已偵測",
@@ -1572,8 +1544,7 @@
     "notFound": "未找到",
     "version": "版本",
     "path": "路徑",
-    "providerNote": "服務商和 API 金鑰設定在模型頁面管理。BaddAssApp Core 支援：Anthropic、OpenAI、AWS Bedrock。"
-  },
+    "providerNote": "服務商和 API 金鑰設定在模型頁面管理。BaddAssApp Core 支援：Anthropic、OpenAI、AWS Bedrock。"  },
   "shared": {
     "saving": "儲存中…",
     "saved": "已儲存",
@@ -1609,7 +1580,9 @@
     "constitution": "章程",
     "images": "圖片生成",
     "voice": "語音",
-    "groupEngine": "ENGINE"
+    "groupEngine": "ENGINE",
+    "commands": "Slash Commands",
+    "doctor": "Doctor"
   },
   "channelsIndex": {
     "title": "訊息渠道",
@@ -1628,8 +1601,7 @@
     "footerText": "更多渠道可透過擴充套件新增。",
     "browseExtensions": "瀏覽擴充套件 →",
     "channelsMovedHint": "訊息渠道已移至整合 →",
-    "subtitle": "將 BaddAssApp 連接至訊息平台。每個連線都有各自的設定、憑證與狀態。",
-    "tier1Tab": "第 1 級",
+    "subtitle": "將 BaddAssApp 連接至訊息平台。每個連線都有各自的設定、憑證與狀態。",    "tier1Tab": "第 1 級",
     "tier2Tab": "第 2 級",
     "tier3Tab": "第 3 級",
     "phase1Label": "階段 1",
@@ -1668,8 +1640,7 @@
       "keyLabel": "貼上 API 金鑰",
       "keyPlaceholder": "貼上任何提供商的金鑰…",
       "connect": "連接",
-      "hintDefault": "BaddAssApp 會自動辨識提供商，無需手動選擇。",
-      "hintAmbiguous": "看起來是 OpenAI 風格的金鑰，連接後確認提供商。",
+      "hintDefault": "BaddAssApp 會自動辨識提供商，無需手動選擇。",      "hintAmbiguous": "看起來是 OpenAI 風格的金鑰，連接後確認提供商。",
       "recognized": "已辨識：",
       "cloudHint": "此提供商需要在「瀏覽」中填寫憑證表單。",
       "unrecognizedPrefix": "無法辨識的金鑰格式：",
@@ -1678,6 +1649,24 @@
       "google": "使用 Google 繼續",
       "googleSuccess": "已以 {{account}} 登入 Google。",
       "googleFailed": "Google 登入失敗，請重試。",
+      "xai": "使用 X 登入 (Grok)",
+      "xaiSuccess": "已使用你的 X 帳號登入 Grok。",
+      "xaiReused": "已重複使用現有的 Grok 登入。",
+      "xaiUnauthorized": "X 登入遭拒。需要 SuperGrok 或 X Premium 訂閱。",
+      "xaiNoCredit": "已登入，但此 Grok 帳號沒有可用額度。",
+      "xaiOffline": "無法連線至 xAI。請檢查網路後再試一次。",
+      "xaiCancelled": "X 登入已取消。",
+      "xaiFailed": "X 登入失敗，請再試一次。",
+      "xaiConnected": "Signed in with X",
+      "xaiReconnect": "Reconnect",
+      "chatgpt": "Sign in with ChatGPT",
+      "chatgptNote": "Signs in with your ChatGPT subscription via the same path the Codex CLI uses. OpenAI may change or restrict this.",
+      "chatgptSuccess": "Signed in with your ChatGPT subscription.",
+      "chatgptUnauthorized": "ChatGPT sign-in was rejected. An active ChatGPT subscription is required.",
+      "chatgptNoCredit": "Signed in, but this ChatGPT account has no usable access.",
+      "chatgptOffline": "Couldn't reach OpenAI. Check your connection and try again.",
+      "chatgptCancelled": "ChatGPT sign-in was cancelled.",
+      "chatgptFailed": "ChatGPT sign-in failed. Please try again.",
       "browse": "瀏覽全部 30+ 提供商 →",
       "thatProvider": "該提供商",
       "errorUnauthorized": "該 {{provider}} 金鑰被拒絕，未授權。請檢查金鑰後重試。",
@@ -1689,7 +1678,13 @@
       "errorNoModels": "{{provider}} 已連接但未回傳任何模型。請在「管理」中嘗試重新整理。",
       "errorUnknown": "無法連接到 {{provider}}，請重試。",
       "undecryptableHint": "Your saved key for this provider is unreadable. Please re-enter it.",
-      "fromDeepLink": "來自深層連結"
+      "fromDeepLink": "來自深層連結",
+      "xaiPasteHint": "Taking a while? Copy the code from the x.ai page and paste it here to finish.",
+      "xaiPastePlaceholder": "Paste code from x.ai",
+      "xaiPasteSubmit": "Finish",
+      "xaiPasteCancel": "Cancel",
+      "xaiCodeNotAccepted": "That code could not be used. Click Sign in with X to start again.",
+      "xaiWaiting": "Finishing sign-in in your browser. Approve it in the tab that opened - this completes on its own."
     },
     "flux": {
       "name": "Flux Router",
@@ -1711,8 +1706,7 @@
       "errorUnrecognized": "無法為 {{provider}} 辨識該金鑰。",
       "errorNoModels": "{{provider}} 已連接但未返回任何模型。請稍後重試。",
       "errorUnknown": "無法連接 {{provider}}。請重試。",
-      "trust": "來自 Ferrox Labs，BaddAssApp 背後的團隊。"
-    },
+      "trust": "來自 Ferrox Labs，BaddAssApp 背後的團隊。"    },
     "detected": {
       "found": "在本機上發現一個 {{provider}} API 金鑰。使用它嗎？",
       "use": "使用",
@@ -1732,6 +1726,10 @@
       "errorUnrecognized": "金鑰無法辨識",
       "errorNoModels": "未回傳模型",
       "errorUnknown": "連接問題",
+      "toggleFailed": "Could not change that provider. Please try again.",
+      "providerToggleAria": "Turn {{provider}} models on or off",
+      "providerToggleOnHint": "Turn on this provider's recommended models",
+      "providerToggleOffHint": "Turn off all of this provider's models",
       "via": {
         "apiKey": "API 金鑰",
         "autoDiscovered": "自動探索的金鑰",
@@ -1759,6 +1757,9 @@
       "noMatch": "沒有符合「{{query}}」的模型",
       "recommendedHead": "推薦，預設開啟",
       "moreHead": "目錄中的更多模型",
+      "selectAll": "Select all",
+      "deselectAll": "Deselect all",
+      "bulkVisibleCount": "{{count}} shown",
       "recommended": "推薦",
       "roleFlagship": "最強能力",
       "roleFast": "最快",
@@ -1805,6 +1806,7 @@
       "noMatch": "沒有符合「{{query}}」的供應商",
       "back": "所有供應商",
       "connected": "已連接",
+      "featuredFluxTagline": "Flux Router - routed per request across 40+ models",
       "connectAria": "連接 {{provider}}",
       "cloudTag": "憑證表單",
       "group": {
@@ -1919,12 +1921,15 @@
       "label": "自動重新整理",
       "hint": "在背景檢查新模型，讓清單保持最新。",
       "saveFailed": "儲存自動重新整理設定失敗。"
+    },
+    "headless": {
+      "title": "供應商在伺服器上設定",
+      "body": "這是一個遠端工作階段，因此無法在此輸入金鑰。供應商透過環境變數或伺服器上的 `wayland setup` 進行設定。重新整理後，您已設定的供應商及其模型將顯示在下方。"
     }
   },
   "mcpPage": {
     "title": "MCP 伺服器",
-    "subtitle": "透過 Model Context Protocol 將 BaddAssApp 連接至外部工具伺服器。新增、設定 MCP 伺服器並在各 agent 間同步。"
-  },
+    "subtitle": "透過 Model Context Protocol 將 BaddAssApp 連接至外部工具伺服器。新增、設定 MCP 伺服器並在各 agent 間同步。"  },
   "imageGenPage": {
     "title": "圖像生成",
     "subtitle": "設定內建圖像生成工具：選擇預設模型並啟用或停用 MCP 伺服器。",
@@ -1940,12 +1945,10 @@
   },
   "notificationsPage": {
     "title": "通知",
-    "subtitle": "BaddAssApp 在何時以何種方式提醒您。",
-    "comingSoon": "各類別開關、勿擾時段與音效控制將於下一版推出。",
+    "subtitle": "BaddAssApp 在何時以何種方式提醒您。",    "comingSoon": "各類別開關、勿擾時段與音效控制將於下一版推出。",
     "systemTitle": "系統通知",
     "master": "總開關",
-    "masterHelp": "關閉時，BaddAssApp 不會傳送任何系統通知。下方其他規則將被忽略。",
-    "agentFinished": "agent 完成時通知",
+    "masterHelp": "關閉時，BaddAssApp 不會傳送任何系統通知。下方其他規則將被忽略。",    "agentFinished": "agent 完成時通知",
     "agentFinishedHelp": "於長時間執行的任務或團隊啟動器完成時觸發。",
     "scheduledTask": "排程任務觸發時通知",
     "scheduledTaskHelp": "Cron 樣式的任務於執行時通知。",
@@ -1976,8 +1979,7 @@
     "open": "開啟",
     "clear": "清除",
     "clearConfirmTitle": "要清除目錄嗎？",
-    "clearConfirmBody": "這將永久移除其中的檔案。BaddAssApp 會在需要時重新建立。",
-    "backupTitle": "備份與還原",
+    "clearConfirmBody": "這將永久移除其中的檔案。BaddAssApp 會在需要時重新建立。",    "backupTitle": "備份與還原",
     "exportIncludeKeys": "匯出時包含 API 金鑰",
     "exportPassphraseLabel": "加密密碼",
     "exportPassphrasePlaceholder": "包含金鑰時為必填",
@@ -1985,8 +1987,7 @@
     "restore": "從備份還原",
     "syncTitle": "同步（端對端加密）",
     "syncComingSoon": "端對端加密同步至資料夾或中繼伺服器。",
-    "resetTitle": "重設 BaddAssApp",
-    "resetDescription": "永久刪除所有對話、設定與快取資料。",
+    "resetTitle": "重設 BaddAssApp",    "resetDescription": "永久刪除所有對話、設定與快取資料。",
     "resetAction": "重設全部",
     "resetConfirmTitle": "要重設全部嗎？",
     "resetConfirmBody": "這會永久刪除所有資料，包括供應商、對話與設定。此操作無法復原。",
@@ -2042,8 +2043,7 @@
     "title": "技能與工具"
   },
   "constitutionPage": {
-    "subtitle": "BaddAssApp 的規則。每輪對話都會重新載入，編輯即時生效，無需重新啟動。覆寫機制的運作方式請參見 §11。",
-    "tocTitle": "章節",
+    "subtitle": "BaddAssApp 的規則。每輪對話都會重新載入，編輯即時生效，無需重新啟動。覆寫機制的運作方式請參見 §11。",    "tocTitle": "章節",
     "tocEmpty": "尚無章節",
     "reset": "重設",
     "resetTooltip": "重設為預設章程",
@@ -2079,8 +2079,7 @@
     "yourAgents": "你的智能體",
     "moreDetected": "更多已偵測 · {{count}}",
     "remoteAgents": "遠程智能體",
-    "empty": "尚未偵測到智能體。連接模型後，BaddAssApp Core 始終可用。",
-    "loadErrorsTitle": "部分智能體載入失敗",
+    "empty": "尚未偵測到智能體。連接模型後，BaddAssApp Core 始終可用。",    "loadErrorsTitle": "部分智能體載入失敗",
     "badge": {
       "active": "運行中",
       "detected": "已偵測"
@@ -2089,8 +2088,7 @@
       "label": "在工具列中顯示",
       "show": "在代理工具列中顯示",
       "hide": "從代理工具列中隱藏",
-      "lockedTooltip": "BaddAssApp Core 會始終保留在工具列中，確保你隨時都有可對話的代理。"
-    },
+      "lockedTooltip": "BaddAssApp Core 會始終保留在工具列中，確保你隨時都有可對話的代理。"    },
     "scope": {
       "any": "運行你連接的任何模型",
       "claude": "運行 Claude 模型",
@@ -2101,8 +2099,7 @@
       "mistral": "運行 Mistral 模型"
     },
     "about": {
-      "wcore": "BaddAssApp 自研引擎。調用你「模型」頁面上的每個提供商。",
-      "claude": "Anthropic 的編程智能體。使用自己的帳號登入，無法運行 GPT 或 Gemini。",
+      "wcore": "BaddAssApp 自研引擎。調用你「模型」頁面上的每個提供商。",      "claude": "Anthropic 的編程智能體。使用自己的帳號登入，無法運行 GPT 或 Gemini。",
       "codex": "OpenAI 的編程智能體。使用自己的帳號登入，無法運行 Claude 或 Gemini。"
     },
     "flux": {
@@ -2123,10 +2120,8 @@
     "fluxSetup": {
       "title": "透過 Flux 路由 {{tool}}",
       "absentBody": "本機未偵測到 {{tool}}。請先安裝它，然後再回來透過 Flux 進行路由。",
-      "unconfiguredBody": "設定 {{tool}} 以透過 Flux 路由。BaddAssApp 會在 {{configPath}} 的 {{tool}} 設定中寫入一個 Flux 服務商，並會先備份現有檔案。",
-      "routedBody": "{{tool}} 正在透過 Flux 路由。",
-      "driftedBody": "{{tool}} 的 Flux 設定在 BaddAssApp 之外被更改。重新套用以還原 BaddAssApp 的設定，或從 {{tool}} 中移除 Flux。",
-      "notConnected": "請先連接 Flux Router，然後再設定 {{tool}}。",
+      "unconfiguredBody": "設定 {{tool}} 以透過 Flux 路由。BaddAssApp 會在 {{configPath}} 的 {{tool}} 設定中寫入一個 Flux 服務商，並會先備份現有檔案。",      "routedBody": "{{tool}} 正在透過 Flux 路由。",
+      "driftedBody": "{{tool}} 的 Flux 設定在 BaddAssApp 之外被更改。重新套用以還原 BaddAssApp 的設定，或從 {{tool}} 中移除 Flux。",      "notConnected": "請先連接 Flux Router，然後再設定 {{tool}}。",
       "genericError": "設定未完成。",
       "setup": "為 Flux 設定 {{tool}}",
       "reapply": "重新套用",
@@ -2168,9 +2163,7 @@
     "subtitle": "聊天框的語音轉文字與文字轉語音設定。開啟各區段以啟用語音輸入與輸出。"
   },
   "wcoreConfig": {
-    "navLabel": "BaddAssApp Core",
-    "title": "BaddAssApp Core",
-    "tagline": "Forged to run. Hardened to last. Built to evolve.",
+    "navLabel": "BaddAssApp Core",    "title": "BaddAssApp Core",    "tagline": "Forged to run. Hardened to last. Built to evolve.",
     "back": "Settings",
     "railGroup": "Engine",
     "engineRunning": "engine running",
@@ -2190,9 +2183,7 @@
     "overview": {
       "title": "Overview",
       "subtitle": "The engine behind every chat, workflow and agent. It is already running with smart defaults — this surface is where you tune what is under the hood.",
-      "inheritedTitle": "Allocated by BaddAssApp Desktop",
-      "inheritedBody": "For this session, Desktop hands the engine your model (as an override) and injects Skills + Assistants/Constitution through its system prompt. Your Desktop MCP library is NOT passed through — only BaddAssApp’s own operational MCPs are.",
-      "readOnly": "read-only",
+      "inheritedTitle": "Allocated by BaddAssApp Desktop",      "inheritedBody": "For this session, Desktop hands the engine your model (as an override) and injects Skills + Assistants/Constitution through its system prompt. Your Desktop MCP library is NOT passed through — only BaddAssApp’s own operational MCPs are.",      "readOnly": "read-only",
       "manageInDesktop": "Manage in Desktop Settings",
       "inheritModels": "Models (override)",
       "inheritMcp": "MCP Servers",
@@ -2224,15 +2215,11 @@
       "allocatedSession": "Allocated by Desktop · this session",
       "skillsDetail": "Injected via system prompt · {{allocated}}",
       "assistantsDetail": "Injected via system prompt · {{allocated}}",
-      "mcpDetail": "BaddAssApp operational MCPs · your Desktop MCP library is separate",
-      "engineOwnedLine": "Tools, Memory, Security and Profiles are the engine’s own — written to ~/.wayland-core/config.toml and shared with the BaddAssApp Core CLI."
-    },
+      "mcpDetail": "BaddAssApp operational MCPs · your Desktop MCP library is separate",      "engineOwnedLine": "Tools, Memory, Security and Profiles are the engine’s own — written to ~/.wayland-core/config.toml and shared with the BaddAssApp Core CLI."    },
     "services": {
-      "subtitle": "The engine tool backends — web search, vision, voice, image. BaddAssApp ships working out of the box; plug in a key to unlock higher limits.",
-      "webSearchGroup": "Web Search",
+      "subtitle": "The engine tool backends — web search, vision, voice, image. BaddAssApp ships working out of the box; plug in a key to unlock higher limits.",      "webSearchGroup": "Web Search",
       "ddgTitle": "DuckDuckGo · active — free web search is on",
-      "ddgBody": "No key needed — BaddAssApp searches the web right now. Add a key below only to go faster or run higher volume.",
-      "connected": "Connected",
+      "ddgBody": "No key needed — BaddAssApp searches the web right now. Add a key below only to go faster or run higher volume.",      "connected": "Connected",
       "getFreeKey": "Get a free key",
       "keyPlaceholder": "Paste API key…",
       "replaceKeyPlaceholder": "Replace key…",
@@ -2267,57 +2254,90 @@
       },
       "huggingface": {
         "desc": "FLUX and open image models via Hugging Face."
-      }
+      },
+      "desktopOnly": "工具金鑰只能在桌面應用程式中變更。",
+      "desktopOnlyNote": "你正在使用網頁介面。工具金鑰儲存在桌面應用程式中，只能在桌面應用程式中新增或變更。"
     },
     "tools": {
-      "subtitle": "Everything the engine can actually do — sensible defaults already on. Toggle a tool to grant or revoke it across all profiles. Tools that need a credential link straight to where you set it.",
+      "subtitle": "引擎始終可以使用每個工具。這些開關只決定工具是自動執行還是先徵求核准，並不會關閉工具。只有 Script 和 RepoMap 才是真正的開/關開關。需要憑證的工具會直接連結到設定處。",
       "filterAll": "All",
       "filterLabel": "Filter tools by category",
-      "catCount": "{{total}} tools · {{on}} on",
+      "catCount": "{{total}} 個工具 · {{on}} 自動執行",
       "chipOnDdg": "on · DuckDuckGo",
       "chipNeedsAuth": "needs auth",
       "chipNeedsKey": "needs key",
       "toggleLabel": "Enable {{tool}}",
-      "catalogNote": "Tool list reflects the engine’s built-in catalogue. Enable/disable state is read from and written to your config.toml.",
-      "descRead": "Read any file in the workspace",
+      "catalogNote": "工具始終可用；這些開關只設定自動執行還是先詢問（[tools].allow_list）。Script 和 RepoMap 寫入各自真正的開/關開關。全部讀寫自你的 config.toml。",
+      "catFile": "File & Code",
+      "catWeb": "Web",
+      "catMedia": "Vision & Media",
+      "catData": "Data & Files",
+      "catCloud": "Dev & Cloud",
+      "catProd": "Productivity",
+      "catAgent": "Agent",
+      "catSystem": "BaddAssApp & Memory",      "descRead": "Read any file in the workspace",
       "descWrite": "Create or overwrite files",
       "descEdit": "Surgical string-replace edits",
       "descGlob": "Find files by pattern",
       "descGrep": "Search file contents by regex",
       "descBash": "Run shell commands in the sandbox",
-      "descScript": "Execute multi-line scripts (python/node)",
-      "descWebSearch": "Search the web · free default, add a key for high volume",
+      "descRepoMap": "Map the repository structure & symbols",
+      "descWeb": "Search, extract, or crawl the web · free DuckDuckGo default",
       "descWebFetch": "Fetch & read a URL as clean markdown",
       "descVision": "Describe & reason over images",
+      "descImageInspect": "Inspect image dimensions & metadata",
       "descImageGen": "Generate images from a prompt",
       "descTranscribe": "Speech & audio to text (Whisper)",
       "descTts": "Text to speech · Piper (local)",
-      "descPdf": "Extract text & tables from PDFs",
       "descVideo": "Sample & analyze video frames",
+      "descPdf": "Extract text & tables from PDFs",
+      "descJsonl": "Stream & query large JSON Lines",
+      "descSqlQuery": "Run SQL against a local SQLite file",
+      "descPostgres": "Run SQL against your database",
+      "descMarkdownTable": "Format & align markdown tables",
+      "descArchive": "Inspect & extract archives",
+      "descEmailParse": "Parse raw email into headers & body",
       "descGit": "Stage, commit, branch, diff",
       "descGithub": "PRs, issues, releases",
       "descGitlab": "Merge requests & pipelines",
       "descKubectl": "Inspect & manage Kubernetes",
       "descAws": "AWS CLI operations",
       "descGcloud": "Google Cloud CLI operations",
-      "descPostgres": "Run SQL against your database",
       "descNotion": "Read & write Notion pages",
       "descLinear": "Create & update Linear issues",
       "descDiscord": "Send messages to channels",
-      "descSpotify": "Control playback & playlists",
-      "descMeet": "Schedule & join meetings",
       "descHass": "Control smart-home devices",
+      "descSendMessage": "Send messages to a connected channel",
       "descCron": "Schedule recurring agent runs",
+      "descSpawn": "Spawn named sub-agents for parallel work",
       "descDelegate": "Spawn sub-agents for parallel work",
+      "descWorkflow": "Run a multi-stage dynamic workflow",
       "descTodo": "Track multi-step task progress",
+      "descClarify": "Ask the user a clarifying question",
+      "descAskUser": "Ask the user a structured multi-choice question",
+      "descEnterPlan": "Enter read-only plan mode",
+      "descExitPlan": "Exit plan mode & begin executing",
+      "descToolSearch": "Search the tool catalogue by intent",
+      "descSkill": "Run an installed skill",
       "descSessionSearch": "Search past sessions & transcripts",
-      "descMemory": "Read & write long-term memory",
-      "catFile": "File & Code",
-      "catWeb": "Web",
-      "catMedia": "Vision & Media",
-      "catDev": "Dev",
-      "catProd": "Productivity",
-      "catAgent": "Agent"
+      "descRecordEpisode": "Store a durable memory episode",
+      "descAssertFact": "Store a durable fact in memory",
+      "descWaylandStatus": "Read live session status & token usage",      "descWaylandTelemetry": "Query per-tool call counts & telemetry",      "descScript": "執行沙箱化的指令碼步驟（啟用前預設關閉）",
+      "modeLabel": "核准模式",
+      "modeAria": "預設工具核准模式",
+      "modeDefault": "先詢問",
+      "modeAutoEdit": "自動編輯",
+      "modeForce": "強制",
+      "modeHintDefault": "先詢問：標記為「自動執行」的工具會略過提示，其餘在執行前詢問。",
+      "modeHintAutoEdit": "自動編輯：讀取和編輯類工具自動執行；指令和傳送仍會先詢問。",
+      "modeHintForce": "強制：所有工具都自動執行，忽略下方的單項設定。",
+      "chipGate": "開/關",
+      "stateEnabled": "已啟用",
+      "stateOff": "關閉",
+      "stateAutoRuns": "自動執行",
+      "stateAsksFirst": "先詢問",
+      "gateAria": "啟用 {{tool}}",
+      "autoRunAria": "自動執行 {{tool}} 而不詢問"
     },
     "memory": {
       "subtitle": "The engine remembers across sessions — facts, preferences, and project context that persist and compound. On by default, stored locally.",
@@ -2394,9 +2414,67 @@
       "rawEngine": "Raw engine mode",
       "rawEngineDesc": "Run the embedded engine on its own config — don’t override with Desktop’s model & skills.",
       "headlessTitle": "Headless server mode",
-      "headlessBody": "Run BaddAssApp Core as a long-lived server (one container per tenant) and reach it over LAN, Tailscale, or the hosted Pro tier."
-    },
+      "headlessBody": "Run BaddAssApp Core as a long-lived server (one container per tenant) and reach it over LAN, Tailscale, or the hosted Pro tier."    },
     "scopeWritesTo": "Writes to",
-    "scopeSharedCli": "— used by the BaddAssApp Core CLI too."
-  }
+    "scopeSharedCli": "— used by the BaddAssApp Core CLI too."  },
+  "slashCommands": {
+    "title": "Slash Commands",
+    "subtitle": "Define your own /commands that expand into prompt templates.",
+    "create": "New command",
+    "createTitle": "New command",
+    "editTitle": "Edit command",
+    "emptyTitle": "No custom commands yet",
+    "emptyBody": "Create a command and it appears in the slash menu when you type / in any chat, alongside your agent’s commands.",
+    "nameLabel": "Command name",
+    "namePlaceholder": "standup",
+    "nameHelp": "Letters, digits, hyphen, underscore. Must start with a letter.",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Shown in the slash menu",
+    "templateLabel": "Prompt template",
+    "templatePlaceholder": "Write the prompt this command expands into. Use {topic} for fill-in placeholders.",
+    "templateHelp": "Selecting the command inserts this text into the composer to edit and send.",
+    "detectedArgs": "Placeholders: {{args}}",
+    "saveError": "Could not save command",
+    "deleteTitle": "Delete command",
+    "deleteBody": "Delete /{{name}}? This cannot be undone.",
+    "nameError": {
+      "empty": "Name is required",
+      "tooLong": "Name is too long (max 32 characters)",
+      "invalidChars": "Use letters, digits, hyphen, underscore; start with a letter",
+      "reserved": "That name is reserved by a built-in command",
+      "duplicate": "A command with that name already exists"
+    }
+  },
+  "doctor": {
+    "title": "Doctor",
+    "subtitle": "Run diagnostic checks across providers, models, the engine, MCP, backends, and config.",
+    "resultsTitle": "Diagnostic results",
+    "rerun": "Re-run",
+    "copy": "Copy report",
+    "copied": "Report copied",
+    "copyFailed": "Could not copy the report",
+    "runFailed": "Could not run the Doctor",
+    "remediationPrefix": "Fix:",
+    "emptyTitle": "No diagnostics yet",
+    "emptyBody": "Run the Doctor to check the app’s health.",
+    "summary": "{{pass}} passed · {{warn}} warnings · {{fail}} failed",
+    "status": {
+      "pass": "Pass",
+      "warn": "Warning",
+      "fail": "Fail"
+    },
+    "checks": {
+      "bootstrap": "Doctor startup",
+      "providerConnectivity": "Provider connectivity",
+      "modelRegistry": "Model registry",
+      "engineReachable": "Engine reachable",
+      "engineRouting": "Engine default routing",
+      "mcpServers": "MCP servers",
+      "backends": "Detected backends",
+      "workspaceDrift": "Workspace paths",
+      "secretStorage": "Secret storage",
+      "engineConfig": "Engine config integrity"
+    }
+  },
+  "checkForUpdatesDesc": "Check that you are running the latest version of BaddAssApp.",  "checkForUpdatesButton": "Check for updates"
 }

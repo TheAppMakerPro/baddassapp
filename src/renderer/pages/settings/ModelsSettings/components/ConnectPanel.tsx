@@ -7,6 +7,7 @@ import type { ConnectError, ProviderId } from '@process/providers/types';
 import { providerMeta, recognizeKey } from '../providerCatalog';
 import { getPendingDeepLinkSeed } from '../index';
 import DetectedStrip from './DetectedStrip';
+import XGrokButton from './XGrokButton';
 import styles from '../ModelsSettings.module.css';
 
 type Props = {
@@ -249,6 +250,16 @@ const ConnectPanel: React.FC<Props> = ({
           <span>{errorText}</span>
         </div>
       )}
+
+      <div className={styles.orDivider}>
+        <span>{t('settings.modelsPage.connect.or')}</span>
+      </div>
+      <div className={styles.googleBtn}>
+        <XGrokButton />
+      </div>
+      {/* #56 ChatGPT subscription sign-in (native OAuth + token store + provider) is built
+          but held until the codex/Responses inference seam (registerChatGptSubscription) is
+          wired and live-verified. Re-enable by importing + rendering <ChatGptButton /> here. */}
 
       <div className={styles.browseLink}>
         <Button type='text' size='small' onClick={() => onBrowse()}>

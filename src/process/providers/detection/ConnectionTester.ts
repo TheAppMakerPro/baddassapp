@@ -67,12 +67,18 @@ const TEST_MODEL: Partial<Record<ProviderId, string>> = {
   openrouter: 'openai/gpt-4o-mini',
   mistral: 'mistral-small-latest',
   deepseek: 'deepseek-chat',
-  xai: 'grok-2',
+  xai: 'grok-3-mini',
   together: 'meta-llama/Llama-3.2-3B-Instruct-Turbo',
   fireworks: 'accounts/fireworks/models/llama-v3p1-8b-instruct',
   cerebras: 'llama3.1-8b',
   perplexity: 'sonar',
   moonshot: 'moonshot-v1-8k',
+  // NVIDIA NIM is OpenAI-compatible (bearer auth, /v1/chat/completions). Without
+  // a test model, connect falls through to the /v1/models auth check, which
+  // NVIDIA answers 200 even for an invalid token - a false-positive connect
+  // (issue #45). `meta/llama-3.1-8b-instruct` is a small, long-standing NIM chat
+  // model, so a real one-token probe distinguishes a good key from a bad one.
+  nvidia: 'meta/llama-3.1-8b-instruct',
   'flux-router': 'flux-fast',
 };
 
@@ -84,7 +90,7 @@ export class ConnectionTester {
    * (or a successful degraded auth check), otherwise `{ ok: false, error }`
    * with the failure classified as a `ConnectError`.
    */
-  async test(providerId: ProviderId, creds: TestCreds): Promise<TestResult> {
+  async test(providerId: ProviderId, creds: TestCreds, customBaseUrl?: string): Promise<TestResult> {
     const apiKey = extractKey(creds);
 
     const testModel = TEST_MODEL[providerId];
@@ -93,15 +99,19 @@ export class ConnectionTester {
     }
 
     // No known test model - fall back to the degraded `/v1/models` auth check.
-    const modelsEndpoint = PROVIDER_ENDPOINTS[providerId];
-    if (modelsEndpoint && apiKey) {
+    // For custom-base providers (e.g. openai-compatible / Ollama), derive the
+    // models endpoint from the user-supplied base URL when no canonical one exists.
+    const registeredEndpoint = PROVIDER_ENDPOINTS[providerId];
+    const modelsEndpoint = registeredEndpoint ?? deriveModelsEndpoint(customBaseUrl);
+    if (modelsEndpoint) {
+      // Ollama-style servers don't require a key; probe with whatever key was given.
       return this.probeModelsEndpoint(providerId, apiKey, modelsEndpoint);
     }
 
-    // The provider IS probeable (it has a test model or a models endpoint) but
+    // The provider IS probeable (it has a test model or a registered endpoint) but
     // the supplied creds carried no usable key - an unrecognized creds shape,
     // distinct from a cloud provider that is genuinely unprobeable.
-    const isProbeable = testModel !== undefined || modelsEndpoint !== undefined;
+    const isProbeable = testModel !== undefined || registeredEndpoint !== undefined;
     if (isProbeable && !apiKey && credsArePresent(creds)) {
       return { ok: false, error: 'unrecognized' };
     }
@@ -178,7 +188,6 @@ export class ConnectionTester {
     try {
       res = await this.fetchWithTimeout(url, { method: 'GET', headers: authHeaders(auth, apiKey) });
     } catch {
-      // Any throw escaping the fetch attempt is an outage - see `probeInference`.
       return { ok: false, error: 'offline' };
     }
 
@@ -276,6 +285,17 @@ function chatCompletionsUrl(providerId: ProviderId): string {
     return `${modelsEndpoint.slice(0, -'/models'.length)}/chat/completions`;
   }
   return 'https://api.openai.com/v1/chat/completions';
+}
+
+/**
+ * Derive a `/v1/models` endpoint from a user-supplied custom base URL.
+ * Handles bases that already include `/v1` and ones that don't.
+ */
+function deriveModelsEndpoint(customBaseUrl: string | undefined): string | undefined {
+  if (!customBaseUrl) return undefined;
+  const base = customBaseUrl.replace(/\/+$/, '');
+  if (/\/v\d+$/i.test(base)) return `${base}/models`;
+  return `${base}/v1/models`;
 }
 
 /** Auth + identification headers for a request, per the provider's scheme. */
