@@ -137,8 +137,12 @@ export const useAssistantEditor = ({
       setEditContext(context);
       setEditSkills(skills);
 
-      // Load skills list for builtin assistants with skillFiles and all custom assistants
-      if (hasBuiltinSkills(assistant.id) || !assistant.isBuiltin) {
+      // Load skills list for builtin assistants with skillFiles and all custom
+      // assistants. Native catalog specialists (builtin-<slug> records not in
+      // ASSISTANT_PRESETS) carry their skills inline on `enabledSkills`; pass
+      // the record so hasBuiltinSkills recognizes them and the editor stops
+      // clearing their skills list.
+      if (hasBuiltinSkills(assistant.id, assistant) || !assistant.isBuiltin) {
         const skillsList = await ipcBridge.fs.listAvailableSkills.invoke();
         setAvailableSkills(skillsList);
         setSelectedSkills(assistant.enabledSkills || []);
@@ -288,6 +292,10 @@ export const useAssistantEditor = ({
           avatar: editAvatar,
           isPreset: true,
           isBuiltin: false,
+          // A user-created assistant is a single-role Specialist. Stamping `kind`
+          // makes it classify as one everywhere (library + Teams pickers, #115)
+          // via the kind-wins path, instead of relying on a category heuristic.
+          kind: 'specialist',
           presetAgentType: editAgent,
           enabled: true,
           enabledSkills: selectedSkills,

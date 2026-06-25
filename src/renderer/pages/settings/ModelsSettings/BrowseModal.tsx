@@ -8,12 +8,16 @@ import type { CatalogProviderEntry } from '@process/providers/catalog/catalogPro
 import { useModelRegistry } from '@renderer/hooks/useModelRegistry';
 import { openExternalUrl } from '@renderer/utils/platform';
 import FluxRouterMark from '@renderer/components/icons/FluxRouterMark';
+import ProviderLogo from '@renderer/components/model/ProviderLogo';
 import CloudCredentialForm, { isCloudFormProvider, type CloudProviderId } from './CloudCredentialForm';
 import {
+  BYO_PROVIDER_IDS,
+  BYO_PROVIDERS,
   PROVIDER_GROUP_ORDER,
   type ProviderGroup,
   type ProviderMeta,
   providerKeysUrl,
+  providerMatchesQuery,
   providerMeta,
   providersInGroup,
 } from './providerCatalog';
@@ -31,6 +35,14 @@ type Props = {
    * the grid (spec §4.3).
    */
   initialProvider?: ProviderId;
+  /**
+   * Connect a single-key provider, threading an optional `baseUrl`. Supplied by
+   * the parent so the connect routes through its headless-aware path: on desktop
+   * the `modelRegistry.connect` IPC, in a remote/WebUI session the write-only
+   * `/api/providers/connect` HTTP route (the IPC is remote-denied). This is what
+   * lets a remote WebUI add a local OpenAI-compatible endpoint host-side (#71).
+   */
+  connectKey: (providerId: ProviderId, key: string, baseUrl?: string) => Promise<IModelRegistryConnectResult>;
 };
 
 /** Map a `ConnectError` code to its inline-error i18n key suffix. */
@@ -70,7 +82,7 @@ type CatalogState =
  * A successful connect closes the modal; `useModelRegistry.connect` reloads the
  * connected list on its own.
  */
-const BrowseModal: React.FC<Props> = ({ visible, onClose, initialProvider }) => {
+const BrowseModal: React.FC<Props> = ({ visible, onClose, initialProvider, connectKey }) => {
   const { t } = useTranslation();
   const { providers, connect, getProviderCatalog } = useModelRegistry();
 
@@ -123,17 +135,23 @@ const BrowseModal: React.FC<Props> = ({ visible, onClose, initialProvider }) => 
   // ---- Grid: search-filtered groups -------------------------------------
   const filteredGroups = useMemo(() => {
     const q = query.trim().toLowerCase();
+    const searching = q.length > 0;
     return PROVIDER_GROUP_ORDER.map((group) => {
-      // Flux Router is the featured hero at the top when NOT searching, so it is
-      // excluded from the grouped tiles then. While searching, the hero is hidden,
-      // so let Flux appear in the results like any other matching provider.
       const items = providersInGroup(group).filter((p) => {
-        if (!q && p.id === 'flux-router') return false;
-        return !q || p.displayName.toLowerCase().includes(q);
+        // When NOT searching, the featured Flux hero and the BYO front section
+        // own these ids, so keep them out of the grouped tiles to avoid showing
+        // them twice. While searching, both sections are hidden, so every
+        // provider (including Flux + BYO) is searchable in its own group.
+        if (!searching) return p.id !== 'flux-router' && !BYO_PROVIDER_IDS.has(p.id);
+        return providerMatchesQuery(p, q);
       });
       return { group, items };
     }).filter((g) => g.items.length > 0);
   }, [query]);
+
+  // The BYO front section only shows when not searching - a search folds those
+  // providers back into their groups (handled above).
+  const showByo = !query.trim();
 
   // ---- Tile selection ----------------------------------------------------
   const handlePick = useCallback((provider: ProviderMeta) => {
@@ -202,8 +220,10 @@ const BrowseModal: React.FC<Props> = ({ visible, onClose, initialProvider }) => 
     setConnecting(true);
     setErrorKey(null);
     try {
-      const creds = baseUrl ? { key, baseUrl } : { key };
-      const res = await connect(view.provider.id, creds);
+      // Route through the parent's headless-aware connect so a remote/WebUI
+      // session adds the endpoint host-side over the write-only HTTP route
+      // instead of the remote-denied `modelRegistry.connect` IPC (#71).
+      const res = await connectKey(view.provider.id, key, baseUrl || undefined);
       if (res.ok) {
         onClose();
       } else {
@@ -214,7 +234,7 @@ const BrowseModal: React.FC<Props> = ({ visible, onClose, initialProvider }) => 
     } finally {
       setConnecting(false);
     }
-  }, [view, keyValue, baseUrlValue, connect, onClose]);
+  }, [view, keyValue, baseUrlValue, connectKey, onClose]);
 
   // ---- Cloud connect (passed to CloudCredentialForm) ---------------------
   const handleCloudConnect = useCallback(
@@ -258,19 +278,7 @@ const BrowseModal: React.FC<Props> = ({ visible, onClose, initialProvider }) => 
         onClick={() => handlePick(provider)}
         aria-label={t('settings.modelsPage.browse.connectAria', { provider: provider.displayName })}
       >
-        {provider.id === 'flux-router' ? (
-          <span className={styles.tileAvatar} style={{ background: '#141414' }} aria-hidden>
-            <FluxRouterMark size={17} />
-          </span>
-        ) : (
-          <span
-            className={styles.tileAvatar}
-            style={{ background: provider.bg, color: provider.darkText ? '#1a1a1a' : '#fff' }}
-            aria-hidden
-          >
-            {provider.mono}
-          </span>
-        )}
+        <ProviderLogo id={provider.id} mono={provider.mono} bg={provider.bg} darkText={provider.darkText} size={28} />
         <span className={styles.tileText}>
           <span className={styles.tileName}>{provider.displayName}</span>
           {cloud && <span className={styles.tileSub}>{t('settings.modelsPage.browse.cloudTag')}</span>}
@@ -305,13 +313,7 @@ const BrowseModal: React.FC<Props> = ({ visible, onClose, initialProvider }) => 
           }
         }}
       >
-        <span
-          className={styles.tileAvatar}
-          style={{ background: meta.bg, color: meta.darkText ? '#1a1a1a' : '#fff' }}
-          aria-hidden
-        >
-          {meta.mono}
-        </span>
+        <ProviderLogo id={entry.id} mono={meta.mono} bg={meta.bg} darkText={meta.darkText} size={28} />
         <span className={styles.tileName}>{entry.displayName}</span>
         {connected && (
           <span className={styles.connectedTag}>
@@ -397,6 +399,49 @@ const BrowseModal: React.FC<Props> = ({ visible, onClose, initialProvider }) => 
                   </span>
                 )}
               </Button>
+            )}
+            {/* Bring-your-own-endpoint - pulled to the front. The custom /
+                self-hosted / OpenAI-compatible connect was the hardest thing to
+                find (buried under "Open inference"); now it leads. Hidden while
+                searching, where these providers fold back into their groups. */}
+            {showByo && (
+              <div className={styles.byo}>
+                <div className={styles.byoHead}>
+                  <span className={styles.byoTitle}>{t('settings.modelsPage.browse.byo.title')}</span>
+                  <span className={styles.byoDesc}>{t('settings.modelsPage.browse.byo.desc')}</span>
+                </div>
+                <div className={styles.byoLead}>{t('settings.modelsPage.browse.byo.lead')}</div>
+                <div className={styles.byoGrid}>
+                  {BYO_PROVIDERS.map((p) => {
+                    const primary = p.id === 'openai-compatible';
+                    const name = primary ? t('settings.modelsPage.browse.byo.openaiName') : p.displayName;
+                    const connected = connectedIds.has(p.id);
+                    return (
+                      <Button
+                        key={p.id}
+                        type='text'
+                        className={`${styles.byoCard} ${primary ? styles.byoPrimary : ''}`}
+                        data-provider={p.id}
+                        onClick={() => handlePick(p)}
+                        aria-label={t('settings.modelsPage.browse.connectAria', { provider: name })}
+                      >
+                        <ProviderLogo id={p.id} mono={p.mono} bg={p.bg} darkText={p.darkText} size={34} />
+                        <span className={styles.byoText}>
+                          <span className={styles.byoName}>{name}</span>
+                          <span className={styles.byoSub}>{t(`settings.modelsPage.browse.byo.sub.${p.id}`)}</span>
+                        </span>
+                        {connected && (
+                          <span className={styles.connectedTag}>
+                            <Check size={10} aria-hidden='true' />
+                            {t('settings.modelsPage.browse.connected')}
+                          </span>
+                        )}
+                      </Button>
+                    );
+                  })}
+                </div>
+                <div className={styles.byoNote}>{t('settings.modelsPage.browse.byo.aliasHint')}</div>
+              </div>
             )}
             {filteredGroups.length === 0 && (
               <div className={styles.noMatch}>{t('settings.modelsPage.browse.noMatch', { query: query.trim() })}</div>

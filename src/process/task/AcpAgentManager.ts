@@ -13,6 +13,7 @@ import type { IConfigStorageRefer } from '@/common/config/storage';
 import { WAYLAND_FILES_MARKER } from '@/common/config/constants';
 import type { IResponseMessage } from '@/common/adapter/ipcBridge';
 import { parseError, uuid } from '@/common/utils';
+import { claudeSlotForModelId } from '@process/agent/acp/utils';
 import type {
   AcpBackend,
   AcpModelInfo,
@@ -32,6 +33,8 @@ import type { ProviderId } from '@process/providers/types';
 import { BACKEND_AUTH_KEYS } from '@process/acp/compat/typeBridge';
 import { selectAuthFailureCulprits } from '@process/providers/detection/authFailure';
 import { ProcessConfig } from '@process/utils/initStorage';
+import { codexBearerEnvVar } from '@process/services/mcpServices/agents/CodexMcpAgent';
+import type { IMcpServer } from '@/common/config/storage';
 import { addMessage, addOrUpdateMessage, nextTickToLocalFinish } from '@process/utils/message';
 import { handlePreviewOpenEvent } from '@process/utils/previewUtils';
 import { cronBusyGuard } from '@process/services/cron/CronBusyGuard';
@@ -556,6 +559,36 @@ ${collectedResponses.join('\n')}`;
    * Resolve agent CLI configuration based on backend type.
    * Dispatches to custom or built-in resolution.
    */
+  /**
+   * Build the scoped env vars Codex reads HTTP MCP bearer tokens from. For each
+   * enabled hosted MCP server, fetch the current OAuth token (getValidToken
+   * refreshes when expired) and map it to the deterministic env-var name. Never
+   * throws and never blocks a spawn on a single failure.
+   */
+  private async buildCodexMcpBearerEnv(): Promise<Record<string, string>> {
+    const env: Record<string, string> = {};
+    try {
+      const raw = await ProcessConfig.get('mcp.config');
+      if (!Array.isArray(raw)) return env;
+      const hosted = (raw as IMcpServer[]).filter(
+        (s) => s?.enabled && (s.transport?.type === 'http' || s.transport?.type === 'streamable_http')
+      );
+      if (hosted.length === 0) return env;
+      // Dynamic import avoids an OAuth module-init cycle (HybridTokenStorage TDZ).
+      const { mcpOAuthService } = await import('@process/services/mcpServices/McpOAuthService');
+      const tokens = await Promise.all(
+        hosted.map((s) => mcpOAuthService.getValidToken(s).catch((): string | null => null))
+      );
+      hosted.forEach((server, i) => {
+        const token = tokens[i];
+        if (token) env[codexBearerEnvVar(server.name)] = token;
+      });
+    } catch (err) {
+      mainWarn('[AcpAgentManager]', 'buildCodexMcpBearerEnv failed', err);
+    }
+    return env;
+  }
+
   private async resolveAgentCliConfig(data: AcpAgentManagerData): Promise<{
     cliPath?: string;
     customArgs?: string[];
@@ -571,6 +604,18 @@ ${collectedResponses.join('\n')}`;
     // auto-injected keys, which in turn win over the inherited shell env.
     const providerEnv = await this.buildConnectedProviderEnv();
     const mergedEnv: Record<string, string> = { ...providerEnv, ...resolved.customEnv };
+
+    // Codex ignores manual Authorization headers and reads each HTTP MCP server's
+    // bearer from an env var (see CodexMcpAgent.codexBearerEnvVar). Inject the
+    // CURRENT (refreshed) token for every enabled hosted MCP so a Codex chat
+    // connects without launching its OWN interactive OAuth flow. Best-effort and
+    // scoped to this spawn; an explicit custom-agent env var still wins.
+    if (data.backend === 'codex') {
+      const bearerEnv = await this.buildCodexMcpBearerEnv();
+      for (const [key, value] of Object.entries(bearerEnv)) {
+        if (!(key in mergedEnv)) mergedEnv[key] = value;
+      }
+    }
 
     // Flux routing (openai-surface generic backends + claude via the anthropic
     // surface; codex/codebuddy route separately).
@@ -635,6 +680,17 @@ ${collectedResponses.join('\n')}`;
         } catch (err) {
           mainWarn('[AcpAgentManager]', 'materializeFluxHermesHome failed', err);
         }
+      }
+    }
+
+    // Native (non-Flux) claude slot picks (sonnet/opus/haiku) get no model list
+    // from the bridge under subscription/OAuth auth, so an in-place set_model is
+    // unreliable. Back the pick with ANTHROPIC_MODEL at spawn so the chosen slot
+    // actually runs (#184). Flux routing already injected its own model above.
+    if (data.backend === 'claude' && decision.routing !== 'flux') {
+      const slot = claudeSlotForModelId(data.currentModelId);
+      if (slot) {
+        mergedEnv.ANTHROPIC_MODEL = slot;
       }
     }
 
@@ -1378,8 +1434,12 @@ ${collectedResponses.join('\n')}`;
         // Ensure conversation list sorting updates immediately after user sends.
         try {
           (await getDatabase()).updateConversation(this.conversation_id, {});
-        } catch {
-          // Conversation might not exist in DB yet
+        } catch (error) {
+          // Graceful degrade: the conversation row might not exist in the DB
+          // yet, so a failure here is non-fatal to the turn. But log it (S6) so
+          // real failures (corruption, disk-full) are no longer swallowed
+          // silently with zero diagnostics.
+          mainWarn('[AcpAgentManager]', 'updateConversation (touch for list sort) failed', error);
         }
         const userResponseMessage: IResponseMessage = {
           type: 'user_content',
@@ -1777,8 +1837,18 @@ ${collectedResponses.join('\n')}`;
     const crossesRoutingBoundary =
       nextRouting !== 'unknown' && this.lastRouting !== 'unknown' && nextRouting !== this.lastRouting;
 
-    if (crossesRoutingBoundary) {
-      return this.respawnForRoutingChange(modelId);
+    // A native claude slot pick is carried by ANTHROPIC_MODEL at spawn (see
+    // resolveAgentCliConfig), so it only takes effect on a respawn — the bridge's
+    // in-place set_model is unreliable when it advertises no model list (#184).
+    // The picker offers registry catalog ids (`claude-opus-4-8`), so normalize to
+    // the slot the CLI actually accepts; respawn (and persist) with that slot, or
+    // the pick falls through to set_model and the CLI rejects it with -32601.
+    const claudeSlot =
+      this.options.backend === 'claude' && nextRouting !== 'flux' ? claudeSlotForModelId(modelId) : undefined;
+    const nativeClaudeSlotChange = claudeSlot !== undefined;
+
+    if (crossesRoutingBoundary || nativeClaudeSlotChange) {
+      return this.respawnForRoutingChange(claudeSlot ?? modelId);
     }
 
     // Same-routing switch TO a Flux id (e.g. the chat is already flux-routed and
@@ -1794,7 +1864,10 @@ ${collectedResponses.join('\n')}`;
     const result = await this.agent.setModelByConfigOption(modelId);
     if (result) {
       this.persistedModelId = result.currentModelId;
-      this.saveModelId(result.currentModelId);
+      // S6: await (was fire-and-forget) so a persist failure can't surface as an
+      // unhandled rejection and the selected model is actually persisted before
+      // returning (matters for resume).
+      await this.saveModelId(result.currentModelId);
       // Update cached models so Guid page defaults to the newly selected model
       if (result.availableModels?.length > 0) {
         void this.cacheModelList(result);

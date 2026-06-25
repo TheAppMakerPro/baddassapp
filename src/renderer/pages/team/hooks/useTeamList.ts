@@ -9,7 +9,7 @@ export function useTeamList() {
   const { user } = useAuth();
   const userId = user?.id ?? 'system_default_user';
 
-  const { data: teams = [], mutate } = useSWR<TTeam[]>(
+  const { data, mutate } = useSWR<TTeam[]>(
     `teams/${userId}`,
     async () => {
       // Defensive: a failed main-process read can resolve to an error envelope
@@ -20,6 +20,11 @@ export function useTeamList() {
     },
     { revalidateOnFocus: false }
   );
+  // ALWAYS an array. The `= []` default only covers `undefined`; if the backend
+  // ever returns a malformed non-array (a broken/empty teams catalog has done
+  // this), every array consumer (sidebar .reduce, .length, .map) would throw and
+  // white-screen the whole app. Coerce here so no consumer can crash.
+  const teams = Array.isArray(data) ? data : [];
 
   // Refresh list when backend creates/removes a team (e.g. via MCP)
   useEffect(() => {

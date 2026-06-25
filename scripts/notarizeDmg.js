@@ -1,6 +1,6 @@
 const { execSync } = require('child_process');
 const path = require('path');
-const { runBounded } = require('./signingExec');
+const { runBounded, isNotaryStall, markNotaryStalled, notaryStallSeen } = require('./signingExec');
 
 /**
  * afterAllArtifactBuild — notarize + staple the .dmg artifacts.
@@ -82,15 +82,59 @@ function delay(ms) {
 }
 
 /**
+ * notarytool's own `--wait` timeout. A submission that burns most of this window
+ * is Apple's notary queue stalling, not a transient connection blip. 15 min
+ * comfortably catches a healthy submission (those return in 1-5 min) while
+ * keeping the stall budget small: app-notarize + dmg-notarize are two waits in
+ * series, so a 20m window let a stall stack toward the 120-min job cap.
+ */
+const NOTARY_WAIT_TIMEOUT_MIN = 15;
+
+/**
+ * Decide whether a failed dmg-notarization attempt is worth retrying.
+ *
+ * The retry exists for transient connection blips (NSURLErrorDomain -1001), which
+ * fail FAST — the next attempt usually connects. But when Apple's notary queue is
+ * slow, `notarytool --wait --timeout` burns the FULL window before giving up, and
+ * retrying just spends another full window against the same stalled queue
+ * (observed: 3 windows of dead wait wedging a single release). So treat an
+ * attempt that ran most of the wait window as terminal: stop retrying and degrade
+ * to signed-but-unstapled, where the release smoke gate makes the publish call.
+ *
+ * @param {{ attempt: number, maxAttempts: number, elapsedMs: number, waitTimeoutMs: number }} p
+ * @returns {boolean} true to retry, false to give up now
+ */
+function shouldRetryNotarization({ attempt, maxAttempts, elapsedMs, waitTimeoutMs }) {
+  if (attempt >= maxAttempts) {
+    return false;
+  }
+  // A near-full-window failure is a slow queue, not a blip -> retrying won't help.
+  if (isNotaryStall(elapsedMs, waitTimeoutMs)) {
+    return false;
+  }
+  return true;
+}
+
+/**
  * Submit the dmg to the Apple notary service and staple the ticket, retrying
- * the network-bound pair on transient failure. Apple's notary endpoint
- * intermittently returns connection timeouts (-1001); a one-off blip should not
- * block a release. Throws only after every attempt fails, so the caller still
- * degrades to "signed-but-unstapled" and the smoke gate makes the final call.
+ * the network-bound pair only on FAST transient failures. Apple's notary
+ * endpoint intermittently returns connection timeouts (-1001) that fail quickly;
+ * a one-off blip should not block a release, so those retry. A failure that
+ * burned the full `--timeout` window is a stalled queue, not a blip — retrying
+ * there just wastes another window, so it degrades immediately. Throws after
+ * giving up, so the caller still degrades to "signed-but-unstapled" and the
+ * smoke gate makes the final call.
  */
 async function notarizeAndStapleWithRetry({ dmg, name, appleId, appleIdPassword, teamId }) {
-  const maxAttempts = 3;
+  // If the .app notarize (afterSign) just hit a stall, the .dmg submission lands
+  // on the SAME slow queue seconds later — don't re-burn three windows
+  // rediscovering it; take one shot in case it cleared, then degrade.
+  const maxAttempts = notaryStallSeen() ? 1 : 3;
+  if (maxAttempts === 1) {
+    console.warn(`notarizeDmg: ${name} — a prior notarize hit a stalled Apple queue; single attempt then degrade.`);
+  }
   const backoffMs = 60000;
+  const waitTimeoutMs = NOTARY_WAIT_TIMEOUT_MIN * 60000;
   const submitCmd = [
     'xcrun notarytool submit',
     `"${dmg}"`,
@@ -98,11 +142,12 @@ async function notarizeAndStapleWithRetry({ dmg, name, appleId, appleIdPassword,
     `--team-id "${teamId}"`,
     '--password "$NOTARYTOOL_PWD"',
     '--wait',
-    '--timeout 20m',
+    `--timeout ${NOTARY_WAIT_TIMEOUT_MIN}m`,
   ].join(' ');
 
   let lastError;
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    const startedAt = Date.now();
     try {
       console.log(`notarizeDmg: submitting ${name} to Apple notary service (attempt ${attempt}/${maxAttempts})…`);
       execSync(submitCmd, {
@@ -119,13 +164,26 @@ async function notarizeAndStapleWithRetry({ dmg, name, appleId, appleIdPassword,
       return;
     } catch (error) {
       lastError = error;
+      const elapsedMs = Date.now() - startedAt;
       const message = error instanceof Error ? error.message : String(error);
-      if (attempt < maxAttempts) {
-        console.warn(
-          `notarizeDmg: ${name} attempt ${attempt}/${maxAttempts} failed (${message}); retrying in ${backoffMs / 1000}s…`
-        );
-        await delay(backoffMs);
+      // A near-full-window failure is a stalled queue — record it so any later
+      // notarize call short-circuits, and stop retrying here.
+      const stalled = isNotaryStall(elapsedMs, waitTimeoutMs);
+      if (stalled) {
+        markNotaryStalled();
       }
+      if (!shouldRetryNotarization({ attempt, maxAttempts, elapsedMs, waitTimeoutMs })) {
+        if (attempt < maxAttempts && stalled) {
+          console.warn(
+            `notarizeDmg: ${name} attempt ${attempt} ran ${Math.round(elapsedMs / 60000)}m before failing — Apple's notary queue is stalled, not a transient blip. Not retrying; degrading to signed-but-unstapled (the smoke gate blocks publish).`
+          );
+        }
+        break;
+      }
+      console.warn(
+        `notarizeDmg: ${name} attempt ${attempt}/${maxAttempts} failed fast (${message}); retrying in ${backoffMs / 1000}s…`
+      );
+      await delay(backoffMs);
     }
   }
   throw lastError instanceof Error ? lastError : new Error(String(lastError));
@@ -173,4 +231,7 @@ function signDmgNoTimestamp(identity, dmg) {
     throw new Error(`codesign --verify failed for ${name}`);
   }
 }
+
+// Exported for unit testing the retry policy without spawning notarytool.
+exports.shouldRetryNotarization = shouldRetryNotarization;
 

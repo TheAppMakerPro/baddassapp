@@ -20,7 +20,8 @@ vi.mock('@/renderer/utils/chat/timeline', () => ({
 }));
 
 vi.mock('@/renderer/utils/workspace/workspace', () => ({
-  getWorkspaceDisplayName: (workspace: string) => `Display: ${workspace}`,
+  getWorkspaceDisplayName: (workspace: string, _t?: unknown, projectName?: string) =>
+    projectName ?? `Display: ${workspace}`,
 }));
 
 vi.mock('@/renderer/utils/workspace/workspaceHistory', () => ({
@@ -336,6 +337,44 @@ describe('groupConversationsByWorkspace', () => {
     expect(workspaceGroup?.conversations[2].id).toBe('conv-1'); // 1000
   });
 
+  // #274: workspace groups should show the user-defined project name when the
+  // workspace path maps to a known project, not the raw folder basename.
+  it('uses the project name for a workspace that maps to a project', () => {
+    const conversations: TChatConversation[] = [
+      {
+        id: 'conv-1',
+        title: 'Test 1',
+        createdAt: 1000,
+        updatedAt: 1000,
+        extra: { workspace: '/repos/myapp/src', customWorkspace: true },
+        userMsgCount: 0,
+      },
+    ];
+
+    const projects = [
+      { id: 'p1', name: 'My Cool App', workspace: '/repos/myapp/src', pinned: false, createTime: 0, modifyTime: 0 },
+    ] as unknown as Parameters<typeof groupConversationsByWorkspace>[2];
+
+    const result = groupConversationsByWorkspace(conversations, mockT, projects);
+    expect(result[0].items[0].workspaceGroup?.displayName).toBe('My Cool App');
+  });
+
+  it('falls back to the basename display when no project matches the workspace', () => {
+    const conversations: TChatConversation[] = [
+      {
+        id: 'conv-1',
+        title: 'Test 1',
+        createdAt: 1000,
+        updatedAt: 1000,
+        extra: { workspace: '/repos/other/src', customWorkspace: true },
+        userMsgCount: 0,
+      },
+    ];
+
+    const result = groupConversationsByWorkspace(conversations, mockT, []);
+    expect(result[0].items[0].workspaceGroup?.displayName).toBe('Display: /repos/other/src');
+  });
+
   it('requires both workspace and customWorkspace to group', () => {
     const conversations: TChatConversation[] = [
       {
@@ -410,6 +449,41 @@ describe('buildGroupedHistory', () => {
         createdAt: 2000,
         updatedAt: 2000,
         extra: { cronJobId: 'job-123' },
+        userMsgCount: 0,
+      },
+    ];
+
+    const result = buildGroupedHistory(conversations, mockT);
+
+    expect(result.pinnedConversations).toHaveLength(0);
+    expect(result.timelineSections[0].items).toHaveLength(1);
+    expect(result.timelineSections[0].items[0].conversation?.id).toBe('conv-1');
+  });
+
+  it('excludes team and project scoped conversations from global history', () => {
+    const conversations: TChatConversation[] = [
+      {
+        id: 'conv-1',
+        title: 'Normal',
+        createdAt: 1000,
+        updatedAt: 1000,
+        extra: {},
+        userMsgCount: 0,
+      },
+      {
+        id: 'conv-2',
+        title: 'Team',
+        createdAt: 2000,
+        updatedAt: 2000,
+        extra: { teamId: 'team-1' },
+        userMsgCount: 0,
+      },
+      {
+        id: 'conv-3',
+        title: 'Project',
+        createdAt: 3000,
+        updatedAt: 3000,
+        extra: { projectId: 'proj-fintrakd' },
         userMsgCount: 0,
       },
     ];

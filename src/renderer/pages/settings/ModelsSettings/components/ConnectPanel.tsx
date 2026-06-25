@@ -8,6 +8,7 @@ import { providerMeta, recognizeKey } from '../providerCatalog';
 import { getPendingDeepLinkSeed } from '../index';
 import DetectedStrip from './DetectedStrip';
 import XGrokButton from './XGrokButton';
+import ChatGptButton from './ChatGptButton';
 import styles from '../ModelsSettings.module.css';
 
 type Props = {
@@ -76,6 +77,10 @@ const ConnectPanel: React.FC<Props> = ({
   const [usingDetected, setUsingDetected] = useState<string | null>(null);
   const [errorKey, setErrorKey] = useState<string | null>(null);
   const [errorProvider, setErrorProvider] = useState<string | null>(null);
+  // #100: soft (non-error) advisory shown when a key connects but has no usable
+  // credit yet - the provider is added connected-but-switched-off.
+  const [noticeKey, setNoticeKey] = useState<string | null>(null);
+  const [noticeProvider, setNoticeProvider] = useState<string | null>(null);
   // Ship-gate Fix C3 - show a subtle "from deep link" hint on the input when
   // the key was pre-filled by a `wayland://add-provider?apiKey=…` URL.
   const [seededFromDeepLink, setSeededFromDeepLink] = useState(false);
@@ -131,6 +136,8 @@ const ConnectPanel: React.FC<Props> = ({
     setKeyValue(value);
     setErrorKey(null);
     setErrorProvider(null);
+    setNoticeKey(null);
+    setNoticeProvider(null);
     // Once the user edits the field the deep-link badge no longer makes sense.
     setSeededFromDeepLink(false);
   }, []);
@@ -165,11 +172,20 @@ const ConnectPanel: React.FC<Props> = ({
     setConnecting(true);
     setErrorKey(null);
     setErrorProvider(null);
+    setNoticeKey(null);
+    setNoticeProvider(null);
     const providerName = providerMeta(recognition.provider).displayName;
     try {
       const res = await onConnectKey(recognition.provider, key);
       if (res.ok) {
         setKeyValue('');
+        // #100: connected, but the key has no usable credit yet - surface a soft
+        // notice (not an error) so the user knows it was added switched-off and
+        // to add credit, then turn it on.
+        if (res.warning === 'no-credit') {
+          setNoticeKey('noticeNoCredit');
+          setNoticeProvider(providerName);
+        }
       } else {
         showError(res.error ?? 'unknown', providerName);
       }
@@ -200,6 +216,12 @@ const ConnectPanel: React.FC<Props> = ({
   const errorText = errorKey
     ? t(`settings.modelsPage.connect.${errorKey}`, {
         provider: errorProvider ?? t('settings.modelsPage.connect.thatProvider'),
+      })
+    : null;
+
+  const noticeText = noticeKey
+    ? t(`settings.modelsPage.connect.${noticeKey}`, {
+        provider: noticeProvider ?? t('settings.modelsPage.connect.thatProvider'),
       })
     : null;
 
@@ -251,15 +273,22 @@ const ConnectPanel: React.FC<Props> = ({
         </div>
       )}
 
+      {noticeText && (
+        <div className={styles.connectNotice} role='status'>
+          <AlertTriangle size={14} aria-hidden='true' />
+          <span>{noticeText}</span>
+        </div>
+      )}
+
       <div className={styles.orDivider}>
         <span>{t('settings.modelsPage.connect.or')}</span>
       </div>
       <div className={styles.googleBtn}>
         <XGrokButton />
       </div>
-      {/* #56 ChatGPT subscription sign-in (native OAuth + token store + provider) is built
-          but held until the codex/Responses inference seam (registerChatGptSubscription) is
-          wired and live-verified. Re-enable by importing + rendering <ChatGptButton /> here. */}
+      <div className={styles.googleBtn}>
+        <ChatGptButton />
+      </div>
 
       <div className={styles.browseLink}>
         <Button type='text' size='small' onClick={() => onBrowse()}>

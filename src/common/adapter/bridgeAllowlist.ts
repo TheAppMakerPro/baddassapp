@@ -185,14 +185,18 @@ const REMOTE_DENIED_KEYS: ReadonlySet<string> = new Set([
   'skills.rescan-all',
   'skills.scan',
   'skills.set-pinned',
-  // --- Model registry secret/write IPC (audit C4). `resolveForChatStart`
-  //     returns a DECRYPTED plaintext provider key; connect/rekey/detectKeys
-  //     mutate or disclose stored credentials. A paired WebUI must never reach
-  //     these or it can harvest every stored provider key. ---
+  // --- Model registry secret/write IPC. connect/rekey/detectKeys mutate or
+  //     disclose stored credentials, so a paired WebUI must never reach them.
+  //     `resolveForChatStart` is deliberately NOT denied here: audit C4 hardened
+  //     it to return ONLY a non-secret chat-start handle (id / platform /
+  //     modelId / baseUrl) - the decrypted key is dropped and re-resolved in the
+  //     main process at spawn, never crossing IPC (proven by the
+  //     "never returns decrypted secrets" handler test). A remote/headless WebUI
+  //     MUST reach it to bind a chat to a model; denying it left every remote
+  //     model pick unresolved ("No model configured yet" - cannot chat). ---
   'modelRegistry.connect',
   'modelRegistry.rekey',
   'modelRegistry.detectKeys',
-  'modelRegistry.resolveForChatStart',
   // --- Wayland Core tool-backend key mutation (plant/clear a search API key) ---
   'wcoreToolKeys.set',
   'wcoreToolKeys.delete',
@@ -203,6 +207,11 @@ const REMOTE_DENIED_KEYS: ReadonlySet<string> = new Set([
   // Also deny the read: it discloses the engine's security/tools posture to a
   // paired WebUI client (no secret values, but defence-in-depth — SEC review F2).
   'wcoreConfig.getSection',
+  // --- In-app engine updater. `install` downloads + stages a native binary the
+  //     next engine spawn executes; a remote caller reaching it is an RCE chain.
+  //     `check` hits the network + discloses the engine version. HUMAN-only. ---
+  'wcoreUpdate.check',
+  'wcoreUpdate.install',
   // --- Wayland Core profile fs mutation (create/clone/activate/delete profile
   //     directories under the profiles root). Remote-denied (SEC-4). ---
   'wcoreProfiles.create',
@@ -296,6 +305,7 @@ const REMOTE_DENIED_KEYS: ReadonlySet<string> = new Set([
   'mcp.sync-to-agents',
   'mcp.remove-from-agents',
   'mcp.login-oauth',
+  'mcp.cancel-oauth',
   'mcp.logout-oauth',
   'mcp.set-byo-oauth-credentials',
   // --- Project knowledge draft (reads arbitrary filePaths to feed the model) ---

@@ -20,6 +20,7 @@ import {
 import { AcpError as AcpSessionError } from '@process/acp/errors/AcpError';
 import { AcpSession, type SessionOptions } from '@process/acp/session/AcpSession';
 import { readClaudeModelInfoFromCcSwitch } from '@process/services/ccSwitchModelSource';
+import { buildClaudeSlotModelInfo } from '@process/agent/acp/utils';
 // TODO(ACP Discovery): Re-enable when acp_session persistence is restored.
 // import type { IAcpSessionRepository } from '@process/services/database/IAcpSessionRepository';
 import { getTeamGuideStdioConfig } from '@/process/team/mcp/guide/teamGuideSingleton';
@@ -39,6 +40,7 @@ import { ProcessConfig } from '@process/utils/initStorage';
 import { getEnhancedEnv } from '@process/utils/shellEnv';
 import { spawn } from 'node:child_process';
 import { McpConfig } from '../session/McpConfig';
+import type { IMcpServer } from '@/common/config/storage';
 
 /**
  * Temporary: backend-specific CLI login arguments.
@@ -195,8 +197,26 @@ export class AcpAgentV2 {
     const rawMcpServers = await ProcessConfig.get('mcp.config');
     if (Array.isArray(rawMcpServers) && rawMcpServers.length > 0) {
       const cachedInit = await ProcessConfig.get('acp.cachedInitializeResult');
-      const caps = cachedInit?.[this.agentConfig.agentBackend]?.capabilities?.mcpCapabilities;
-      const userServers = McpConfig.fromStorageConfig(rawMcpServers, caps);
+      const rawCaps = cachedInit?.[this.agentConfig.agentBackend]?.capabilities?.mcpCapabilities;
+      // Enable http/sse so hosted OAuth connectors (e.g. Notion) reach the
+      // session - agents advertise http:false by default, which dropped every
+      // hosted MCP and left it uncallable in chat. An agent that can't use an
+      // http session server simply ignores it.
+      const caps = { stdio: rawCaps?.stdio ?? true, http: true, sse: true };
+      // Attach the CURRENT (refreshed) OAuth bearer so the session connects with
+      // a live token rather than the stale one baked into the CLI/engine config
+      // at sync time (the "401 invalid token" / silently-dropped-connector cause).
+      // Dynamic import: pulling McpService at module-init would create an OAuth
+      // init cycle (HybridTokenStorage TDZ); deferring it to call-time avoids that.
+      // On failure fall back to the stored headers (no worse than before).
+      let freshened = rawMcpServers as IMcpServer[];
+      try {
+        const { mcpService } = await import('@process/services/mcpServices/McpService');
+        freshened = await mcpService.attachOAuthTokens(freshened);
+      } catch (err) {
+        console.warn('[AcpAgentV2] attachOAuthTokens failed; using stored MCP headers:', err);
+      }
+      const userServers = McpConfig.fromStorageConfig(freshened, caps);
       if (userServers.length > 0) {
         (this.agentConfig as { mcpServers?: McpServer[] }).mcpServers = [
           ...(this.agentConfig.mcpServers || []),
@@ -349,7 +369,22 @@ export class AcpAgentV2 {
       },
 
       onModelUpdate: (model: ModelSnapshot) => {
-        this.cachedModelInfo = toAcpModelInfo(model);
+        const next = toAcpModelInfo(model);
+
+        // The claude-agent-acp bridge periodically emits a model snapshot with an
+        // EMPTY model list (notably under subscription/OAuth auth). Adopting it
+        // would wipe cachedModelInfo and push an empty acp_model_info to the
+        // renderer, reverting the in-chat picker to "Select Model" a moment after
+        // a selection (#184). Keep the last good info when the update is empty.
+        if (next.availableModels.length === 0 && this.cachedModelInfo?.availableModels.length) {
+          if (this.modelOp) {
+            this.resolveOp(this.modelOp, this.cachedModelInfo);
+            this.modelOp = null;
+          }
+          return;
+        }
+
+        this.cachedModelInfo = next;
 
         // Resolve modelOp if pending
         if (this.modelOp) {
@@ -818,6 +853,13 @@ export class AcpAgentV2 {
           };
         }
         return ccSwitchInfo;
+      }
+      // Claude Code's ACP wrapper never advertises a switchable model list, so
+      // cachedModelInfo stays null and the picker is stuck on "Select Model"
+      // (#184). Fall back to the static Sonnet/Opus/Haiku slots (applied via
+      // --model / ANTHROPIC_MODEL on (re)spawn) so the user can pick a model.
+      if (!this.cachedModelInfo || this.cachedModelInfo.availableModels.length === 0) {
+        return buildClaudeSlotModelInfo(this.userModelOverride ?? this.cachedModelInfo?.currentModelId);
       }
     }
     return this.cachedModelInfo;

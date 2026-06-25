@@ -16,6 +16,7 @@ import type { AgentBackend, AcpModelInfo } from '../types/acpTypes';
 import type { SlashCommandItem } from '../chat/slash/types';
 import type { IMcpServer, IProvider, TChatConversation, TProviderWithModel, ICssTheme } from '../config/storage';
 import type { PreviewHistoryTarget, PreviewSnapshotInfo } from '../types/preview';
+import type { MigrationPlan, MigrationResult, MigrationToolId } from '../types/migration';
 import type { IjfwErrorReason, IjfwInvokeResult, IjfwRuntimeModePublic } from '../types/ijfw';
 import type {
   CodexSetupResult,
@@ -32,6 +33,12 @@ import type {
   UpdateDownloadResult,
   AutoUpdateStatus,
 } from '../update/updateTypes';
+import type {
+  WCoreInstallRequest,
+  WCoreInstallResult,
+  WCoreUpdateCheck,
+  WCoreUpdateProgress,
+} from '../update/wcoreUpdateTypes';
 import type {
   ChatGptOAuthResult,
   ConnectFluxResult,
@@ -118,6 +125,13 @@ export const conversation = {
   confirmMessage: buildProvider<IBridgeResponse, IConfirmMessageParams>('conversation.confirm.message'), // Generic confirm message
   responseStream: buildEmitter<IResponseMessage>('chat.response.stream'), // Receive messages (unified interface)
   turnCompleted: buildEmitter<IConversationTurnCompletedEvent>('conversation.turn.completed'),
+  /**
+   * The runaway circuit-breaker (Phase 2) stopped a turn that was looping
+   * (re-reading the same content / a command failing repeatedly). Carries the
+   * conversation + reason so the renderer can explain why it stopped.
+   */
+  runawayHalted:
+    buildEmitter<import('@process/services/runaway/RunawayMonitor').RunawayHalted>('conversation.runaway-halted'),
   listChanged: buildEmitter<IConversationListChangedEvent>('conversation.list-changed'),
   getWorkspace: buildProvider<
     IDirOrFile[],
@@ -218,6 +232,11 @@ export const application = {
   updateSystemInfo: buildProvider<IBridgeResponse, { cacheDir: string; workDir: string }>('system.update-info'), // Update system info
   getZoomFactor: buildProvider<number, void>('app.get-zoom-factor'),
   setZoomFactor: buildProvider<number, { factor: number }>('app.set-zoom-factor'),
+  // Pop a main destination (e.g. Mission Control) out into its own window, reusing
+  // the conversation pop-out window infrastructure. `route` is validated against an
+  // allowlist in the main process. Returns alreadyOpen:true when an existing
+  // pop-out of the same route was focused instead of a new one created (#157).
+  popoutRoute: buildProvider<{ ok: boolean; alreadyOpen: boolean }, { route: string }>('app.popout-route'),
   // CDP (Chrome DevTools Protocol) management
   getCdpStatus: buildProvider<IBridgeResponse<ICdpStatus>, void>('app.get-cdp-status'), // Get CDP status
   updateCdpConfig: buildProvider<IBridgeResponse<ICdpConfig>, Partial<ICdpConfig>>('app.update-cdp-config'), // Update CDP config
@@ -263,6 +282,17 @@ export const autoUpdate = {
    * the renderer should surface this so users know auto-updates are disabled until next launch.
    */
   getStatus: buildProvider<{ available: boolean; error?: string }, void>('auto-update.get-status'),
+};
+
+// In-app updater for the bundled Wayland Core engine binary (HUMAN-only;
+// remote-denied in bridgeAllowlist - install downloads + stages a native binary).
+export const wcoreUpdate = {
+  /** Check GitHub releases for a newer wayland-core than the installed binary. */
+  check: buildProvider<WCoreUpdateCheck, void>('wcoreUpdate.check'),
+  /** Download, SHA-256 verify, and install a release tag into the override dir. */
+  install: buildProvider<WCoreInstallResult, WCoreInstallRequest>('wcoreUpdate.install'),
+  /** Install progress (download percent + phase) emitted by the main process. */
+  progress: buildEmitter<WCoreUpdateProgress>('wcoreUpdate.progress'),
 };
 
 export const starOffice = {
@@ -477,8 +507,47 @@ export const skills = {
    */
   save: buildProvider<
     { name: string; verdict: SkillVerdict; quarantinedAt?: string },
-    { name: string; description: string; category: string; tags: string[]; body: string }
+    { name: string; description: string; category: string; tags: string[]; body: string; type?: 'skill' | 'workflow' }
   >('skills.save'),
+};
+
+/**
+ * Per-item verdict returned by a type-aware import. One entry per imported
+ * SKILL.md, carrying what surface it landed on so the import modal can show
+ * "Registered as Assistant / Workflow / Skill" alongside the SkillGuard
+ * verdict (clean / review / blocked).
+ */
+export type ImportItemResult = {
+  name: string;
+  /** Surface the entry registered into (driven by frontmatter `type:`). */
+  registeredAs: SkillIndexEntry['type'];
+  /** SkillGuard verdict: 'blocked' items are quarantined, not registered. */
+  verdict: SkillVerdict;
+  /** Assistant id, set only when registeredAs === 'agent-profile'. */
+  assistantId?: string;
+};
+
+export type ImportSummary = {
+  items: ImportItemResult[];
+  /** Names routed to quarantine (verdict === 'blocked'). */
+  quarantined: string[];
+  /** Non-fatal warnings surfaced by the importer (e.g. executable-ref). */
+  warnings: string[];
+};
+
+/**
+ * Type-aware import for Assistants and Workflows. Runs the hardened
+ * SkillImport pipeline (folder / git / SKILL.md), then routes each imported
+ * entry by its frontmatter `type:`:
+ *   - 'agent-profile' -> written to the custom-assistant store (surfaces on
+ *     the Assistants page; the SkillLibrary type filter does NOT surface them)
+ *   - 'workflow' / 'skill' -> already registered into SkillLibrary by the
+ *     importer (surface on Workflows / Skills via skills.list).
+ */
+export const imports = {
+  folder: buildProvider<ImportSummary, { srcPath: string }>('imports.folder'),
+  git: buildProvider<ImportSummary, { url: string }>('imports.git'),
+  singleSkillMd: buildProvider<ImportSummary, { srcPath: string }>('imports.single-skill-md'),
 };
 
 export const voiceAsset = {
@@ -801,7 +870,7 @@ export const mcpService = {
       | { success: true }
       | {
           success: false;
-          code: 'needs_byo' | 'transport_unsupported' | 'no_url' | 'cancelled' | 'unknown';
+          code: 'needs_byo' | 'transport_unsupported' | 'no_url' | 'cancelled' | 'timeout' | 'unknown';
           error?: string;
           redirectUri?: string;
           authorizationUrl?: string;
@@ -809,6 +878,12 @@ export const mcpService = {
     >,
     { server: IMcpServer; config?: any }
   >('mcp.login-oauth'),
+  /**
+   * Abort an in-flight loginMcpOAuth. Optional serverName targets a single
+   * login; omit to cancel all. Lets the renderer's Cancel button unstick a user
+   * waiting on an OAuth callback that will never arrive.
+   */
+  cancelMcpOAuth: buildProvider<IBridgeResponse, string | undefined>('mcp.cancel-oauth'),
   logoutMcpOAuth: buildProvider<IBridgeResponse, string>('mcp.logout-oauth'),
   getAuthenticatedServers: buildProvider<IBridgeResponse<string[]>, void>('mcp.get-authenticated-servers'),
   /**
@@ -994,6 +1069,11 @@ export const systemSettings = {
   setKeepAwake: buildProvider<void, { enabled: boolean }>('system-settings:set-keep-awake'),
   getRouteThroughFlux: buildProvider<boolean, void>('system-settings:get-route-through-flux'),
   setRouteThroughFlux: buildProvider<void, { enabled: boolean }>('system-settings:set-route-through-flux'),
+  // Native Claude default model slot for a new Claude Code chat (null = no native
+  // login). Lets a Claude chat default to the subscription instead of flux-auto.
+  getClaudeNativeDefaultModelId: buildProvider<string | null, void>(
+    'system-settings:get-claude-native-default-model-id'
+  ),
   changeLanguage: buildProvider<void, { language: string }>('system-settings:change-language'),
   // Broadcast language change to all renderers (desktop + WebUI) for real-time sync
   languageChanged: buildEmitter<{ language: string }>('system-settings:language-changed'),
@@ -1010,6 +1090,12 @@ export const systemSettings = {
 // posture, so a paired WebUI client must never enumerate it.
 export const doctor = {
   runDoctor: buildProvider<DoctorReport, void>('doctor.run'),
+  // Copy the rendered report text to the OS clipboard from the MAIN process.
+  // `navigator.clipboard.writeText` is unreliable in the Electron renderer on
+  // Windows (it silently rejects without a focused document / secure-context
+  // gesture), so the Doctor "Copy report" button routes through Electron's
+  // `clipboard.writeText` here instead (#269).
+  copyText: buildProvider<void, { text: string }>('doctor.copy-text'),
 };
 
 // Flux compatibility-layer connectors (opencode, etc.)
@@ -1732,6 +1818,12 @@ export type IjfwDropIngestResult =
 export type IModelRegistryConnectResult = {
   ok: boolean;
   error?: ConnectError;
+  /**
+   * Non-fatal advisory on an otherwise successful connect. `'no-credit'` means
+   * the key authenticated but has no usable credit yet, so the provider was
+   * added connected-but-switched-off (#100); the panel surfaces a soft notice.
+   */
+  warning?: ConnectError;
 };
 
 /** Result of a connectivity test against an already-connected provider. */
@@ -2435,6 +2527,12 @@ export const cost = {
   listBudgets: buildProvider<import('@process/services/cost/types').BudgetStatus[], void>('cost.listBudgets'),
   /** One-time non-blocking over-budget warn notification (main -> renderer). */
   budgetAlert: buildEmitter<import('@process/services/cost/types').BudgetAlert>('cost.budgetAlert'),
+  /**
+   * A 'pause' budget blocked a turn before it started (runaway circuit-breaker
+   * Phase 1). The renderer shows a resumable card; the held message is in the
+   * payload so it can be re-sent after the user raises the cap (main -> renderer).
+   */
+  budgetGateBlocked: buildEmitter<import('@process/services/cost/types').BudgetGateBlocked>('cost.budgetGateBlocked'),
 };
 
 // ==================== Memory Archive (v0.6.4) ====================
@@ -2623,7 +2721,7 @@ export const project = {
    * takes name/description directly rather than a project id. Never rejects.
    */
   generateKnowledgeDraft: buildProvider<
-    { draft: string; error?: 'no-model' | 'failed' },
+    { draft: string; error?: 'no-model' | 'failed'; detail?: string },
     {
       name?: string;
       description?: string;
@@ -2654,4 +2752,16 @@ export const project = {
    * existing `changed.on(() => refresh())` listeners remain valid.
    */
   changed: buildEmitter<{ id?: string; count?: number } | undefined>('project.changed'),
+};
+
+/**
+ * Migrate config (provider keys, MCP servers) from a sibling agent tool
+ * (Hermes, OpenClaw) into Wayland (#migrate). `scan` is read-only and returns a
+ * secret-free plan; `apply` re-reads the source in the main process to recover
+ * key values, so secrets never cross this boundary - the renderer only sends
+ * back the selected item ids.
+ */
+export const migrate = {
+  scan: buildProvider<MigrationPlan, { toolId: MigrationToolId }>('migrate.scan'),
+  apply: buildProvider<MigrationResult, { toolId: MigrationToolId; selectedIds: string[] }>('migrate.apply'),
 };

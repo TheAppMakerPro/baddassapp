@@ -111,8 +111,33 @@ function loadEnvFile() {
 function has(cmd) {
   return spawnSync(process.platform === 'win32' ? 'where' : 'which', [cmd], { stdio: 'ignore' }).status === 0;
 }
+/** bun's canonical install dir. The bun.sh installer drops the binary here and
+ *  only edits shell rc files (.bashrc/.zshrc) - so it is NOT on the PATH of this
+ *  node process, nor of a systemd service (which starts with a minimal env). */
+function bunBinDir() {
+  return join(homedir(), '.bun', 'bin');
+}
+/** Resolve the bun executable: PATH first, then ~/.bun/bin. Relying on `which
+ *  bun` alone made `wayland setup` report "bun install failed" right after a
+ *  clean install, and the systemd service die with "bun runtime not found",
+ *  because neither context has ~/.bun/bin on PATH yet (#201). Returns the
+ *  command/path to spawn, or null when bun truly isn't installed. */
+function resolveBun() {
+  if (has('bun')) return 'bun';
+  const local = join(bunBinDir(), process.platform === 'win32' ? 'bun.exe' : 'bun');
+  return existsSync(local) ? local : null;
+}
 function hasBun() {
-  return has('bun');
+  return resolveBun() !== null;
+}
+/** Return env with ~/.bun/bin prepended to PATH, so a freshly-installed bun (and
+ *  any bun/node subprocess the server spawns) resolves without a new shell. */
+function withBunPath(env) {
+  const dir = bunBinDir();
+  if (!existsSync(dir)) return env;
+  const sep = process.platform === 'win32' ? ';' : ':';
+  const cur = env.PATH || '';
+  return cur.split(sep).includes(dir) ? env : { ...env, PATH: dir + sep + cur };
 }
 
 /** bun's installer needs unzip + curl. On a fresh Debian/Ubuntu box neither is
@@ -124,6 +149,27 @@ function ensureUnzipCurl() {
   const sudo = root ? '' : 'sudo ';
   console.log(c.dim('  Installing prerequisites (unzip, curl)…'));
   spawnSync('bash', ['-c', `${sudo}apt-get update -qq >/dev/null 2>&1; ${sudo}apt-get install -y -qq unzip curl >/dev/null 2>&1`], { stdio: 'inherit' });
+}
+
+/** The bundled wayland-core engine binary links libasound (ALSA). A minimal
+ *  Debian/Ubuntu server image ships without it, so the engine aborts on the
+ *  first chat turn with "wcore exited with code 127". Install it the same way we
+ *  install bun's unzip/curl prereqs - idempotent, apt-only (other distros: the
+ *  user installs the equivalent package). */
+function ensureEngineRuntimeLibs() {
+  if (!has('apt-get')) return; // non-Debian: user handles prereqs
+  const root = typeof process.getuid === 'function' && process.getuid() === 0;
+  const sudo = root ? '' : 'sudo ';
+  console.log(c.dim('  Ensuring engine runtime libraries (libasound2)…'));
+  // libasound2t64 on Ubuntu 24.04+ (the t64 ABI transition); libasound2 elsewhere.
+  spawnSync(
+    'bash',
+    [
+      '-c',
+      `${sudo}apt-get install -y -qq libasound2t64 >/dev/null 2>&1 || ${sudo}apt-get install -y -qq libasound2 >/dev/null 2>&1`,
+    ],
+    { stdio: 'inherit' }
+  );
 }
 
 async function ensureBun() {
@@ -153,6 +199,10 @@ async function setup() {
     process.exit(1);
   }
   if (!(await ensureBun())) process.exit(1);
+
+  // The bundled engine needs ALSA at runtime; install it now so the first chat
+  // turn does not fail with "wcore exited with code 127" on a minimal box.
+  ensureEngineRuntimeLibs();
 
   console.log(c.dim(`  Bring a model. Flux Router is the easy path - one key, every model,`));
   console.log(c.dim(`  best-fit routing. Free account: ${c.o(FLUX_SIGNUP)}\n`));
@@ -221,6 +271,9 @@ ExecStart=${process.execPath} ${bin} start
 Restart=always
 RestartSec=3
 Environment=DATA_DIR=${DATA_DIR}
+# systemd starts with a minimal PATH that excludes ~/.bun/bin (where the bun.sh
+# installer drops bun), so the start command would die with bun-runtime-not-found (#201).
+Environment=PATH=${bunBinDir()}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 [Install]
 WantedBy=multi-user.target
@@ -244,16 +297,17 @@ function start() {
     console.log(c.r(`Server payload missing at ${SERVER}. Reinstall: npm i -g getwayland`));
     process.exit(1);
   }
-  if (!hasBun()) {
+  const bunExe = resolveBun();
+  if (!bunExe) {
     console.log(c.r('bun runtime not found. Run `wayland setup` (it installs bun) or see https://bun.sh'));
     process.exit(1);
   }
-  const env = { ...process.env, ...loadEnvFile() };
+  const env = withBunPath({ ...process.env, ...loadEnvFile() });
   env.DATA_DIR = env.DATA_DIR || DATA_DIR;
   env.PORT = env.PORT || '3000';
   env.ALLOW_REMOTE = env.ALLOW_REMOTE || 'true';
   env.NODE_ENV = env.NODE_ENV || 'production';
-  const child = spawn('bun', [SERVER], { cwd: PAYLOAD, env, stdio: 'inherit' });
+  const child = spawn(bunExe, [SERVER], { cwd: PAYLOAD, env, stdio: 'inherit' });
   child.on('exit', (code) => process.exit(code ?? 0));
   process.on('SIGINT', () => child.kill('SIGINT'));
   process.on('SIGTERM', () => child.kill('SIGTERM'));
@@ -269,15 +323,16 @@ function resetpass() {
     console.log(c.r(`Server payload missing at ${SERVER}. Reinstall: npm i -g getwayland`));
     process.exit(1);
   }
-  if (!hasBun()) {
+  const bunExe = resolveBun();
+  if (!bunExe) {
     console.log(c.r('bun runtime not found. Run `wayland setup` (it installs bun) or see https://bun.sh'));
     process.exit(1);
   }
-  const env = { ...process.env, ...loadEnvFile() };
+  const env = withBunPath({ ...process.env, ...loadEnvFile() });
   env.DATA_DIR = env.DATA_DIR || DATA_DIR;
   env.NODE_ENV = env.NODE_ENV || 'production';
   // Forward any extra args (e.g. a username) after the subcommand.
-  const child = spawn('bun', [SERVER, '--resetpass', ...process.argv.slice(3)], { cwd: PAYLOAD, env, stdio: 'inherit' });
+  const child = spawn(bunExe, [SERVER, '--resetpass', ...process.argv.slice(3)], { cwd: PAYLOAD, env, stdio: 'inherit' });
   child.on('exit', (code) => process.exit(code ?? 0));
 }
 

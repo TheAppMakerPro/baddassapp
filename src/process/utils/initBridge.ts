@@ -19,7 +19,7 @@ import { prewarmProviderSdks } from '@process/utils/prewarmProviders';
 import { SqliteCostRepository } from '@process/services/cost/SqliteCostRepository';
 import { SqliteBudgetRepository } from '@process/services/cost/SqliteBudgetRepository';
 import { CostAnalyticsService } from '@process/services/cost/CostAnalyticsService';
-import { BudgetController } from '@process/services/cost/BudgetController';
+import { BudgetController, setBudgetController } from '@process/services/cost/BudgetController';
 import { initCostBridge, initCostBudgetBridge } from '@process/bridge/costBridge';
 import { CostRecorder, setCostRecorder } from '@process/services/cost/CostRecorder';
 import { getModelPricing } from '@process/services/cost/ModelPricing';
@@ -199,6 +199,11 @@ void getDatabase()
       });
       initCostBudgetBridge(budgetController);
       costRecorder.setTurnRecordedHook((ctx) => budgetController.checkAfterTurn(ctx));
+      // Expose the controller process-wide so the turn-start path can consult
+      // the pre-turn pause gate (canStartTurn) - the runaway circuit-breaker
+      // Phase 1. checkAfterTurn (warn) was already wired above; this completes
+      // the pause half.
+      setBudgetController(budgetController);
     } catch (err) {
       console.warn('[cost] init failed:', err);
     }
@@ -335,11 +340,30 @@ void getDatabase()
         return false;
       }
     };
+    // The agent's most recent text reply (skipping the user's own messages and
+    // tool/status rows), so the parent driver can detect a prose clarification
+    // question and park AUTO instead of force-advancing past it (#123).
+    const getLastAgentText = async (conversationId: string): Promise<string | null> => {
+      try {
+        const db = await getDatabase();
+        const result = db.getConversationMessages(conversationId, 0, 5, 'DESC');
+        for (const msg of result.data ?? []) {
+          if (msg.type === 'text' && msg.position !== 'right') {
+            const content = (msg.content as { content?: unknown }).content;
+            return typeof content === 'string' ? content : null;
+          }
+        }
+        return null;
+      } catch {
+        return null;
+      }
+    };
     ipcBridge.conversation?.turnCompleted?.on?.((event) => {
       void handleParentWorkflowTurn(event, {
         service: workflowService,
         isAutonomousChild,
         sendDirective: sendWorkflowDirective,
+        getLastAgentText,
       });
     });
 

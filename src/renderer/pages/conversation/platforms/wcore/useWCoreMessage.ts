@@ -11,6 +11,8 @@ import type { TChatConversation, TokenUsageData } from '@/common/config/storage'
 import type { ThoughtData } from '@/renderer/components/chat/ThoughtDisplay';
 import { useAddOrUpdateMessage, useClearErrorTips } from '@/renderer/pages/conversation/Messages/hooks';
 import { useTabResumeEffect } from '@/renderer/hooks/system/useTabResumeEffect';
+import { isToolUnsupportedErrorMessage } from '@/renderer/utils/model/errorDetection';
+import i18n from '@/renderer/services/i18n';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 type TokenUsage = {
@@ -50,6 +52,12 @@ export const useWCoreMessage = (
   // Track whether current turn has content output
   // Only reset waitingResponse when finish arrives after content (not after tool calls)
   const hasContentInTurnRef = useRef(false);
+
+  // Track whether the turn ended in an error: set on an `error` frame, cleared
+  // whenever successful output (content/tool_group) arrives after it (which means
+  // the error was a transient mid-turn diagnostic, not fatal). Used on `finish`
+  // to decide whether the error tip is fatal (keep) or transient (clear). (#101)
+  const turnEndedInErrorRef = useRef(false);
 
   useEffect(() => {
     onConfigChangedRef.current = onConfigChanged;
@@ -144,6 +152,7 @@ export const useWCoreMessage = (
         case 'start':
           setStreamRunning(true);
           streamRunningRef.current = true;
+          turnEndedInErrorRef.current = false;
           // Don't reset waitingResponse here - let tool completion flow handle it
           break;
         case 'finish':
@@ -166,11 +175,19 @@ export const useWCoreMessage = (
             setStreamRunning(false);
             setWaitingResponse(false);
             setThought({ subject: '', description: '' });
-            // A turn that produced output and then finished should not keep a
-            // mid-turn transient error banner (e.g. wcore's non-fatal
-            // "Cache full miss: TtlExpiry"). Genuinely fatal errors end the turn
-            // with no content, so they are preserved. (#101)
-            if (hasContentInTurnRef.current) {
+            // Only drop transient mid-turn error tips (e.g. wcore's non-fatal
+            // "Cache full miss: TtlExpiry") when the turn actually SUCCEEDED. A
+            // turn that ENDS in an error must keep its error tip — that banner is
+            // the only feedback the user gets that the request failed. The old
+            // `hasContentInTurnRef` gate assumed fatal errors produce no content,
+            // but agentic providers (e.g. Groq Compound's "tool calling is not
+            // supported" 400) stream a preamble frame before erroring, so the
+            // fatal tip was being cleared. Gate on the turn's terminal state
+            // instead: the error frame was the last meaningful event, or the
+            // engine reported finish_reason 'error'. (#101)
+            const finishReason = (message.data as { finish_reason?: string } | undefined)?.finish_reason;
+            const turnEndedInError = turnEndedInErrorRef.current || finishReason === 'error';
+            if (hasContentInTurnRef.current && !turnEndedInError) {
               clearErrorTips();
             }
           }
@@ -179,6 +196,8 @@ export const useWCoreMessage = (
           {
             // Mark that current turn has content output
             hasContentInTurnRef.current = true;
+            // Successful output after an error means that error was transient.
+            turnEndedInErrorRef.current = false;
 
             // Auto-recover streamRunning if tool_group arrives after finish
             if (!streamRunningRef.current) {
@@ -237,11 +256,32 @@ export const useWCoreMessage = (
           break;
         default: {
           if (message.type === 'error') {
+            // An error frame ends the turn. Clear ALL running contributors so the
+            // "Processing/Working" spinner stops and the composer unlocks — a fatal
+            // provider error (e.g. Compound's "tool calling is not supported") used
+            // to leave the chat stuck running with no way to send again.
             setWaitingResponse(false);
+            waitingResponseRef.current = false;
+            setStreamRunning(false);
+            streamRunningRef.current = false;
+            setHasActiveTools(false);
+            hasActiveToolsRef.current = false;
+            setThought({ subject: '', description: '' });
+            // Mark the turn as currently ended-in-error; a later content/tool_group
+            // frame clears this if the turn actually continues and succeeds.
+            turnEndedInErrorRef.current = true;
+            // Tool-incapable models (e.g. OpenRouter's Aion-1.0) hard-fail because the
+            // engine always attaches its built-in tools. Replace the opaque provider
+            // 404 with a clean, actionable message before it is rendered as a tip.
+            if (isToolUnsupportedErrorMessage(message.data)) {
+              message.data = i18n.t('conversation.chat.toolUnsupported');
+            }
             onError?.(message as IResponseMessage);
           } else {
             // Mark that current turn has content output (exclude error type)
             hasContentInTurnRef.current = true;
+            // Successful content after an error means that error was transient.
+            turnEndedInErrorRef.current = false;
             // Reset waitingResponse when actual content arrives
             if (message.type === 'content') {
               setWaitingResponse(false);
@@ -268,6 +308,7 @@ export const useWCoreMessage = (
     setThought({ subject: '', description: '' });
     setTokenUsage(null);
     hasContentInTurnRef.current = false;
+    turnEndedInErrorRef.current = false;
     setHasHydratedRunningState(false);
 
     // Check actual conversation status from backend before resetting all running states
@@ -344,6 +385,7 @@ export const useWCoreMessage = (
     hasActiveToolsRef.current = false;
     setThought({ subject: '', description: '' });
     hasContentInTurnRef.current = false;
+    turnEndedInErrorRef.current = false;
     // Clear active message ID to prevent filtering events from new messages after stop
     activeMsgIdRef.current = null;
   }, []);

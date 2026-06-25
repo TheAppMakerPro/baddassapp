@@ -45,6 +45,7 @@ import { initMemoryArchiveBridge, initPromotionSweep } from './memoryArchiveBrid
 import { initWikiBridge } from './wikiBridge';
 import { startWikiAutoSync } from '@process/services/wiki/wikiAutoSync';
 import { initImportBridge } from './importBridge';
+import { initMigrationBridge } from './migrationBridge';
 import { initSystemSettingsBridge } from './systemSettingsBridge';
 import { initFluxConnectorBridge } from './fluxConnectorBridge';
 import { initAmbientBridge } from './ambientBridge';
@@ -66,6 +67,7 @@ import type { TeamSessionService } from '@process/team/TeamSessionService';
 import { initModelRegistryIpc } from '@process/providers/ipc/modelRegistryIpc';
 import { initWcoreToolKeyIpc } from '@process/agent/wcore/toolKeyIpc';
 import { initWcoreConfigBridge } from './wcoreConfigBridge';
+import { initWcoreUpdateBridge } from './wcoreUpdateBridge';
 import { initPendingSendBridge } from './pendingSendBridge';
 import { initDoctorBridge } from './doctorBridge';
 
@@ -117,6 +119,7 @@ export function initAllBridges(deps: BridgeDependencies): void {
   initWikiBridge();
   startWikiAutoSync();
   initImportBridge();
+  initMigrationBridge();
   initAmbientBridge();
   initNotificationBridge();
   initTaskBridge(deps.workerTaskManager);
@@ -139,6 +142,7 @@ export function initAllBridges(deps: BridgeDependencies): void {
   });
   initWcoreToolKeyIpc();
   initWcoreConfigBridge();
+  initWcoreUpdateBridge();
   initPendingSendBridge();
   initStorageBridge();
   initNicknamesBridge();
@@ -210,6 +214,7 @@ export {
   initIjfwDropBridge,
   initWikiBridge,
   initImportBridge,
+  initMigrationBridge,
   initDoctorBridge,
 };
 export { initModelRegistryIpc } from '@process/providers/ipc/modelRegistryIpc';

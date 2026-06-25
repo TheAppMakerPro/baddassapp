@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Message, Switch, Modal } from '@arco-design/web-react';
@@ -34,15 +34,16 @@ import {
   useMcpServerCRUD,
   useMcpConnection,
 } from '@renderer/hooks/mcp';
+import type { McpOAuthLoginResult } from '@renderer/hooks/mcp/useMcpOAuth';
 import { openExternalUrl } from '@renderer/utils/platform';
 import { mcpService } from '@/common/adapter/ipcBridge';
-import type { IMcpServer, IMcpServerTransport } from '@/common/config/storage';
+import type { IMcpServer } from '@/common/config/storage';
 import { useMcpLibrary } from './hooks/useMcpLibrary';
 import { SetupGuide } from './components/SetupGuide';
 import StatusChip from './components/StatusChip';
 import { ByoCredentialsModal, type ByoVendorHint } from './components/ByoCredentialsModal';
 import { deriveStatus, type UIStatus } from './status';
-import type { CatalogEntry } from './types';
+import { entryToServerData } from './entryToServerData';
 import styles from './DetailPage.module.css';
 
 type Tab = 'overview' | 'tools' | 'setup-guide' | 'permissions';
@@ -58,15 +59,6 @@ function safeUrl(u: string | undefined): string | undefined {
   if (u.startsWith('data:image/svg+xml')) return u;
   if (u.startsWith('icons/')) return u;
   return undefined;
-}
-
-// Catalog uses hyphenated transport types ('streamable-http'); storage uses
-// underscored ('streamable_http'). Normalize between them to avoid invalid
-// transport.type values reaching the connection layer.
-function normalizeRemoteType(t: string): 'sse' | 'http' | 'streamable_http' {
-  if (t === 'streamable-http' || t === 'streamable_http') return 'streamable_http';
-  if (t === 'sse') return 'sse';
-  return 'http';
 }
 
 // Title-case a single word/token ('communication' -> 'Communication').
@@ -123,84 +115,6 @@ function formatRelativeTime(ts: number | undefined): string | undefined {
   return `${day}d ago`;
 }
 
-function entryToServerData(
-  entry: CatalogEntry,
-  envValues: Record<string, string>,
-): Omit<IMcpServer, 'id' | 'createdAt' | 'updatedAt'> {
-  const pkg = entry.packages.length > 0 ? entry.packages[0] : undefined;
-  const remote = entry.remotes && entry.remotes.length > 0 ? entry.remotes[0] : undefined;
-
-  if (!pkg && !remote) {
-    throw new Error(`Catalog entry ${entry.name} has no installable target.`);
-  }
-
-  // Prefer remote (hosted MCP) if both are present - no local spawn required.
-  // For an api-key hosted server the user's token is sent as a Bearer
-  // Authorization header (McpProtocol forwards transport.headers for
-  // streamable-http/sse). Static catalog headers are merged first so an entry
-  // can still pin extra headers. A user-entered Authorization wins.
-  const remoteHeaders: Record<string, string> =
-    remote?.headers && remote.headers.length > 0
-      ? Object.fromEntries(remote.headers.map((h) => [h.name, h.value]))
-      : {};
-  if (remote && entry['x-wayland'].auth?.method === 'api-key') {
-    const token = Object.values(envValues).find((v) => typeof v === 'string' && v.trim().length > 0);
-    if (token) {
-      // Most hosted api-key servers want `Authorization: Bearer <token>`, but
-      // some use a custom header with the raw token (New Relic `Api-Key`,
-      // Readwise `X-Access-Token`). Honour the per-entry override.
-      const headerName = entry['x-wayland'].auth.header?.trim() || 'Authorization';
-      remoteHeaders[headerName] = headerName === 'Authorization' ? `Bearer ${token.trim()}` : token.trim();
-    }
-  }
-  // Extra CLI args after the package id (subcommand / toolset flag / cred flag),
-  // with `{{VAR}}` substituted from the user's setup-guide inputs. Empty args
-  // (an unfilled optional `{{VAR}}`) are dropped so we never pass a bare flag value.
-  const runtimeArgs = (pkg?.runtimeArguments ?? [])
-    .map((a) => a.replace(/\{\{(\w+)\}\}/g, (_m, k) => envValues[k] ?? ''))
-    .filter((a) => a.length > 0);
-  const transport: IMcpServerTransport = remote
-    ? {
-        type: normalizeRemoteType(remote.type),
-        url: remote.url,
-        ...(Object.keys(remoteHeaders).length > 0 ? { headers: remoteHeaders } : {}),
-      }
-    : pkg!.runtimeHint === 'native'
-      ? {
-          // Bundled @wayland MCP: spawn via the local Node runtime against the
-          // bare bundle filename. The main-process spawn layer
-          // (McpProtocol.testStdioConnection) rewrites args[0] to an absolute
-          // path under out/main (dev) or app.asar.unpacked/out/main (prod).
-          type: 'stdio',
-          command: 'node',
-          args: [pkg!.identifier, ...runtimeArgs],
-          env: envValues,
-        }
-      : {
-          type: 'stdio',
-          command: pkg!.runtimeHint,
-          args: [...(pkg!.identifier ? [pkg!.identifier] : []), ...runtimeArgs],
-          env: envValues,
-        };
-
-  // The catalog id is reverse-DNS with a slash (com.vendor/name), but an MCP
-  // server name written into a CLI agent's config must match
-  // /^[A-Za-z0-9_.-]+$/ (validateMcpServer). Sanitize to the safe form (same
-  // convention as the entry filename) so the agent-sync step doesn't reject it.
-  // libraryEntryId keeps the canonical slug for install/dedup matching.
-  const safeName = entry.name.replace(/[^A-Za-z0-9_.-]/g, '-');
-
-  return {
-    name: safeName,
-    description: entry.description,
-    enabled: false,
-    transport,
-    originalJson: JSON.stringify({ source: 'library', entry: entry.name }),
-    source: 'library',
-    libraryEntryId: entry.name,
-  };
-}
-
 export function DetailPage() {
   const { t } = useTranslation();
   const { entryId } = useParams<{ entryId: string }>();
@@ -212,7 +126,7 @@ export function DetailPage() {
   const { mcpServers, saveMcpServers } = useMcpServers();
   const { agentInstallStatus, setAgentInstallStatus, checkSingleServerInstallStatus } = useMcpAgentStatus();
   const { syncMcpToAgents, removeMcpFromAgents } = useMcpOperations(mcpServers, message);
-  const { login, loggingIn, oauthStatus, setByoCredentials } = useMcpOAuth();
+  const { login, cancel: cancelMcpOAuthIpc, loggingIn, oauthStatus, setByoCredentials } = useMcpOAuth();
   const crud = useMcpServerCRUD(
     mcpServers,
     saveMcpServers,
@@ -243,6 +157,10 @@ export function DetailPage() {
     redirectUri: string;
   }>({ visible: false, server: null, redirectUri: 'http://localhost:57000/oauth/callback' });
 
+  // Lets the user back out of an in-flight OAuth sign-in (the upstream call
+  // can't be aborted, so login() races the IPC against this signal).
+  const oauthAbortRef = useRef<AbortController | null>(null);
+
   // Steps the user has completed (beyond static autoCompletedByInstall):
   // - any step whose primaryAction is 'oauth-flow' when the server has a
   //   valid token and isn't asking for re-login.
@@ -263,9 +181,28 @@ export function DetailPage() {
     return done;
   }, [guide, installedServer, oauthStatus]);
 
+  // Probe the open connector's live status on mount (and when the selected
+  // connector changes) so the action card reflects reality - Connected vs
+  // "needs sign-in" - instead of a stale persisted status. Without this the
+  // page only ever shows the last status written by a manual reconnect, so an
+  // already-authorized hosted server (Notion/Canva/...) reads "Not connected"
+  // even though every agent has it. refreshServerStatuses is passive: it
+  // dedupes by STALE_MS and never auto-disables a server.
+  useEffect(() => {
+    if (installedServer?.enabled) {
+      void conn.refreshServerStatuses([installedServer]);
+    }
+    // Re-probe only when the selected connector identity / enabled flag changes,
+    // never on each status write (refreshServerStatuses updates the record).
+  }, [installedServer?.id, installedServer?.enabled]);
+
   if (!entry) return <div className={styles.unknown}>Unknown entry: {id}</div>;
 
   const w = entry['x-wayland'];
+
+  // Catalog-declared OAuth scope names (e.g. GitHub repo / read:org / workflow)
+  // threaded into login() so the authorization request actually asks for them.
+  const oauthScopes = w.auth.scopes?.map((s) => s.name).filter((n) => n.length > 0);
 
   const install = async (): Promise<IMcpServer | null> => {
     setInstalling(true);
@@ -380,7 +317,10 @@ export function DetailPage() {
       if (!server) return;
     }
 
-    const result = await login(server);
+    const controller = new AbortController();
+    oauthAbortRef.current = controller;
+    const result = await login(server, oauthScopes, { signal: controller.signal });
+    oauthAbortRef.current = null;
     if (result.success === true) {
       await finishOAuthSuccess(server);
       return;
@@ -398,11 +338,34 @@ export function DetailPage() {
       return;
     }
 
+    if (handleOAuthAbort(result)) return;
+
     message.error(
       t('mcpLibrary.install.oauthFailed', 'Authorization failed: {{error}}', {
         error: (result.success === false && result.error) || 'unknown',
       }),
     );
+  };
+
+  /**
+   * Surface a cancelled / timed-out OAuth wait. Returns true when the result was
+   * handled here (so callers skip their generic oauthFailed toast):
+   *  - cancelled: silent back-out, the user chose to stop.
+   *  - timeout: actionable toast pointing at the likely BYO mistake.
+   */
+  const handleOAuthAbort = (result: McpOAuthLoginResult): boolean => {
+    if (result.success !== false) return false;
+    if (result.code === 'cancelled') return true;
+    if (result.code === 'timeout') {
+      message.error(
+        t(
+          'mcpLibrary.install.oauthTimeout',
+          'Sign-in timed out. Check the client ID/secret and redirect URI, then try again.',
+        ),
+      );
+      return true;
+    }
+    return false;
   };
 
   /**
@@ -429,16 +392,29 @@ export function DetailPage() {
       prev.map((s) => (s.id === saveResult.server!.id ? saveResult.server! : s)),
     );
 
-    const retryResult = await login(saveResult.server);
+    const controller = new AbortController();
+    oauthAbortRef.current = controller;
+    const retryResult = await login(saveResult.server, oauthScopes, { signal: controller.signal });
+    oauthAbortRef.current = null;
     if (retryResult.success === true) {
       await finishOAuthSuccess(saveResult.server);
       return;
     }
+    if (handleOAuthAbort(retryResult)) return;
     message.error(
       t('mcpLibrary.install.oauthFailed', 'Authorization failed: {{error}}', {
         error: (retryResult.success === false && retryResult.error) || 'unknown',
       }),
     );
+  };
+
+  // Back out of an in-flight OAuth sign-in (#242). Does BOTH: aborts the local
+  // race so login() settles to a `cancelled` result and clears the spinner (no
+  // error toast for a user-initiated back-out), AND fires the main-process IPC
+  // cancel so the service frees the callback port + stops waiting.
+  const cancelOAuth = (server: IMcpServer) => {
+    oauthAbortRef.current?.abort();
+    void cancelMcpOAuthIpc(server);
   };
 
   // "Connected and ready" must reflect a real connection, not just an install.
@@ -630,6 +606,15 @@ export function DetailPage() {
               ? t('mcpLibrary.detail.signingIn', 'Signing in…')
               : t('mcpLibrary.detail.signIn', 'Sign in')}
           </button>
+          {oauthInFlight && installedServer && (
+            <button
+              type="button"
+              className={styles.btn2}
+              onClick={() => cancelOAuth(installedServer)}
+            >
+              {t('mcpLibrary.detail.cancelSignIn', 'Cancel sign-in')}
+            </button>
+          )}
           <div className={styles.lifecycle}>
             <button type="button" className={`${styles.btn2} ${styles.btn2Danger}`} onClick={confirmRemove}>
               <Trash2 size={14} />
@@ -697,6 +682,15 @@ export function DetailPage() {
                 : t('mcpLibrary.detail.signIn', 'Sign in')
               : t('mcpLibrary.detail.addToken', 'Add token')}
           </button>
+          {isOauth && oauthInFlight && installedServer && (
+            <button
+              type="button"
+              className={styles.btn2}
+              onClick={() => cancelOAuth(installedServer)}
+            >
+              {t('mcpLibrary.detail.cancelSignIn', 'Cancel sign-in')}
+            </button>
+          )}
           <div className={styles.lifecycle}>
             <button type="button" className={`${styles.btn2} ${styles.btn2Danger}`} onClick={confirmRemove}>
               <Trash2 size={14} />
@@ -940,6 +934,15 @@ export function DetailPage() {
                             provider: w.auth.providerName ?? entry.title,
                           })}
                   </button>
+                  {!isApiKey && oauthInFlight && installedServer && (
+                    <button
+                      type="button"
+                      className={styles.btn2}
+                      onClick={() => void cancelOAuth(installedServer)}
+                    >
+                      {t('mcpLibrary.detail.cancelSignIn', 'Cancel')}
+                    </button>
+                  )}
                   {isApiKey && (
                     <span className={styles.connectHint}>
                       {t('mcpLibrary.detail.saveConnectHint', 'Paste your key above, then connect.')}
@@ -1056,6 +1059,12 @@ export function DetailPage() {
             : undefined) as ByoVendorHint | undefined
         }
         onCancel={() => setByoModal({ ...byoModal, visible: false, server: null })}
+        onCancelInFlight={() => {
+          // Abort the in-flight retry login() (bug #242) and close the modal so
+          // the user is never stuck behind a frozen "Save & sign in".
+          if (byoModal.server) void cancelOAuth(byoModal.server);
+          setByoModal({ ...byoModal, visible: false, server: null });
+        }}
         onSubmit={handleByoSubmit}
       />
     </div>

@@ -64,6 +64,7 @@
 
 import type { CatalogModel, CuratedModel } from '../types';
 import { isFluxModelId } from '@/common/config/flux';
+import { CHATGPT_SUBSCRIPTION_PROVIDER_ID } from './chatgptSubscriptionModels';
 
 /**
  * The recency window - a family flagship is only eligible for `recommended`
@@ -326,6 +327,37 @@ function curateOne(model: CatalogModel, rank: number, familyEligible: boolean): 
   // the rest of the flux-router catalog follows normal curation.
   if (isFluxModelId(model.id)) {
     return { ...model, recommended: false, enabled: true, role: 'flagship' };
+  }
+  // The ChatGPT-subscription static catalog (GPT-5.x / Codex) is a curated,
+  // unenriched virtual set just like the Flux tiers - there is no `/v1/models`
+  // to enrich it. Without this branch every model fails the enrichment gate
+  // (Rule 4) and lands `enabled: false`, so a freshly connected subscription
+  // shows its provider toggle OFF with zero usable models. Treat the whole set
+  // as recommended + on so the connection is usable the moment it lands.
+  if (model.providerId === CHATGPT_SUBSCRIPTION_PROVIDER_ID) {
+    return { ...model, recommended: true, enabled: true, role: 'flagship' };
+  }
+  // Local Ollama (`ollama-local`) is keyless and unenriched by design - the
+  // loopback daemon has no `/v1/models` registry entry to enrich it, so it
+  // fails the enrichment gate (Rule 4) and would land `enabled: false`, hiding
+  // every model from the picker (the renderer surfaces only `enabled` models)
+  // even though `autoRegisterOllama` promises they are "immediately selectable
+  // in chat". Same class as the Flux / ChatGPT-subscription virtual sets above.
+  // Force the local set `enabled` so the daemon's models are selectable +
+  // searchable; keep `recommended: false` so user-installed local models
+  // populate "More models" rather than crowding the Recommended zone.
+  if (model.providerId === 'ollama-local') {
+    return { ...model, recommended: false, enabled: true };
+  }
+  // Sakana AI (fugu / fugu-ultra) is a new provider not yet tracked by models.dev,
+  // so its live `/v1/models` entries are unenriched and would fail the enrichment
+  // gate (Rule 4) → `enabled: false`, hiding every model from the picker even
+  // though the user explicitly connected the provider. Force the set `enabled` so
+  // the models are selectable + searchable; keep `recommended: false` (no
+  // models.dev recency signal to justify a Recommended slot). Same class as the
+  // Ollama / Flux / ChatGPT-subscription unenriched-but-real catalogs above.
+  if (model.providerId === 'sakana') {
+    return { ...model, recommended: false, enabled: true };
   }
   if (familyEligible && rank === 0 && !isKnownLegacy(model.id)) {
     return { ...model, recommended: true, enabled: true, role: 'flagship' };

@@ -26,7 +26,8 @@
     "description": "Gestiona de forma centralizada las habilidades de los agentes de IA. Instálalas una vez y úsalas en todos los asistentes.",
     "mySkillsTitle": "Mis habilidades",
     "discoveredTitle": "Habilidades externas detectadas",
-    "discoveryAlert": "Se detectaron habilidades de tus herramientas CLI. Impórtalas para usarlas en BaddAssApp.",    "importAll": "Importar todo",
+    "discoveryAlert": "Se detectaron habilidades de tus herramientas CLI. Impórtalas para usarlas en BaddAssApp.",
+    "importAll": "Importar todo",
     "importAllSuccess": "{{count}} habilidades importadas",
     "noSkills": "No se encontraron habilidades. Importa algunas para empezar.",
     "custom": "Personalizada",
@@ -179,7 +180,8 @@
   "autoPreviewOfficeFiles": "Previsualizar automáticamente los nuevos archivos de Office",
   "autoPreviewOfficeFilesDesc": "Abre automáticamente los archivos de Word, Excel y PowerPoint recién creados en el espacio de trabajo actual. Los archivos de bloqueo temporales de Office se ignoran.",
   "startOnBoot": "Iniciar al arrancar",
-  "startOnBootDesc": "Inicia BaddAssApp automáticamente al iniciar sesión en macOS, Windows o Linux.",  "startOnBootUnsupported": "Disponible solo en las apps empaquetadas de macOS, Windows y Linux.",
+  "startOnBootDesc": "Inicia BaddAssApp automáticamente al iniciar sesión en macOS, Windows o Linux.",
+  "startOnBootUnsupported": "Disponible solo en las apps empaquetadas de macOS, Windows y Linux.",
   "startOnBootUpdateFailed": "Error al actualizar el ajuste de inicio al arrancar",
   "closeToTray": "Cerrar a la bandeja",
   "notification": "Notificaciones",
@@ -221,7 +223,8 @@
   "deleteInvalidKeys": "Eliminar claves no válidas",
   "testAllKeys": "Probar todas las claves",
   "addModelPlaceholder": "Selecciona o introduce un ID de modelo",
-  "customModelSupportNote": "Nota: BaddAssApp Core y el agente Gemini CLI admiten actualmente modelos personalizados.",  "addModelHint": "Elige o escribe un ID de modelo y se añadirá a este proveedor.",
+  "customModelSupportNote": "Nota: BaddAssApp Core y el agente Gemini CLI admiten actualmente modelos personalizados.",
+  "addModelHint": "Elige o escribe un ID de modelo y se añadirá a este proveedor.",
   "addModelSelectedHint": "Listo para añadir el modelo: {{model}}",
   "currentModelsLabel": "Modelos actuales",
   "addModelNoExisting": "Aún no se han añadido modelos para este proveedor. Aparecerán aquí una vez añadidos.",
@@ -271,7 +274,9 @@
   "channels": {
     "label": "Canales",
     "telegram": {
-      "help": "Chatea con tu asistente de IA de BaddAssApp a través de Telegram. Crea un bot con @BotFather para empezar.",      "howToTalk": "Abre Telegram, busca tu bot y envia cualquier mensaje. BaddAssApp respondera alli mismo."    },
+      "help": "Chatea con tu asistente de IA de BaddAssApp a través de Telegram. Crea un bot con @BotFather para empezar.",
+      "howToTalk": "Abre Telegram, busca tu bot y envia cualquier mensaje. BaddAssApp respondera alli mismo."
+    },
     "slack": {
       "comingSoonTitle": "La compatibilidad con Slack llega en {{phase}}",
       "comingSoonBody": "Integración de bot mediante Socket Mode. Publica y recibe mensajes en cualquier canal de tu espacio de trabajo.",
@@ -309,7 +314,8 @@
           "required": "El transporte de Events API requiere un secreto de firma"
         }
       },
-      "howToTalk": "Abre Slack, escribe al bot o mencionalo en un canal. BaddAssApp respondera alli mismo."    },
+      "howToTalk": "Abre Slack, escribe al bot o mencionalo en un canal. BaddAssApp respondera alli mismo."
+    },
     "discord": {
       "comingSoonTitle": "La compatibilidad con Discord llega en {{phase}}",
       "comingSoonBody": "Integración de bot mediante el Discord Gateway. Servidores, hilos, MD y comandos de barra.",
@@ -339,7 +345,8 @@
           "help": "Opcional. Solo es necesaria si más tarde cambias al endpoint de interacciones HTTP en lugar del Gateway."
         }
       },
-      "howToTalk": "Abre Discord, envia un DM al bot o mencionalo en un canal del servidor. BaddAssApp respondera alli mismo."    },
+      "howToTalk": "Abre Discord, envia un DM al bot o mencionalo en un canal del servidor. BaddAssApp respondera alli mismo."
+    },
     "webhook": {
       "comingSoonTitle": "El canal de webhook llega en {{phase}}",
       "comingSoonBody": "Endpoint HTTP entrante genérico con verificación de firma HMAC. Úsalo para integraciones personalizadas.",
@@ -407,9 +414,12 @@
         "label": "Modo de cuenta",
         "personal": "Personal (solo tu)",
         "dedicated": "Dedicado (otros pueden hablar)",
-        "personalHelp": "BaddAssApp vincula tu propio WhatsApp. Solo tu, a traves de tu chat contigo mismo, puedes hablar con el. Los mensajes de otros contactos se ignoran.",        "dedicatedHelp": "Usa un numero de WhatsApp separado creado para tu agente. Introduce tu numero personal para que BaddAssApp sepa que eres el propietario; otras personas pueden emparejarse para hablar con el.",        "ownerNumbers": {
+        "personalHelp": "BaddAssApp vincula tu propio WhatsApp. Solo tu, a traves de tu chat contigo mismo, puedes hablar con el. Los mensajes de otros contactos se ignoran.",
+        "dedicatedHelp": "Usa un numero de WhatsApp separado creado para tu agente. Introduce tu numero personal para que BaddAssApp sepa que eres el propietario; otras personas pueden emparejarse para hablar con el.",
+        "ownerNumbers": {
           "label": "Tu numero personal",
-          "help": "Tu propio numero o numeros de WhatsApp en formato internacional completo. BaddAssApp reconoce los mensajes de estos numeros como del propietario. Separa varios numeros con comas.",          "savedHidden": "Los numeros guardados estan ocultos. Vuelve a introducirlos para cambiarlos.",
+          "help": "Tu propio numero o numeros de WhatsApp en formato internacional completo. BaddAssApp reconoce los mensajes de estos numeros como del propietario. Separa varios numeros con comas.",
+          "savedHidden": "Los numeros guardados estan ocultos. Vuelve a introducirlos para cambiarlos.",
           "placeholder": "+15551234567"
         }
       },
@@ -438,12 +448,14 @@
         "accountSid": {
           "label": "Account SID",
           "placeholder": "ACxxxxxxxxxxxxxxxx",
-          "help": "Encuentra tu Account SID en el panel de la consola de Twilio. Empieza por «AC»."
+          "help": "Encuentra tu Account SID en el panel de la consola de Twilio. Empieza por «AC».",
+          "required": "Account SID is required"
         },
         "authToken": {
           "label": "Auth Token",
           "placeholder": "auth token",
-          "help": "Trata el auth token como una contraseña; Twilio firma cada webhook con él."
+          "help": "Trata el auth token como una contraseña; Twilio firma cada webhook con él.",
+          "required": "Auth Token is required"
         },
         "fromNumber": {
           "label": "Número de origen",
@@ -466,7 +478,12 @@
         "rotateButton": "Rotar",
         "rotateSuccess": "URL de webhook rotada",
         "rotateFailed": "Error al rotar"
-      }
+      },
+      "testAndEnable": "Test & Enable",
+      "connectionFailed": "Twilio connection test failed",
+      "pluginEnabled": "SMS (Twilio) channel enabled",
+      "enableFailed": "Failed to enable Twilio SMS plugin",
+      "fromOrServiceRequired": "A From Number or Messaging Service SID is required"
     },
     "signal": {
       "comingSoonTitle": "Signal llega en {{phase}}",
@@ -493,7 +510,8 @@
           "help": "Déjalo en blanco para usar el runtime incluido o el signal-cli de tu PATH."
         }
       },
-      "howToTalk": "Abre Signal y revisa tu chat Nota personal. BaddAssApp acaba de saludar alli; responde al chat."    },
+      "howToTalk": "Abre Signal y revisa tu chat Nota personal. BaddAssApp acaba de saludar alli; responde al chat."
+    },
     "matrix": {
       "comingSoonTitle": "Matrix llega en {{phase}}",
       "comingSoonBody": "Compatible con federación mediante matrix-js-sdk. Cifrado E2E opcional con verificación de dispositivos. Compatible con cualquier homeserver.",
@@ -536,7 +554,8 @@
       "pluginEnabled": "Plugin de MS Teams activado",
       "enableFailed": "Error al activar el plugin",
       "testAndEnable": "Probar y activar",
-      "setupHint": "Registra tu bot en el Azure Portal: Azure Bot Service → Create resource → configura el canal de Microsoft Teams → establece el endpoint de mensajería en tu URL de webhook de BaddAssApp → copia aquí el App ID y el secreto de cliente.",      "credentials": {
+      "setupHint": "Registra tu bot en el Azure Portal: Azure Bot Service → Create resource → configura el canal de Microsoft Teams → establece el endpoint de mensajería en tu URL de webhook de BaddAssApp → copia aquí el App ID y el secreto de cliente.",
+      "credentials": {
         "appId": {
           "label": "App ID (MicrosoftAppId)",
           "help": "ID de cliente del registro de la app en Azure AD, en Azure Portal → App Registrations → Overview.",
@@ -587,7 +606,8 @@
     "imessage": {
       "comingSoonTitle": "iMessage llega en {{phase}}",
       "comingSoonBody": "Solo macOS, experimental. Puente AppleScript a Messages.app. Apple limita silenciosamente los envíos por script, así que la mensajería está restringida.",
-      "howToTalk": "Envia un iMessage al identificador permitido de tu Mac. BaddAssApp respondera alli mismo."    },
+      "howToTalk": "Envia un iMessage al identificador permitido de tu Mac. BaddAssApp respondera alli mismo."
+    },
     "viber": {
       "comingSoonTitle": "Viber llega en {{phase}}",
       "comingSoonBody": "Integración de bot mediante la Viber Bot API. Webhook para entrada, REST para salida. Se requiere una URL pública."
@@ -871,11 +891,14 @@
           "help": "STARTTLS cuando el puerto = 587, TLS implícito cuando el puerto = 465."
         }
       },
-      "howToTalk": "Revisa tu propia bandeja de entrada. BaddAssApp acaba de enviarte un correo; responde a ese correo cuando quieras."    },
+      "howToTalk": "Revisa tu propia bandeja de entrada. BaddAssApp acaba de enviarte un correo; responde a ese correo cuando quieras."
+    },
     "welcome": {
-      "message": "Hola, soy BaddAssApp. Estoy conectado. Responde a este mensaje cuando quieras y te ayudare."    }
+      "message": "Hola, soy BaddAssApp. Estoy conectado. Responde a este mensaje cuando quieras y te ayudare."
+    }
   },
-  "webui.description": "Usa BaddAssApp como tu «asistente remoto 24/7»: organiza tareas desde cualquier dispositivo remoto, en cualquier momento y lugar.",  "webui.steps": "Paso 1. Activa la WebUI; Paso 2. Copia la URL de acceso; Paso 3. Ábrela en un navegador remoto",
+  "webui.description": "Usa BaddAssApp como tu «asistente remoto 24/7»: organiza tareas desde cualquier dispositivo remoto, en cualquier momento y lugar.",
+  "webui.steps": "Paso 1. Activa la WebUI; Paso 2. Copia la URL de acceso; Paso 3. Ábrela en un navegador remoto",
   "webui.configuration": "Configuración de la WebUI",
   "webui.enable": "Activar la WebUI",
   "webui.enableDesc": "Inicia el servicio web para permitir el acceso por navegador",
@@ -900,6 +923,11 @@
   "webui.initialPasswordDesc": "Contraseña generada en el primer inicio; cámbiala, por favor",
   "webui.changePassword": "Cambiar contraseña",
   "webui.changePasswordDesc": "Actualiza la contraseña de administrador de este servidor.",
+  "webui.changeUsername": "Change username",
+  "webui.changeUsernameDesc": "Update the admin login name for this server.",
+  "agentsPage.flux.remoteConnectCta": "Connect Flux from this device",
+  "agentsPage.flux.remoteConnectError": "Could not connect Flux. Please try again.",
+  "agentsPage.flux.remoteConnectSuccess": "Flux connected",
   "webui.currentPassword": "Contraseña actual",
   "webui.currentPasswordPlaceholder": "Introduce la contraseña actual",
   "webui.currentPasswordRequired": "Introduce la contraseña actual",
@@ -953,11 +981,14 @@
   "webui.passwordHint": "La contraseña se muestra en la consola en el primer inicio. Usa «Cambiar contraseña» para restablecerla",
   "webui.checkConsoleForPassword": "Consulta la consola de la aplicación para ver la contraseña inicial",
   "webui.browserNotSupported": "Los ajustes de la WebUI no están disponibles en el navegador",
-  "webui.browserNotSupportedDesc": "Por motivos de seguridad, los ajustes de la WebUI solo se pueden gestionar en la aplicación de escritorio. Abre el panel de ajustes en la app de escritorio de BaddAssApp para configurarla.",  "webui.passwordHidden": "******",
+  "webui.browserNotSupportedDesc": "Por motivos de seguridad, los ajustes de la WebUI solo se pueden gestionar en la aplicación de escritorio. Abre el panel de ajustes en la app de escritorio de BaddAssApp para configurarla.",
+  "webui.passwordHidden": "******",
   "webui.passwordOnlyFirstTime": "La contraseña solo se muestra en el primer inicio y luego se ocultará",
   "webui.resetPasswordWarning": "¡Guarda la contraseña restablecida en un lugar seguro!",
-  "webui.featureRemoteDesc": "Activa la WebUI para que tu teléfono o un navegador remoto puedan acceder a BaddAssApp.",  "webui.featureChannelsTitle": "Control por mensajería",
-  "webui.featureChannelsDesc": "Conecta Telegram, Lark, DingTalk y WeChat para interactuar con BaddAssApp desde apps de mensajería.",  "webui.goToChannels": "Ir a Canales",
+  "webui.featureRemoteDesc": "Activa la WebUI para que tu teléfono o un navegador remoto puedan acceder a BaddAssApp.",
+  "webui.featureChannelsTitle": "Control por mensajería",
+  "webui.featureChannelsDesc": "Conecta Telegram, Lark, DingTalk y WeChat para interactuar con BaddAssApp desde apps de mensajería.",
+  "webui.goToChannels": "Ir a Canales",
   "webui.pairedDevices.title": "Dispositivos emparejados",
   "webui.pairedDevices.empty": "Aún no hay dispositivos emparejados",
   "webui.pairedDevices.lastSeen": "Visto por última vez {{time}}",
@@ -1018,17 +1049,25 @@
   "assistant.step4": "Una vez aprobado, ¡puedes empezar a chatear con Gemini a través de Telegram!",
   "channels.title": "Canales",
   "channels.telegramTitle": "Telegram",
-  "channels.telegramDesc": "Chatea con el asistente de BaddAssApp a través de Telegram",  "channels.slackTitle": "Slack",
-  "channels.slackDesc": "Chatea con el asistente de BaddAssApp a través de Slack",  "channels.discordTitle": "Discord",
-  "channels.discordDesc": "Chatea con el asistente de BaddAssApp a través de Discord",  "channels.larkTitle": "Lark",
-  "channels.larkDesc": "Chatea con el asistente de BaddAssApp a través de Lark",  "channels.dingtalkTitle": "DingTalk",
-  "channels.dingtalkDesc": "Chatea con el asistente de BaddAssApp a través de DingTalk",  "channels.weixinTitle": "WeChat",
-  "channels.weixinDesc": "Chatea con el asistente de BaddAssApp a través de WeChat",  "channels.wecomTitle": "WeCom",
-  "channels.wecomDesc": "Chatea con el asistente de BaddAssApp a través de WeCom (bot de IA de WeChat empresarial)",  "channels.comingSoon": "Próximamente",
+  "channels.telegramDesc": "Chatea con el asistente de BaddAssApp a través de Telegram",
+  "channels.slackTitle": "Slack",
+  "channels.slackDesc": "Chatea con el asistente de BaddAssApp a través de Slack",
+  "channels.discordTitle": "Discord",
+  "channels.discordDesc": "Chatea con el asistente de BaddAssApp a través de Discord",
+  "channels.larkTitle": "Lark",
+  "channels.larkDesc": "Chatea con el asistente de BaddAssApp a través de Lark",
+  "channels.dingtalkTitle": "DingTalk",
+  "channels.dingtalkDesc": "Chatea con el asistente de BaddAssApp a través de DingTalk",
+  "channels.weixinTitle": "WeChat",
+  "channels.weixinDesc": "Chatea con el asistente de BaddAssApp a través de WeChat",
+  "channels.wecomTitle": "WeCom",
+  "channels.wecomDesc": "Chatea con el asistente de BaddAssApp a través de WeCom (bot de IA de WeChat empresarial)",
+  "channels.comingSoon": "Próximamente",
   "channels.comingSoonDesc": "La compatibilidad con {{channel}} llegará pronto",
   "channels.notConfigured": "Sin configurar",
   "channels.configured": "Configurado",
-  "channels.guide": "Conecta Telegram, Lark, DingTalk y más para controlar tu agente de IA de BaddAssApp siempre activo desde cualquier app de chat.",  "channels.selectFirst": "Selecciona un canal y configura las credenciales.",
+  "channels.guide": "Conecta Telegram, Lark, DingTalk y más para controlar tu agente de IA de BaddAssApp siempre activo desde cualquier app de chat.",
+  "channels.selectFirst": "Selecciona un canal y configura las credenciales.",
   "channels.enableAfterConfig": "Activa el canal y empieza a chatear con tu agente de IA.",
   "channels.extension.requiredField": "Completa el campo obligatorio: {{field}}",
   "channels.extension.enabled": "Canal activado",
@@ -1080,6 +1119,9 @@
   "speechToTextDownloadSuccess": "Modelo descargado correctamente",
   "speechToTextDownloadError": "Error en la descarga",
   "speechToTextCancelDownload": "Cancelar",
+  "speechToTextProviderFluxVoice": "Flux Voice",
+  "speechToTextFluxVoicePremiumLocked": "Flux Voice requires a paid plan. Upgrade at fluxrouter.ai to enable speech-to-text.",
+  "speechToTextFluxVoiceAuthError": "Flux Voice authentication failed. Check your Flux Router key in Settings → Voice.",
   "textToSpeech": "Texto a voz",
   "textToSpeechDescription": "Lee en voz alta las respuestas de la IA usando un motor de voz local o del sistema.",
   "textToSpeechProvider": "Proveedor",
@@ -1125,7 +1167,8 @@
   "mcpImportSuccess": "Importación correcta",
   "mcpImportFailed": "Error en la importación",
   "mcpJsonInvalid": "Formato JSON no válido",
-  "mcpImportDescription": "BaddAssApp obtendrá automáticamente el MCP instalado en tu agente CLI y lo importará con un clic",  "mcpStepSelectAgent": "Seleccionar agente",
+  "mcpImportDescription": "BaddAssApp obtendrá automáticamente el MCP instalado en tu agente CLI y lo importará con un clic",
+  "mcpStepSelectAgent": "Seleccionar agente",
   "mcpStepFetchTools": "Obtener mcp",
   "mcpStepImportSuccess": "Importación correcta",
   "mcpLoadingTools": "Leyendo la lista de herramientas de la CLI...",
@@ -1507,7 +1550,9 @@
     "marketUpdate": "Actualizar",
     "marketEmpty": "No se encontraron agentes instalables. Comprueba tu conexión de red y asegúrate de que GitHub sea accesible.",
     "marketContributionHint": "¿Quieres que aparezca aquí un nuevo agente?",
-    "marketContributionAction": "Abre un PR en BaddAssAppHub",    "marketComingSoon": "El mercado de BaddAssAppHub llega pronto.",    "detectCustomAgent": "Detectar agente personalizado",
+    "marketContributionAction": "Abre un PR en BaddAssAppHub",
+    "marketComingSoon": "El mercado de BaddAssAppHub llega pronto.",
+    "detectCustomAgent": "Detectar agente personalizado",
     "editCustomAgent": "Editar agente personalizado",
     "localAgentsEmpty": "No se detectaron agentes locales",
     "detected": "Detectado",
@@ -1564,7 +1609,8 @@
     "notFound": "No encontrado",
     "version": "Versión",
     "path": "Ruta",
-    "providerNote": "Los ajustes de proveedor y clave de API se gestionan en la página de Modelos. BaddAssApp Core admite: Anthropic, OpenAI, AWS Bedrock."  },
+    "providerNote": "Los ajustes de proveedor y clave de API se gestionan en la página de Modelos. BaddAssApp Core admite: Anthropic, OpenAI, AWS Bedrock."
+  },
   "shared": {
     "saving": "Guardando…",
     "saved": "Guardado",
@@ -1606,7 +1652,8 @@
   },
   "channelsIndex": {
     "title": "Canales",
-    "subtitle": "Conecta BaddAssApp a plataformas de mensajería. Cada conexión tiene su propia configuración, credenciales y estado.",    "tier1Tab": "Nivel 1",
+    "subtitle": "Conecta BaddAssApp a plataformas de mensajería. Cada conexión tiene su propia configuración, credenciales y estado.",
+    "tier1Tab": "Nivel 1",
     "tier2Tab": "Nivel 2",
     "tier3Tab": "Nivel 3",
     "phase1Label": "Fase 1",
@@ -1672,7 +1719,8 @@
       "keyLabel": "Pega una clave de API",
       "keyPlaceholder": "Pega una clave de cualquier proveedor…",
       "connect": "Conectar",
-      "hintDefault": "BaddAssApp reconoce el proveedor por sí solo, no necesitas elegir uno.",      "hintAmbiguous": "Parece una clave de estilo OpenAI; conéctate para confirmar el proveedor.",
+      "hintDefault": "BaddAssApp reconoce el proveedor por sí solo, no necesitas elegir uno.",
+      "hintAmbiguous": "Parece una clave de estilo OpenAI; conéctate para confirmar el proveedor.",
       "recognized": "Reconocido:",
       "cloudHint": "este proveedor necesita un formulario de credenciales en Explorar.",
       "unrecognizedPrefix": "No es un formato de clave reconocido:",
@@ -1692,6 +1740,8 @@
       "xaiConnected": "Signed in with X",
       "xaiReconnect": "Reconnect",
       "chatgpt": "Sign in with ChatGPT",
+      "chatgptConnected": "Signed in with ChatGPT",
+      "chatgptReconnect": "Reconnect",
       "chatgptNote": "Signs in with your ChatGPT subscription via the same path the Codex CLI uses. OpenAI may change or restrict this.",
       "chatgptSuccess": "Signed in with your ChatGPT subscription.",
       "chatgptUnauthorized": "ChatGPT sign-in was rejected. An active ChatGPT subscription is required.",
@@ -1738,7 +1788,8 @@
       "errorUnrecognized": "No se reconoció esa clave para {{provider}}.",
       "errorNoModels": "{{provider}} se conectó pero no devolvió modelos. Inténtalo de nuevo en un momento.",
       "errorUnknown": "No se pudo conectar a {{provider}}. Inténtalo de nuevo.",
-      "trust": "De Ferrox Labs, el equipo detrás de BaddAssApp."    },
+      "trust": "De Ferrox Labs, el equipo detrás de BaddAssApp."
+    },
     "detected": {
       "found": "Se encontró una clave de API de {{provider}} en este equipo. ¿Usarla?",
       "use": "Usarla",
@@ -1761,6 +1812,7 @@
       "toggleFailed": "Could not change that provider. Please try again.",
       "providerToggleAria": "Turn {{provider}} models on or off",
       "providerToggleOnHint": "Turn on this provider's recommended models",
+      "providerToggleNoModelsHint": "No models loaded yet. Open Manage and refresh to load this provider's models first.",
       "providerToggleOffHint": "Turn off all of this provider's models",
       "via": {
         "apiKey": "clave de API",
@@ -1944,12 +1996,14 @@
     },
     "headless": {
       "title": "Los proveedores se configuran en el servidor",
-      "body": "Esta es una sesion remota, por lo que las claves no se pueden introducir aqui. Los proveedores se configuran mediante variables de entorno o `wayland setup` en el servidor. Tus proveedores configurados y sus modelos apareceran abajo tras actualizar."
+      "body": "Esta es una sesion remota, por lo que las claves no se pueden introducir aqui. Los proveedores se configuran mediante variables de entorno o `wayland setup` en el servidor. Tus proveedores configurados y sus modelos apareceran abajo tras actualizar.",
+      "localEndpoint": "To add a local OpenAI-compatible endpoint (Ollama, vLLM, LM Studio), set OPENAI_API_KEY and OPENAI_BASE_URL in the server environment, then restart. The endpoint's models appear in the list below once refreshed."
     }
   },
   "mcpPage": {
     "title": "Servidores MCP",
-    "subtitle": "Conecta BaddAssApp a servidores de herramientas externos mediante el Model Context Protocol. Añade, configura y sincroniza servidores MCP en todos tus agentes."  },
+    "subtitle": "Conecta BaddAssApp a servidores de herramientas externos mediante el Model Context Protocol. Añade, configura y sincroniza servidores MCP en todos tus agentes."
+  },
   "imageGenPage": {
     "title": "Generación de imágenes",
     "subtitle": "Configura la herramienta integrada de generación de imágenes: elige un modelo predeterminado y activa o desactiva el servidor MCP.",
@@ -1969,10 +2023,12 @@
   },
   "notificationsPage": {
     "title": "Notificaciones",
-    "subtitle": "Cuándo y cómo te avisa BaddAssApp.",    "comingSoon": "Los interruptores por categoría, las horas de silencio y los controles de sonido llegan en la próxima versión.",
+    "subtitle": "Cuándo y cómo te avisa BaddAssApp.",
+    "comingSoon": "Los interruptores por categoría, las horas de silencio y los controles de sonido llegan en la próxima versión.",
     "systemTitle": "Notificaciones del sistema",
     "master": "Interruptor principal",
-    "masterHelp": "Cuando está desactivado, BaddAssApp no envía notificaciones del sistema. Las demás reglas de abajo se ignoran.",    "agentFinished": "Notificar cuando el agente termine",
+    "masterHelp": "Cuando está desactivado, BaddAssApp no envía notificaciones del sistema. Las demás reglas de abajo se ignoran.",
+    "agentFinished": "Notificar cuando el agente termine",
     "agentFinishedHelp": "Se dispara cuando se completa una tarea de larga duración o el lanzador de equipos.",
     "scheduledTask": "Notificar al ejecutarse una tarea programada",
     "scheduledTaskHelp": "Las tareas de tipo cron notifican cuando se ejecutan.",
@@ -2003,7 +2059,8 @@
     "open": "Abrir",
     "clear": "Borrar",
     "clearConfirmTitle": "¿Borrar el directorio?",
-    "clearConfirmBody": "Esto elimina de forma permanente los archivos que contiene. BaddAssApp los reconstruirá según sea necesario.",    "backupTitle": "Copia de seguridad y restauración",
+    "clearConfirmBody": "Esto elimina de forma permanente los archivos que contiene. BaddAssApp los reconstruirá según sea necesario.",
+    "backupTitle": "Copia de seguridad y restauración",
     "exportIncludeKeys": "Incluir las claves de API en la exportación",
     "exportPassphraseLabel": "Frase de cifrado",
     "exportPassphrasePlaceholder": "Obligatoria cuando se incluyen claves",
@@ -2011,7 +2068,8 @@
     "restore": "Restaurar desde copia de seguridad",
     "syncTitle": "Sincronización (E2EE)",
     "syncComingSoon": "Sincronización cifrada de extremo a extremo a una carpeta o un relay.",
-    "resetTitle": "Restablecer BaddAssApp",    "resetDescription": "Elimina de forma permanente todas las conversaciones, ajustes y datos en caché.",
+    "resetTitle": "Restablecer BaddAssApp",
+    "resetDescription": "Elimina de forma permanente todas las conversaciones, ajustes y datos en caché.",
     "resetAction": "Restablecer todo",
     "resetConfirmTitle": "¿Restablecer todo?",
     "resetConfirmBody": "Esto elimina de forma permanente todos los datos, incluidos los proveedores, las conversaciones y los ajustes. No se puede deshacer.",
@@ -2044,7 +2102,27 @@
       "pickFolder": "Elegir carpeta",
       "pickFolderFirst": "Elige primero una carpeta",
       "enable": "Activar sincronización"
-    }
+    },
+    "copyPath": "Copy path",
+    "pathCopied": "Path copied to clipboard",
+    "pathCopyFailed": "Couldn't copy the path",
+    "cleared": "Cleared",
+    "clearFailed": "Couldn't clear the directory",
+    "exportFailed": "Export failed",
+    "restoreModalTitle": "Restore from backup",
+    "restoreConfirm": "Restore",
+    "restoreWarning": "Restore overwrites your current conversations, attachments, and config. A safety backup of your current data is created first. Available only from a trusted local network (loopback, LAN, or Tailscale).",
+    "restorePickFile": "Choose backup (.zip)",
+    "restoreNoFile": "No file selected",
+    "restorePasswordLabel": "Confirm your password",
+    "restorePasswordHint": "Your WebUI password",
+    "restorePassphraseLabel": "Backup passphrase (optional)",
+    "restorePassphraseHint": "Only if the backup includes encrypted keys",
+    "restoreSuccess": "Restore complete",
+    "restoreNotOperator": "Restore is only available from a trusted local network (loopback, LAN, or Tailscale).",
+    "restoreBadPassword": "Password is incorrect",
+    "restoreTooLarge": "That backup file is too large",
+    "restoreFailed": "Restore failed"
   },
   "editorPage": {
     "title": "Editor",
@@ -2067,7 +2145,8 @@
     "title": "Habilidades y herramientas"
   },
   "constitutionPage": {
-    "subtitle": "Las reglas de BaddAssApp. Se cargan de nuevo en cada turno, las ediciones se aplican de inmediato, sin reiniciar. Consulta la §11 para ver cómo funcionan las anulaciones.",    "tocTitle": "Secciones",
+    "subtitle": "Las reglas de BaddAssApp. Se cargan de nuevo en cada turno, las ediciones se aplican de inmediato, sin reiniciar. Consulta la §11 para ver cómo funcionan las anulaciones.",
+    "tocTitle": "Secciones",
     "tocEmpty": "Aún no hay secciones",
     "reset": "Restablecer",
     "resetTooltip": "Restablecer a la Constitución predeterminada",
@@ -2103,7 +2182,8 @@
     "yourAgents": "Tus agentes",
     "moreDetected": "Más detectados · {{count}}",
     "remoteAgents": "Agentes remotos",
-    "empty": "Aún no se detectaron agentes. BaddAssApp Core siempre está disponible una vez que conectas un modelo.",    "loadErrorsTitle": "Algunos agentes no se cargaron",
+    "empty": "Aún no se detectaron agentes. BaddAssApp Core siempre está disponible una vez que conectas un modelo.",
+    "loadErrorsTitle": "Algunos agentes no se cargaron",
     "badge": {
       "active": "Activo",
       "detected": "Detectado"
@@ -2112,7 +2192,8 @@
       "label": "Mostrar en la barra de herramientas",
       "show": "Mostrar en la barra de agentes",
       "hide": "Ocultar de la barra de agentes",
-      "lockedTooltip": "BaddAssApp Core permanece en la barra de herramientas para que siempre tengas un agente con el que chatear."    },
+      "lockedTooltip": "BaddAssApp Core permanece en la barra de herramientas para que siempre tengas un agente con el que chatear."
+    },
     "scope": {
       "any": "Ejecuta cualquier modelo que conectes",
       "claude": "Ejecuta modelos Claude",
@@ -2123,7 +2204,8 @@
       "mistral": "Ejecuta modelos Mistral"
     },
     "about": {
-      "wcore": "El motor propio de BaddAssApp. Aprovecha todos los proveedores de tu página de Modelos.",      "claude": "El agente de programación de Anthropic. Inicia sesión con su propia cuenta; no puede ejecutar GPT ni Gemini.",
+      "wcore": "El motor propio de BaddAssApp. Aprovecha todos los proveedores de tu página de Modelos.",
+      "claude": "El agente de programación de Anthropic. Inicia sesión con su propia cuenta; no puede ejecutar GPT ni Gemini.",
       "codex": "El agente de programación de OpenAI. Inicia sesión con su propia cuenta; no puede ejecutar Claude ni Gemini."
     },
     "flux": {
@@ -2144,8 +2226,10 @@
     "fluxSetup": {
       "title": "Enrutar {{tool}} a través de Flux",
       "absentBody": "{{tool}} no se detecta en este equipo. Instálalo primero y vuelve para enrutarlo a través de Flux.",
-      "unconfiguredBody": "Configura {{tool}} para enrutarlo a través de Flux. BaddAssApp escribe un proveedor de Flux en la configuración de {{tool}} en {{configPath}} y hace una copia de seguridad del archivo existente primero.",      "routedBody": "{{tool}} se enruta a través de Flux.",
-      "driftedBody": "La configuración de Flux de {{tool}} se cambió fuera de BaddAssApp. Vuelve a aplicarla para restaurar los ajustes de BaddAssApp, o quita Flux de {{tool}}.",      "notConnected": "Conecta primero Flux Router y luego configura {{tool}}.",
+      "unconfiguredBody": "Configura {{tool}} para enrutarlo a través de Flux. BaddAssApp escribe un proveedor de Flux en la configuración de {{tool}} en {{configPath}} y hace una copia de seguridad del archivo existente primero.",
+      "routedBody": "{{tool}} se enruta a través de Flux.",
+      "driftedBody": "La configuración de Flux de {{tool}} se cambió fuera de BaddAssApp. Vuelve a aplicarla para restaurar los ajustes de BaddAssApp, o quita Flux de {{tool}}.",
+      "notConnected": "Conecta primero Flux Router y luego configura {{tool}}.",
       "genericError": "La configuración no se completó.",
       "setup": "Configurar {{tool}} para Flux",
       "reapply": "Volver a aplicar",
@@ -2161,7 +2245,9 @@
     }
   },
   "wcoreConfig": {
-    "navLabel": "BaddAssApp Core",    "title": "BaddAssApp Core",    "tagline": "Forged to run. Hardened to last. Built to evolve.",
+    "navLabel": "BaddAssApp Core",
+    "title": "BaddAssApp Core",
+    "tagline": "Forged to run. Hardened to last. Built to evolve.",
     "back": "Settings",
     "railGroup": "Engine",
     "engineRunning": "engine running",
@@ -2181,7 +2267,9 @@
     "overview": {
       "title": "Overview",
       "subtitle": "The engine behind every chat, workflow and agent. It is already running with smart defaults — this surface is where you tune what is under the hood.",
-      "inheritedTitle": "Allocated by BaddAssApp Desktop",      "inheritedBody": "For this session, Desktop hands the engine your model (as an override) and injects Skills + Assistants/Constitution through its system prompt. Your Desktop MCP library is NOT passed through — only BaddAssApp’s own operational MCPs are.",      "readOnly": "read-only",
+      "inheritedTitle": "Allocated by BaddAssApp Desktop",
+      "inheritedBody": "For this session, Desktop hands the engine your model (as an override) and injects Skills + Assistants/Constitution through its system prompt. Your Desktop MCP library is NOT passed through — only BaddAssApp’s own operational MCPs are.",
+      "readOnly": "read-only",
       "manageInDesktop": "Manage in Desktop Settings",
       "inheritModels": "Models (override)",
       "inheritMcp": "MCP Servers",
@@ -2213,11 +2301,15 @@
       "allocatedSession": "Allocated by Desktop · this session",
       "skillsDetail": "Injected via system prompt · {{allocated}}",
       "assistantsDetail": "Injected via system prompt · {{allocated}}",
-      "mcpDetail": "BaddAssApp operational MCPs · your Desktop MCP library is separate",      "engineOwnedLine": "Tools, Memory, Security and Profiles are the engine’s own — written to ~/.wayland-core/config.toml and shared with the BaddAssApp Core CLI."    },
+      "mcpDetail": "BaddAssApp operational MCPs · your Desktop MCP library is separate",
+      "engineOwnedLine": "Tools, Memory, Security and Profiles are the engine’s own — written to ~/.wayland-core/config.toml and shared with the BaddAssApp Core CLI."
+    },
     "services": {
-      "subtitle": "The engine tool backends — web search, vision, voice, image. BaddAssApp ships working out of the box; plug in a key to unlock higher limits.",      "webSearchGroup": "Web Search",
+      "subtitle": "The engine tool backends — web search, vision, voice, image. BaddAssApp ships working out of the box; plug in a key to unlock higher limits.",
+      "webSearchGroup": "Web Search",
       "ddgTitle": "DuckDuckGo · active — free web search is on",
-      "ddgBody": "No key needed — BaddAssApp searches the web right now. Add a key below only to go faster or run higher volume.",      "connected": "Connected",
+      "ddgBody": "No key needed — BaddAssApp searches the web right now. Add a key below only to go faster or run higher volume.",
+      "connected": "Connected",
       "getFreeKey": "Get a free key",
       "keyPlaceholder": "Paste API key…",
       "replaceKeyPlaceholder": "Replace key…",
@@ -2252,9 +2344,7 @@
       },
       "huggingface": {
         "desc": "FLUX and open image models via Hugging Face."
-      },
-      "desktopOnly": "Las claves de herramientas solo se pueden cambiar en la app de escritorio.",
-      "desktopOnlyNote": "Estás en la interfaz web. Las claves de herramientas se guardan en la app de escritorio y solo pueden añadirse o cambiarse allí."
+      }
     },
     "tools": {
       "subtitle": "Cada herramienta está siempre disponible para el motor. Estos interruptores definen si una herramienta se ejecuta sola o pide aprobación primero; no las desactivan. Solo Script y RepoMap son verdaderos interruptores de encendido/apagado. Las herramientas que necesitan credencial enlazan directamente a su ajuste.",
@@ -2273,7 +2363,8 @@
       "catCloud": "Dev & Cloud",
       "catProd": "Productivity",
       "catAgent": "Agent",
-      "catSystem": "BaddAssApp & Memory",      "descRead": "Read any file in the workspace",
+      "catSystem": "BaddAssApp & Memory",
+      "descRead": "Read any file in the workspace",
       "descWrite": "Create or overwrite files",
       "descEdit": "Surgical string-replace edits",
       "descGlob": "Find files by pattern",
@@ -2320,7 +2411,9 @@
       "descSessionSearch": "Search past sessions & transcripts",
       "descRecordEpisode": "Store a durable memory episode",
       "descAssertFact": "Store a durable fact in memory",
-      "descWaylandStatus": "Read live session status & token usage",      "descWaylandTelemetry": "Query per-tool call counts & telemetry",      "descScript": "Ejecutar un paso de script en sandbox (apagado hasta que lo actives)",
+      "descWaylandStatus": "Read live session status & token usage",
+      "descWaylandTelemetry": "Query per-tool call counts & telemetry",
+      "descScript": "Ejecutar un paso de script en sandbox (apagado hasta que lo actives)",
       "modeLabel": "Modo de aprobación",
       "modeAria": "Modo de aprobación de herramientas por defecto",
       "modeDefault": "Preguntar",
@@ -2412,9 +2505,11 @@
       "rawEngine": "Raw engine mode",
       "rawEngineDesc": "Run the embedded engine on its own config — don’t override with Desktop’s model & skills.",
       "headlessTitle": "Headless server mode",
-      "headlessBody": "Run BaddAssApp Core as a long-lived server (one container per tenant) and reach it over LAN, Tailscale, or the hosted Pro tier."    },
+      "headlessBody": "Run BaddAssApp Core as a long-lived server (one container per tenant) and reach it over LAN, Tailscale, or the hosted Pro tier."
+    },
     "scopeWritesTo": "Writes to",
-    "scopeSharedCli": "— used by the BaddAssApp Core CLI too."  },
+    "scopeSharedCli": "— used by the BaddAssApp Core CLI too."
+  },
   "slashCommands": {
     "title": "Slash Commands",
     "subtitle": "Define your own /commands that expand into prompt templates.",
@@ -2474,5 +2569,7 @@
       "engineConfig": "Engine config integrity"
     }
   },
-  "checkForUpdatesDesc": "Check that you are running the latest version of BaddAssApp.",  "checkForUpdatesButton": "Check for updates"
+  "checkForUpdatesDesc": "Check that you are running the latest version of BaddAssApp.",
+  "checkForUpdatesButton": "Check for updates",
+  "settings": {}
 }
