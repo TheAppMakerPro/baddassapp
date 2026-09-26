@@ -72,11 +72,38 @@ async function applyElectronFuses(context) {
  * Applies Electron fuses, then rebuilds native modules for cross-architecture builds.
  */
 
+/**
+ * node-pty's prebuilt `spawn-helper` binaries ship without the executable bit.
+ * When the compiled build/Release copy is the wrong architecture (an x64 app
+ * built on an arm64 host), node-pty falls back to prebuilds/<platform>-<arch>,
+ * and every terminal spawn then fails with "posix_spawnp failed". Restore the
+ * bit before signing so the seal covers the final file mode.
+ */
+function ensureSpawnHelpersExecutable(context) {
+  const { electronPlatformName, appOutDir, packager } = context;
+  if (electronPlatformName === 'win32') return;
+  const resourcesDir =
+    electronPlatformName === 'darwin' || electronPlatformName === 'mas'
+      ? path.join(appOutDir, `${packager.appInfo.productFilename}.app`, 'Contents', 'Resources')
+      : path.join(appOutDir, 'resources');
+  const ptyDir = path.join(resourcesDir, 'app.asar.unpacked', 'node_modules', 'node-pty');
+  if (!fs.existsSync(ptyDir)) return;
+  const candidates = [path.join(ptyDir, 'build', 'Release', 'spawn-helper')];
+  const prebuilds = path.join(ptyDir, 'prebuilds');
+  if (fs.existsSync(prebuilds)) {
+    for (const d of fs.readdirSync(prebuilds)) candidates.push(path.join(prebuilds, d, 'spawn-helper'));
+  }
+  for (const file of candidates) {
+    if (fs.existsSync(file)) fs.chmodSync(file, 0o755);
+  }
+}
+
 module.exports = async function afterPack(context) {
   const { arch, electronPlatformName, appOutDir, packager } = context;
 
   // Harden the packaged binary before anything else (notably before afterSign on macOS).
   await applyElectronFuses(context);
+  ensureSpawnHelpersExecutable(context);
   const targetArch = normalizeArch(typeof arch === 'string' ? arch : Arch[arch] || process.arch);
   const buildArch = normalizeArch(os.arch());
 
