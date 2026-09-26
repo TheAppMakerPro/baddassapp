@@ -1,3 +1,4 @@
+# BaddAssApp fork: dispatch this to build a single platform on demand.
 name: '🔨 Manual Build'
 
 permissions:
