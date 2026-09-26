@@ -63,7 +63,10 @@ function download(url, destPath, redirectsLeft = 5) {
           return;
         }
         if (res.statusCode !== 200) {
-          reject(new Error(`HTTP ${res.statusCode} for ${url}`));
+          const err = new Error(`HTTP ${res.statusCode} for ${url}`);
+          err.statusCode = res.statusCode;
+          err.retryAfter = Number(res.headers['retry-after']) || 0;
+          reject(err);
           res.resume();
           return;
         }
@@ -86,6 +89,25 @@ function download(url, destPath, redirectsLeft = 5) {
   });
 }
 
+// Hugging Face rate-limits shared CI runner IPs (HTTP 429), so retry rate
+// limits and server errors with backoff instead of failing the whole build.
+const MAX_ATTEMPTS = 6;
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+async function downloadWithRetry(url, destPath) {
+  for (let attempt = 1; ; attempt += 1) {
+    try {
+      return await download(url, destPath);
+    } catch (err) {
+      const retryable = err.statusCode === 429 || err.statusCode >= 500 || !err.statusCode;
+      if (!retryable || attempt >= MAX_ATTEMPTS) throw err;
+      const waitMs = Math.min(err.retryAfter ? err.retryAfter * 1000 : 5000 * 2 ** (attempt - 1), 90000);
+      process.stdout.write(`\n[prepareVoiceModel] ${err.message}; retrying in ${waitMs / 1000}s ... `);
+      await sleep(waitMs);
+    }
+  }
+}
+
 async function prepareVoiceModel() {
   ensureDir(OUTPUT_DIR);
   let downloaded = 0;
@@ -98,7 +120,7 @@ async function prepareVoiceModel() {
       continue;
     }
     process.stdout.write(`[prepareVoiceModel] downloading ${file} ... `);
-    await download(`${HF_BASE}/${file}`, destPath);
+    await downloadWithRetry(`${HF_BASE}/${file}`, destPath);
     const mb = (fs.statSync(destPath).size / 1024 / 1024).toFixed(1);
     process.stdout.write(`ok (${mb} MB)\n`);
     downloaded += 1;
