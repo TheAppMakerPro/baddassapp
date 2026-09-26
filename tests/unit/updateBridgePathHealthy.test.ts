@@ -13,6 +13,11 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+
+// BaddAssApp fork: updates are switched off (src/process/fork/updatePolicy.ts).
+// This file covers upstream's updater logic, which is kept intact, so it runs
+// with the policy off. tests/unit/fork/updatesDisabled.test.ts covers the policy.
+vi.mock('@process/fork/updatePolicy', () => ({ UPDATES_DISABLED: false, UPDATES_DISABLED_REASON: '' }));
 import type { IjfwDetectionResult } from '@process/services/ijfwSystemService';
 
 vi.mock('@office-ai/platform', () => ({

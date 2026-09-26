@@ -465,6 +465,12 @@ try {
     stdio: 'inherit',
     env: process.env,
   });
+  // BaddAssApp fork: voice input loads ONNX Runtime from this bundled copy and
+  // refuses to fall back to the CDN, so a build without it ships broken voice.
+  const voiceRuntime = path.join(__dirname, '..', 'resources', 'voice-models', 'ort-wasm', 'ort-wasm-simd-threaded.asyncify.wasm');
+  if (!fs.existsSync(voiceRuntime)) {
+    throw new Error(`Bundled voice runtime missing at ${voiceRuntime}; run node scripts/prepareVoiceModel.js`);
+  }
 
   // 6. Run electron-builder to create distributables (DMG/ZIP/EXE, etc.)
   // Always disable auto-publish to avoid electron-builder's implicit tag-based publishing

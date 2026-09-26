@@ -68,6 +68,7 @@ import { initPopoutBridge } from '@process/bridge/popoutBridge';
 import { AION_ASSET_PROTOCOL } from '@process/extensions';
 import { resolveAllowedAssetPath } from '@process/extensions/protocol/assetAllowlist';
 import { initializeProcess } from './process';
+import { UPDATES_DISABLED, UPDATES_DISABLED_REASON } from './process/fork/updatePolicy';
 import { ProcessConfig } from './process/utils/initStorage';
 import { loadShellEnvironmentAsync, logEnvironmentDiagnostics, mergePaths } from './process/utils/shellEnv';
 import { initializeAcpDetector, registerWindowMaximizeListeners, disposeAllTeamSessions } from '@process/bridge';
@@ -618,6 +619,7 @@ const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): v
   // would otherwise hit the GitHub feed on every dev launch and log spurious errors)
   const isCiRuntime = process.env.CI === 'true' || process.env.CI === '1' || process.env.GITHUB_ACTIONS === 'true';
   const disableAutoUpdater =
+    UPDATES_DISABLED ||
     !app.isPackaged ||
     process.env.WAYLAND_DISABLE_AUTO_UPDATE === '1' ||
     process.env.WAYLAND_E2E_TEST === '1' ||
@@ -641,6 +643,9 @@ const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): v
           error: error instanceof Error ? error.message : String(error),
         };
       });
+  } else if (UPDATES_DISABLED) {
+    // BaddAssApp fork: say so in Settings instead of reporting a working channel.
+    globalThis.__waylandUpdateChannelStatus = { available: false, error: UPDATES_DISABLED_REASON };
   } else {
     console.log('[Wayland] Auto-updater disabled via env/CI guard');
   }

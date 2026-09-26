@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { UPDATES_DISABLED, UPDATES_DISABLED_REASON } from '@process/fork/updatePolicy';
 import { ipcBridge } from '@/common';
 import type {
   UpdateCheckResult,
@@ -746,6 +747,7 @@ export function createAutoUpdateStatusBroadcast(): (
 export function initUpdateBridge(): void {
   ipcBridge.update.check.provider(
     async (params): Promise<{ success: boolean; data?: UpdateCheckResult; msg?: string }> => {
+      if (UPDATES_DISABLED) return { success: false, msg: UPDATES_DISABLED_REASON };
       try {
         const repo = resolveRepo();
         const includePrerelease = Boolean(params?.includePrerelease);
@@ -796,6 +798,7 @@ export function initUpdateBridge(): void {
 
   ipcBridge.update.download.provider(
     async (params: UpdateDownloadRequest): Promise<{ success: boolean; data?: UpdateDownloadResult; msg?: string }> => {
+      if (UPDATES_DISABLED) return { success: false, msg: UPDATES_DISABLED_REASON };
       try {
         if (!params?.url) {
           return { success: false, msg: (await getI18n()).t('update.errors.missingUrl') };
@@ -863,6 +866,7 @@ export function initUpdateBridge(): void {
       data?: { updateInfo?: { version: string; releaseDate?: string; releaseNotes?: string } };
       msg?: string;
     }> => {
+      if (UPDATES_DISABLED) return { success: false, msg: UPDATES_DISABLED_REASON };
       try {
         // Set prerelease preference before checking
         const includePrerelease = Boolean(params?.includePrerelease);
@@ -892,6 +896,7 @@ export function initUpdateBridge(): void {
   );
 
   ipcBridge.autoUpdate.download.provider(async (): Promise<{ success: boolean; msg?: string }> => {
+    if (UPDATES_DISABLED) return { success: false, msg: UPDATES_DISABLED_REASON };
     try {
       const result = await autoUpdaterService.downloadUpdate();
       return { success: result.success, msg: result.error };
@@ -912,6 +917,7 @@ export function initUpdateBridge(): void {
   // can warn when auto-updates are disabled for this session. Defaults to `available: true`
   // because the channel only sets the global on explicit success/failure of the import.
   ipcBridge.autoUpdate.getStatus.provider(async (): Promise<{ available: boolean; error?: string }> => {
+    if (UPDATES_DISABLED) return { available: false, error: UPDATES_DISABLED_REASON };
     return globalThis.__waylandUpdateChannelStatus ?? { available: true };
   });
 }

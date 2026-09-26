@@ -17,12 +17,16 @@
  */
 
 import { pipeline, env, type AutomaticSpeechRecognitionPipeline } from '@huggingface/transformers';
+import { useBundledOrtRuntime, type OrtWasmEnv } from './bundledOrtRuntime';
 
-// The model is bundled in the app - never reach out to the HF Hub. The ORT
-// WASM runtime still loads from transformers.js's default CDN on first use
-// (small, browser-cached); offline-WASM bundling is a follow-up.
+// Nothing here touches the network. The model is bundled and loaded local-only,
+// and so is the ONNX Runtime WebAssembly that runs it: see bundledOrtRuntime.ts
+// for why (transformers.js would otherwise fetch it from a public CDN).
 env.allowRemoteModels = false;
 env.allowLocalModels = true;
+// The runtime is handed to ONNX Runtime directly below, so transformers.js's
+// own pre-load (via the Cache API, which rejects wayland-asset://) is skipped.
+env.useWasmCache = false;
 // The browser Cache API rejects the wayland-asset:// scheme; disabling the
 // cache silences a stream of harmless "scheme unsupported" warnings. Model
 // files are local disk reads anyway, so re-fetching per load is cheap.
@@ -43,13 +47,20 @@ self.onmessage = async (event: MessageEvent<IncomingMessage>) => {
   if (msg.type === 'init') {
     // transformers.js fetches `${localModelPath}${MODEL_ID}/<file>`.
     env.localModelPath = msg.modelBase.endsWith('/') ? msg.modelBase : `${msg.modelBase}/`;
+    // Replaces the CDN default transformers.js set on import. Must run before
+    // the pipeline creates its session; throws (fails closed) if the bundled
+    // runtime is missing, and that error reaches the caller below as 'error'.
+    const runtimeReady = useBundledOrtRuntime(env.backends.onnx.wasm as OrtWasmEnv, env.localModelPath);
     // `graphOptimizationLevel: 'basic'` skips ORT's QDQ→MatMulNBits transpose
     // pass, which crashes on the q8-quantized Whisper decoder ("Missing
     // required scale"). Basic-level optimization still loads cleanly.
-    asrPromise = pipeline('automatic-speech-recognition', MODEL_ID, {
-      dtype: 'q8',
-      session_options: { graphOptimizationLevel: 'basic' },
-    }) as Promise<AutomaticSpeechRecognitionPipeline>;
+    asrPromise = runtimeReady.then(
+      () =>
+        pipeline('automatic-speech-recognition', MODEL_ID, {
+          dtype: 'q8',
+          session_options: { graphOptimizationLevel: 'basic' },
+        }) as Promise<AutomaticSpeechRecognitionPipeline>
+    );
     try {
       await asrPromise;
       self.postMessage({ type: 'ready' });

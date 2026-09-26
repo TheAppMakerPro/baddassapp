@@ -14,6 +14,7 @@
  * Pattern follows prepareWaylandCore.js / prepareBundledBun.js.
  */
 
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
@@ -113,11 +114,88 @@ async function prepareVoiceModel() {
   );
 }
 
-module.exports = prepareVoiceModel;
+// ---------------------------------------------------------------------------
+// ONNX Runtime Web, bundled beside the model (BaddAssApp fork).
+//
+// transformers.js otherwise fetches this runtime from cdn.jsdelivr.net the
+// first time voice input runs — see src/renderer/workers/bundledOrtRuntime.ts.
+// These two files are COPIED from the installed package, never downloaded, and
+// from the exact package transformers.js resolves, which is the one the
+// renderer bundle is built against: the loader, the binary and the JavaScript
+// half of the runtime must all be the same build.
+// ---------------------------------------------------------------------------
+
+const RUNTIME_OUTPUT_DIR = path.join(__dirname, '..', 'resources', 'voice-models', 'ort-wasm');
+// Must match ORT_RUNTIME_FILES in src/renderer/workers/bundledOrtRuntime.ts.
+const RUNTIME_FILES = ['ort-wasm-simd-threaded.asyncify.mjs', 'ort-wasm-simd-threaded.asyncify.wasm'];
+
+/**
+ * Package root from any file inside it. Neither package exposes
+ * `./package.json` through its `exports` map, so resolving that subpath
+ * directly throws; resolve the entry point and walk up to the root instead.
+ */
+function packageRoot(name, fromDirs) {
+  let dir = path.dirname(require.resolve(name, fromDirs ? { paths: fromDirs } : undefined));
+  for (;;) {
+    const manifest = path.join(dir, 'package.json');
+    if (fs.existsSync(manifest) && JSON.parse(fs.readFileSync(manifest, 'utf8')).name === name) return dir;
+    const parent = path.dirname(dir);
+    if (parent === dir) throw new Error(`Could not find the package root of ${name}`);
+    dir = parent;
+  }
+}
+
+function resolveOrtWebDist() {
+  const transformersRoot = packageRoot('@huggingface/transformers');
+  const ortRoot = packageRoot('onnxruntime-web', [transformersRoot]);
+  return {
+    dist: path.join(ortRoot, 'dist'),
+    version: JSON.parse(fs.readFileSync(path.join(ortRoot, 'package.json'), 'utf8')).version,
+  };
+}
+
+const sha256 = (file) => crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+
+/**
+ * Copies the runtime into `outputDir`. Re-copies whenever the contents differ,
+ * so upgrading onnxruntime-web can never leave a stale runtime shipping beside
+ * newer JavaScript. Throws if the source files are missing.
+ */
+function prepareVoiceRuntime({ sourceDir, outputDir = RUNTIME_OUTPUT_DIR } = {}) {
+  const source = sourceDir ? { dist: sourceDir, version: 'custom' } : resolveOrtWebDist();
+  ensureDir(outputDir);
+  const copied = [];
+  for (const file of RUNTIME_FILES) {
+    const from = path.join(source.dist, file);
+    if (!fs.existsSync(from)) {
+      throw new Error(`onnxruntime-web ${source.version} has no ${file} at ${source.dist}`);
+    }
+    const to = path.join(outputDir, file);
+    if (fs.existsSync(to) && sha256(to) === sha256(from)) continue;
+    fs.copyFileSync(from, to);
+    copied.push(file);
+  }
+  console.log(
+    `[prepareVoiceModel] ONNX Runtime Web ${source.version}: ` +
+      (copied.length ? `copied ${copied.join(', ')}` : 'runtime already current') +
+      ` at ${outputDir}`
+  );
+  return { version: source.version, copied };
+}
+
+async function prepareAll() {
+  await prepareVoiceModel();
+  prepareVoiceRuntime();
+}
+
+module.exports = prepareAll;
+module.exports.prepareVoiceModel = prepareVoiceModel;
+module.exports.prepareVoiceRuntime = prepareVoiceRuntime;
+module.exports.RUNTIME_FILES = RUNTIME_FILES;
 
 // Allow running directly: `node scripts/prepareVoiceModel.js`
 if (require.main === module) {
-  prepareVoiceModel().catch((err) => {
+  prepareAll().catch((err) => {
     console.error(`[prepareVoiceModel] FAILED: ${err.message}`);
     process.exitCode = 1;
   });
